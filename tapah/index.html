@@ -1,47 +1,423 @@
 <!doctype html>
-<!-- generated:scaffold -->
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tapah — Sacrificing service · Yama & Niyama</title>
-  <meta name="description" content="Penance through service — bearing physical discomfort to relieve the grief of those weaker, poorer, and more downtrodden than oneself." />
+  <title>Tapah — Sacrificing service · Yama &amp; Niyama</title>
+  <meta name="description" content="Tapah, the eighth observance: penance through service. To shoulder the sorrows and miseries of others, with no commercial motive, directing one's care downward — to the weaker, poorer, and sick. The served is Brahma." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,400&family=Spectral:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,900&family=Spectral:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/src/shared/base.css" />
+  <!-- Hide above-the-fold hero pieces only when motion is allowed, so reduced-motion
+       users (and the no-JS case) always see fully-rendered content. -->
+  <script>
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches)
+      document.documentElement.classList.add("anim");
+  </script>
   <style>
     :root {
-      --accent: hsl(252 58% 52%);
-      --accent-soft: hsl(252 48% 92%);
-      --ink: hsl(252 30% 12%);
-      --paper: hsl(252 40% 97%);
+      --ink: #2a1a10;
+      --paper: #f1e6d6;
+      --paper-2: #e7d6bf;
+      --accent: #b4541f;   /* terracotta */
+      --gold: #cf8a3a;     /* ochre */
+      --clay: #8c5a3c;     /* warm clay */
+      --muted: #7a5c45;
+      --line: rgba(42, 26, 16, 0.16);
     }
-    body { background: var(--paper); color: var(--ink); }
-    .stage { min-height: 100svh; display: grid; grid-template-rows: auto 1fr auto; max-width: 860px; margin-inline: auto; padding: clamp(1.5rem, 5vw, 4rem); }
-    .crumb { font-family: var(--font-body); font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
-    .crumb a { color: inherit; text-decoration: none; }
-    .glyph { font-size: clamp(4rem, 16vw, 10rem); line-height: 1; color: var(--accent); opacity: .9; }
-    .translit { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.5rem, 9vw, 5.5rem); line-height: .95; margin: .1em 0 0; }
-    .gloss { font-style: italic; font-size: clamp(1.1rem, 3vw, 1.5rem); color: var(--accent); margin-top: .4rem; }
-    .sutra { font-style: italic; border-left: 3px solid var(--accent); padding-left: 1rem; margin: 2.5rem 0; color: hsl(252 25% 30%); }
-    .definition { font-size: clamp(1.15rem, 2.6vw, 1.5rem); line-height: 1.5; }
-    .note { margin-top: 1.5rem; color: hsl(252 18% 32%); line-height: 1.7; }
-    .seam { font-family: var(--font-body); font-size: .75rem; letter-spacing: .15em; text-transform: uppercase; color: hsl(252 15% 55%); }
+
+    body { background: var(--paper); color: var(--ink); overflow-x: hidden; }
+
+    /* faint paper grain for atmosphere */
+    body::after {
+      content: ""; position: fixed; inset: 0; z-index: 9; pointer-events: none;
+      opacity: 0.045; mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ── chrome ─────────────────────────────────────────── */
+    .progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 50; background: transparent; }
+    .progress__bar { height: 100%; width: 100%; transform: scaleX(0); transform-origin: left center;
+      background: linear-gradient(90deg, var(--accent), var(--gold)); }
+
+    .home { position: fixed; top: clamp(1rem, 3vw, 1.8rem); left: clamp(1rem, 4vw, 2.4rem); z-index: 40;
+      font: 500 0.74rem/1 var(--font-body); letter-spacing: 0.24em; text-transform: uppercase;
+      text-decoration: none; color: var(--ink); mix-blend-mode: difference; filter: invert(1); }
+    .home::before { content: "←"; margin-right: 0.5em; display: inline-block; }
+
+    /* ── shared type ────────────────────────────────────── */
+    .kicker { font: 500 0.78rem/1 var(--font-body); letter-spacing: 0.32em; text-transform: uppercase; color: var(--accent); margin: 0 0 1.4rem; }
+    .scene .kicker { color: rgba(255, 244, 232, 0.86); }
+    .display { font: 300 clamp(2.3rem, 6.4vw, 5rem)/1.04 var(--font-display); letter-spacing: -0.018em; margin: 0; }
+    .lede { font: 400 clamp(1.12rem, 2.3vw, 1.5rem)/1.6 var(--font-body); color: var(--muted); max-width: 34ch; }
+    .scene .lede { color: rgba(255, 244, 232, 0.9); }
+    .body-copy { font: 400 clamp(1.05rem, 1.5vw, 1.22rem)/1.72 var(--font-body); max-width: 56ch; }
+
+    .panel { max-width: 1080px; margin-inline: auto; padding: clamp(4.5rem, 13vh, 10rem) clamp(1.4rem, 6vw, 5rem); }
+
+    /* ── full-bleed photographic scenes ─────────────────── */
+    .scene { position: relative; min-height: 100svh; display: grid; align-items: center; overflow: clip; color: #fff; }
+    .scene__bg { position: absolute; inset: -12% 0; width: 100%; height: 124%; object-fit: cover; will-change: transform; }
+    .scene__tint { position: absolute; inset: 0; z-index: 1; }
+    .scene__inner { position: relative; z-index: 2; width: 100%; max-width: 1080px; margin-inline: auto; padding: clamp(2rem, 8vw, 6rem) clamp(1.4rem, 6vw, 5rem); }
+    .scene__inner.right { display: flex; justify-content: flex-end; text-align: right; }
+    .scene__inner.right > div { max-width: 40ch; }
+
+    /* ── hero ───────────────────────────────────────────── */
+    .hero { text-align: center; place-items: center; }
+    .hero__tint { background:
+      radial-gradient(120% 90% at 50% 10%, rgba(40, 18, 6, 0.1), transparent 55%),
+      linear-gradient(180deg, rgba(34, 16, 6, 0.46) 0%, rgba(34, 16, 6, 0.28) 42%, rgba(28, 13, 5, 0.7) 100%); }
+    .hero__inner { display: grid; justify-items: center; gap: 0.2rem; }
+    .hero__num { font: 500 0.8rem/1 var(--font-body); letter-spacing: 0.42em; text-transform: uppercase; color: rgba(255,244,232,0.82); margin: 0 0 2.2rem; }
+    .hero__glyph { font-family: var(--font-display); font-weight: 400; font-size: clamp(3.6rem, 12vw, 8.5rem); line-height: 1; color: #fff; text-shadow: 0 2px 40px rgba(0,0,0,0.4); }
+    .hero__title { font: 300 clamp(3rem, 11vw, 7.5rem)/0.92 var(--font-display); letter-spacing: -0.02em; margin: 0.1em 0 0; }
+    .hero__sub { font: 500 clamp(0.9rem, 2vw, 1.15rem)/1 var(--font-body); letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); margin: 1.4rem 0 0; }
+    .hero__say { font: 400 clamp(1.05rem, 2.2vw, 1.35rem)/1.6 var(--font-body); color: rgba(255,244,232,0.92); max-width: 32ch; margin: 2.4rem auto 0; }
+    .cue { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 3;
+      font: 500 0.68rem/1 var(--font-body); letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,244,232,0.82);
+      display: grid; justify-items: center; gap: 0.7rem; }
+    .cue__line { width: 1px; height: 46px; background: rgba(255,244,232,0.6); transform-origin: top; }
+
+    /* ── definition (two facing blocks) ─────────────────── */
+    .defs { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 6vw, 5rem); margin-top: 3rem; }
+    .def h3 { font: 500 clamp(1.6rem, 3.4vw, 2.4rem)/1 var(--font-display); margin: 0 0 0.2rem; }
+    .def .sa { font-family: var(--font-display); color: var(--accent); font-size: 1.4rem; margin: 0 0 0.9rem; }
+    .def--proper h3 { color: var(--accent); }
+    .def p { font: 400 1.08rem/1.66 var(--font-body); color: var(--muted); margin: 0; }
+    .pull { margin-top: clamp(2.6rem, 6vw, 4rem); padding-top: 2rem; border-top: 1px solid var(--line);
+      font: 300 clamp(1.5rem, 3.6vw, 2.4rem)/1.32 var(--font-display); letter-spacing: -0.01em; max-width: 26ch; }
+    .pull b { font-weight: 600; color: var(--accent); }
+
+    /* ── direction-of-service signature moment ──────────── */
+    .dir { color: #fff; text-align: center; place-items: center; }
+    .dir__tint { background: linear-gradient(180deg, rgba(28, 14, 6, 0.82), rgba(28, 14, 6, 0.66)); }
+    .dir__inner { display: grid; justify-items: center; gap: 1.2rem; max-width: 40ch; }
+    .dir__axis { display: grid; justify-items: center; gap: 0.5rem; margin: 0.6rem 0 0.4rem; }
+    .dir__up, .dir__down { font: 500 0.82rem/1.4 var(--font-body); letter-spacing: 0.22em; text-transform: uppercase; }
+    .dir__up { color: rgba(255,244,232,0.5); }
+    .dir__arrow { font-family: var(--font-display); font-size: clamp(2.4rem, 9vw, 4.6rem); line-height: 1; color: var(--gold); }
+    .dir__big { font: 500 clamp(2rem, 7vw, 4rem)/1.05 var(--font-display); letter-spacing: -0.02em; color: var(--gold); }
+    .dir__down { color: #fff; }
+    .dir__list { display: grid; gap: 0.55rem; margin: 1rem 0 0; padding: 0; list-style: none; }
+    .dir__list li { font: 400 clamp(1.05rem, 2.4vw, 1.3rem)/1.4 var(--font-body); color: rgba(255,244,232,0.92); }
+    .dir__caption { font: 400 0.95rem/1.5 var(--font-body); color: rgba(255,244,232,0.66); max-width: 38ch; margin-top: 0.6rem; }
+
+    /* ── method cards (commercial mentality / knowledge) ── */
+    .cards { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.2rem, 3vw, 2rem); margin-top: 3rem; }
+    .card { background: var(--paper-2); border: 1px solid var(--line); border-radius: 4px; padding: clamp(1.6rem, 3vw, 2.6rem); }
+    .card__tag { font: 500 0.72rem/1 var(--font-body); letter-spacing: 0.26em; text-transform: uppercase; color: var(--accent); margin: 0 0 1rem; }
+    .card--off .card__tag { color: var(--muted); }
+    .card h3 { font: 500 clamp(1.5rem, 3vw, 2rem)/1.04 var(--font-display); margin: 0 0 0.8rem; }
+    .card p { font: 400 1.04rem/1.66 var(--font-body); color: var(--muted); margin: 0; }
+    .verdict { margin-top: clamp(2.4rem, 5vw, 3.4rem); font: 300 clamp(1.5rem, 3.6vw, 2.4rem)/1.34 var(--font-display); max-width: 28ch; }
+    .verdict b { font-weight: 600; color: var(--accent); }
+
+    /* ── Buddha couplet ─────────────────────────────────── */
+    .couplet { color: #fff; text-align: center; place-items: center; }
+    .couplet__tint { background: linear-gradient(180deg, rgba(24, 12, 5, 0.6), rgba(24, 12, 5, 0.78)); }
+    .couplet__inner { max-width: 26ch; }
+    .couplet blockquote { margin: 0; font: 300 clamp(1.6rem, 5vw, 3rem)/1.34 var(--font-display); letter-spacing: -0.01em; }
+    .couplet blockquote span { display: block; }
+    .couplet cite { display: block; margin-top: 1.6rem; font: 500 0.8rem/1 var(--font-body); letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); font-style: normal; }
+
+    /* ── closing ────────────────────────────────────────── */
+    .close__tint { background: linear-gradient(180deg, rgba(30, 15, 6, 0.5), rgba(24, 12, 5, 0.82)); }
+    .close__inner { max-width: 760px; }
+    .close .body-copy { color: rgba(255,244,232,0.92); max-width: 50ch; }
+    .close em { font-style: normal; color: var(--gold); }
+    .nav { display: flex; flex-wrap: wrap; gap: 1.4rem 2.4rem; margin-top: clamp(2.6rem, 6vw, 4rem);
+      padding-top: 1.6rem; border-top: 1px solid rgba(255,244,232,0.25); }
+    .nav a { font: 500 0.82rem/1.4 var(--font-body); letter-spacing: 0.14em; text-transform: uppercase; color: #fff; text-decoration: none; opacity: 0.82; transition: opacity 0.25s; }
+    .nav a:hover { opacity: 1; }
+    .nav a small { display: block; font-size: 0.66rem; letter-spacing: 0.2em; color: var(--gold); margin-top: 0.3rem; }
+    .nav .next { margin-left: auto; text-align: right; }
+    .attribution { margin-top: 3rem; font: 400 0.74rem/1.5 var(--font-body); letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,244,232,0.55); }
+
+    /* reveal gating — only hero pieces are pre-hidden (above the fold) */
+    .anim .hero [data-load] { opacity: 0; }
+
+    @media (max-width: 720px) {
+      .defs, .cards { grid-template-columns: 1fr; }
+      .scene__inner.right { justify-content: flex-start; text-align: left; }
+      .nav .next { margin-left: 0; text-align: left; }
+    }
   </style>
 </head>
 <body>
-  <main class="stage">
-    <p class="crumb"><a href="/yama-niyama/">Yama & Niyama</a> · Niyama · 08</p>
-    <div>
-      <div class="glyph" lang="sa">तपः</div>
-      <h1 class="translit">Tapah</h1>
-      <p class="gloss">Sacrificing service</p>
-      <blockquote class="sutra">To shoulder the sorrows and miseries of others, to make them happy.</blockquote>
-      <p class="definition">Penance through service — bearing physical discomfort to relieve the grief of those weaker, poorer, and more downtrodden than oneself.</p>
-      <p class="note">Tapah without discrimination is misused. Banquet not the rich — feed the starving. Send not presents to superiors — send medicine to the sick. The served is Brahma; the service is the sádhaná.</p>
-    </div>
-    <p class="seam">A Guide to Human Conduct — scaffold placeholder, design pending</p>
+  <div class="progress"><div class="progress__bar"></div></div>
+  <a class="home" href="/yama-niyama/">Yama &amp; Niyama</a>
+
+  <main>
+    <!-- ░░ HERO ░░ -->
+    <section class="hero scene">
+      <img class="scene__bg" data-hero-bg src="./img/t_children.jpg" alt="A cluster of children in worn clothes reaching up and smiling on warm terracotta steps" />
+      <div class="scene__tint hero__tint"></div>
+      <div class="scene__inner">
+        <div class="hero__inner">
+          <p class="hero__num" data-load>Niyama · The Third Observance · 08</p>
+          <div class="hero__glyph" lang="sa" data-load>तपः</div>
+          <h1 class="hero__title" data-load>Tapah</h1>
+          <p class="hero__sub" data-load>Sacrificing service</p>
+          <p class="hero__say" data-load>Penance is not what you give up for yourself. It is the sorrow you shoulder so that someone weaker can be made happy.</p>
+        </div>
+      </div>
+      <div class="cue" data-load><span>Scroll</span><span class="cue__line"></span></div>
+    </section>
+
+    <!-- ░░ THE WORD — what penance is for ░░ -->
+    <section class="panel">
+      <p class="kicker" data-reveal>The word</p>
+      <h2 class="display" data-split>Penance has only one purpose.</h2>
+      <div class="defs">
+        <div class="def" data-reveal>
+          <p class="sa" lang="sa">तपः</p>
+          <h3>Tapah</h3>
+          <p>To practise penance to reach the goal. Not discomfort for its own sake — a ten-rupee gift costs a millionaire nothing, so for him it is not penance at all.</p>
+        </div>
+        <div class="def def--proper" data-reveal>
+          <p class="sa" lang="sa">सेवा</p>
+          <h3>The aim</h3>
+          <p>To shoulder the sorrows and miseries of others, to make them happy — to free them from grief and give them comforts. There is no second purpose.</p>
+        </div>
+      </div>
+      <p class="pull" data-reveal>The aspirant is the servant. <b>The served is Brahma</b> — and the service rendered is the sádhaná itself.</p>
+    </section>
+
+    <!-- ░░ PHYSICAL SERVICE — the food boxes ░░ -->
+    <section class="scene">
+      <img class="scene__bg" data-parallax src="./img/t_foodboxes.jpg" alt="Volunteers in masks passing crates of fresh food down from a truck bed" />
+      <div class="scene__tint" style="background:linear-gradient(180deg,rgba(40,22,8,.5),rgba(34,18,7,.7))"></div>
+      <div class="scene__inner">
+        <p class="kicker" data-reveal>The body, not the cheque</p>
+        <h2 class="display" data-split>Tapah is physical service.</h2>
+        <p class="body-copy" data-reveal style="color:rgba(255,244,232,.92);margin-top:1.6rem">
+          <span lang="sa">Shudrocita sevá</span> — the labour of the hands — is, in almost every case, what tapah asks of you. So those who are afraid of physical work, or who look down on the labourer, can never become a <span lang="sa">tápasa</span>. To sit for hours with the sick and give them the relief they need: that is penance.
+        </p>
+      </div>
+    </section>
+
+    <!-- ░░ NO COMMERCIAL MENTALITY — cards ░░ -->
+    <section class="panel">
+      <p class="kicker" data-reveal>The one ruin</p>
+      <h2 class="display" data-split>A hidden motive cancels the whole effort.</h2>
+      <div class="cards">
+        <div class="card" data-reveal>
+          <p class="card__tag">Penance</p>
+          <h3>Above selfishness</h3>
+          <p>You serve the sick for hours because they are in pain and need relief. Nothing is expected back. This is tapah, and it dilates the mind toward the Cosmic.</p>
+        </div>
+        <div class="card card--off" data-reveal>
+          <p class="card__tag">Commerce</p>
+          <h3>The favour, banked</h3>
+          <p>You serve the same person to secure their help in your own bad days. The instant that motive enters, the entire effort of tapah is lost. Not even the least bit of commercial mentality may remain.</p>
+        </div>
+      </div>
+      <p class="verdict" data-reveal>Serve with sincerity, or it is not service. <b>The price tag dissolves the penance.</b></p>
+    </section>
+
+    <!-- ░░ KNOWLEDGE — the rich miser ░░ -->
+    <section class="scene">
+      <img class="scene__bg" data-parallax src="./img/t_care.jpg" alt="A nurse resting a steadying hand on the shoulder of a seated patient she is caring for" />
+      <div class="scene__tint" style="background:linear-gradient(180deg,rgba(36,18,8,.4),rgba(30,15,6,.72))"></div>
+      <div class="scene__inner right">
+        <div>
+          <p class="kicker" data-reveal>The harder discipline</p>
+          <h2 class="display" data-split>Tapah without knowledge is misused.</h2>
+          <p class="body-copy" data-reveal style="color:rgba(255,244,232,.92);margin-top:1.6rem;margin-left:auto">
+            A rich miser comes to you with a tale of woe. Move with pity and relieve him, and you have only made him more miserly — and taught him to deceive the next servant of humanity. Ascertain first whether the person truly needs you. Far more knowledge is required here than in any easier service.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ DIRECTION OF RESPONSIBILITY — signature moment ░░ -->
+    <section class="dir scene">
+      <img class="scene__bg" src="./img/t_bread.jpg" alt="A pair of weathered hands holding out a fresh round loaf of bread wrapped in cloth" />
+      <div class="scene__tint dir__tint"></div>
+      <div class="scene__inner">
+        <div class="dir__inner">
+          <p class="kicker">Where your responsibility lies</p>
+          <div class="dir__axis">
+            <p class="dir__up" data-dir-up>To the powerful, the rich, the strong — almost none</p>
+            <span class="dir__arrow" data-dir-arrow>↓</span>
+            <p class="dir__big" data-dir-big>Direct it downward</p>
+            <p class="dir__down" data-dir-down>To the weaker · poorer · less educated · downtrodden</p>
+          </div>
+          <ul class="dir__list">
+            <li data-dir-line>Banquet not the rich — give food to the starving.</li>
+            <li data-dir-line>Send no presents to your superiors — send medicine to the sick.</li>
+            <li data-dir-line>Do not flatter the rich; it yields nothing.</li>
+          </ul>
+          <p class="dir__caption" data-dir-line>Spend your sympathy on the underprivileged and take them into your society. Misjudge the direction, and all your time and labour are spent in vain.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ THE SERVED IS BRAHMA — children ░░ -->
+    <section class="scene">
+      <img class="scene__bg" data-parallax src="./img/t_served.jpg" alt="A close cluster of laughing children, one girl beaming brightly at the centre" />
+      <div class="scene__tint" style="background:linear-gradient(180deg,rgba(34,18,7,.42),rgba(28,14,6,.66))"></div>
+      <div class="scene__inner">
+        <p class="kicker" data-reveal>Without consideration of caste or creed</p>
+        <h2 class="display" data-split>Look upon every person served as the Cosmos itself.</h2>
+        <p class="body-copy" data-reveal style="color:rgba(255,244,232,.92);margin-top:1.6rem">
+          Those who weigh a sufferer's caste, creed, religion or nationality before helping have already defeated their own penance — such a narrow heart cannot serve with sincerity. But serve selflessly, seeing only an expression of the Cosmos, and devotion is aroused in a short time. When love is awakened, what else remains to be achieved?
+        </p>
+      </div>
+    </section>
+
+    <!-- ░░ BUDDHA COUPLET ░░ -->
+    <section class="couplet scene">
+      <img class="scene__bg" data-parallax src="./img/t_flame.jpg" alt="Three pale candles burning steadily against a deep warm dark" />
+      <div class="scene__tint couplet__tint"></div>
+      <div class="scene__inner">
+        <div class="couplet__inner">
+          <blockquote data-reveal>
+            <span>Win the miser by charity,</span>
+            <span>win the liar by speaking the truth.</span>
+          </blockquote>
+          <cite data-reveal>— The Buddha</cite>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ WHERE IT LEADS — loaves ░░ -->
+    <section class="close scene">
+      <img class="scene__bg" data-parallax src="./img/t_loaves.jpg" alt="Three rustic dark loaves of bread resting with an ear of wheat on a weathered wooden table" />
+      <div class="scene__tint close__tint"></div>
+      <div class="scene__inner close__inner">
+        <p class="kicker" data-reveal>Where it leads</p>
+        <h2 class="display" data-split>Tapah with discrimination changes the course of a life.</h2>
+        <p class="body-copy" data-reveal>
+          Action ungoverned by discrimination is merely goaded by instinct; penance guided by it turns toward emancipation. As the mind dilates in selfless service it readies the <em>sádhaka</em> for <em>Iishvara Prańidhána</em> — the shelter in the Cosmic. You will not reach Brahma by service done blindly. You reach it by serving the right one, in the right way, for no reason but their relief.
+        </p>
+        <nav class="nav" data-reveal>
+          <a class="prev" href="/yama-niyama/santosha">← Santośa<small>07 · Contentment</small></a>
+          <a href="/yama-niyama/">All ten<small>Index</small></a>
+          <a class="next" href="/yama-niyama/svadhyaya">Svádhyáya →<small>09 · Understanding</small></a>
+        </nav>
+        <p class="attribution" data-reveal>A Guide to Human Conduct · after Shrii Shrii Ánandamúrti</p>
+      </div>
+    </section>
   </main>
+
+  <script type="module">
+    import gsap from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    import { SplitText } from "gsap/SplitText";
+    import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    gsap.registerPlugin(ScrollToPlugin);
+    setupKeyboardNav();
+
+    if (!reduce) {
+      gsap.registerPlugin(ScrollTrigger, SplitText);
+      document.fonts.ready.then(init);
+    }
+
+    // ← / → (and ↑ / ↓ / PgUp / PgDn) step between sections; Home / End jump to the ends.
+    // Tops are recomputed live each press with getBoundingClientRect so GSAP's pin
+    // spacers (which reparent pinned sections) can never desync the navigation.
+    function setupKeyboardNav() {
+      const tops = () => {
+        const ys = Array.from(document.querySelectorAll("main section"))
+          .map((s) => Math.round(s.getBoundingClientRect().top + window.scrollY))
+          .sort((a, b) => a - b);
+        return ys.filter((y, i) => i === 0 || y - ys[i - 1] > 8); // de-dupe near-equal
+      };
+
+      const scrollTo = (y) =>
+        gsap.to(window, { duration: reduce ? 0 : 0.9, ease: "power2.inOut", scrollTo: { y, autoKill: false } });
+
+      const step = (dir) => {
+        const ys = tops();
+        const y = window.scrollY;
+        const target = dir > 0
+          ? ys.find((t) => t > y + 8) ?? ys[ys.length - 1]
+          : [...ys].reverse().find((t) => t < y - 8) ?? ys[0];
+        scrollTo(target);
+      };
+
+      addEventListener("keydown", (e) => {
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        const fwd = e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === "PageDown";
+        const back = e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "PageUp";
+        if (!fwd && !back && e.key !== "Home" && e.key !== "End") return;
+        e.preventDefault();
+        const ys = tops();
+        if (e.key === "Home") return scrollTo(ys[0]);
+        if (e.key === "End") return scrollTo(ys[ys.length - 1]);
+        step(fwd ? 1 : -1);
+      });
+    }
+
+    function init() {
+      // scroll progress bar
+      gsap.to(".progress__bar", {
+        scaleX: 1, ease: "none",
+        scrollTrigger: { trigger: document.documentElement, start: "top top", end: "bottom bottom", scrub: true },
+      });
+
+      // hero entrance — fromTo with explicit visible end state, because the
+      // .anim CSS pre-hides these (a plain .from() would treat 0 as the target).
+      const heroTl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      heroTl
+        .fromTo(".hero__num", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.8 })
+        .fromTo(".hero__glyph", { opacity: 0, scale: 0.86, filter: "blur(14px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 1.4 }, "-=0.4")
+        .fromTo(".hero__title", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1.1 }, "-=0.9")
+        .fromTo(".hero__sub", { opacity: 0, y: 18, letterSpacing: "0.7em" }, { opacity: 1, y: 0, letterSpacing: "0.4em", duration: 0.9 }, "-=0.6")
+        .fromTo(".hero__say", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9 }, "-=0.5")
+        .fromTo(".cue", { opacity: 0 }, { opacity: 1, duration: 0.8 }, "-=0.4");
+      gsap.fromTo(".cue__line", { scaleY: 0 }, { scaleY: 1, transformOrigin: "top", duration: 1, ease: "power2.out", delay: 1.6, repeat: -1, repeatDelay: 0.6, yoyo: true });
+
+      // hero parallax + fade on scroll out
+      gsap.to("[data-hero-bg]", { yPercent: 16, scale: 1.12, ease: "none",
+        scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+      gsap.to(".hero__inner", { yPercent: -14, opacity: 0, ease: "none",
+        scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+
+      // parallax on every full-bleed scene image
+      gsap.utils.toArray("[data-parallax]").forEach((img) => {
+        gsap.fromTo(img, { yPercent: -10 }, { yPercent: 10, ease: "none",
+          scrollTrigger: { trigger: img.closest(".scene"), start: "top bottom", end: "bottom top", scrub: true } });
+      });
+
+      // heading line reveals
+      gsap.utils.toArray("[data-split]").forEach((el) => {
+        const split = new SplitText(el, { type: "lines", linesClass: "split-line" });
+        gsap.from(split.lines, {
+          yPercent: 110, opacity: 0, duration: 1, ease: "power3.out", stagger: 0.1,
+          scrollTrigger: { trigger: el, start: "top 82%" },
+        });
+      });
+
+      // generic fade-up reveals
+      gsap.utils.toArray("[data-reveal]").forEach((el) => {
+        gsap.from(el, {
+          y: 34, opacity: 0, duration: 0.9, ease: "power2.out",
+          scrollTrigger: { trigger: el, start: "top 88%" },
+        });
+      });
+
+      // pinned signature moment: the axis of responsibility tips downward.
+      // The upward direction dims to almost nothing; the downward branch and its
+      // instructions resolve in, while the arrow swings from level to a firm down.
+      const dirTl = gsap.timeline({
+        scrollTrigger: { trigger: ".dir", start: "top top", end: "+=130%", pin: true, scrub: 0.5 },
+      });
+      dirTl
+        .fromTo("[data-dir-up]", { opacity: 0.85, y: 0 }, { opacity: 0.28, y: -10, ease: "power1.out" }, 0)
+        .fromTo("[data-dir-arrow]", { y: -16, opacity: 0.4, rotate: -8 }, { y: 0, opacity: 1, rotate: 0, ease: "power2.out" }, 0.1)
+        .fromTo("[data-dir-big]", { opacity: 0, y: 22, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, ease: "power2.out" }, 0.2)
+        .fromTo("[data-dir-down]", { opacity: 0, y: 18 }, { opacity: 1, y: 0, ease: "power2.out" }, 0.35)
+        .from("[data-dir-line]", { opacity: 0, y: 24, stagger: 0.2, ease: "power2.out" }, 0.5);
+
+      ScrollTrigger.refresh();
+    }
+  </script>
 </body>
 </html>
