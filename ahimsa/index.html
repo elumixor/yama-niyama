@@ -1,47 +1,391 @@
 <!doctype html>
-<!-- generated:scaffold -->
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ahiṃsá — Non-harming · Yama & Niyama</title>
-  <meta name="description" content="Not inflicting pain or hurt on anybody by thought, word or action — guiding one's conduct so that it is unjust to none." />
+  <title>Ahiṃsá — Non-harming · Yama &amp; Niyama</title>
+  <meta name="description" content="Ahiṃsá, the first Yama: not inflicting pain by thought, word or action. It is not the refusal to ever take life — existence itself depends on other life. What it forbids is the intention to harm." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,400&family=Spectral:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,900&family=Spectral:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/src/shared/base.css" />
+  <!-- Hide above-the-fold hero pieces only when motion is allowed, so reduced-motion
+       users (and the no-JS case) always see fully-rendered content. -->
+  <script>
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches)
+      document.documentElement.classList.add("anim");
+  </script>
   <style>
     :root {
-      --accent: hsl(0 58% 52%);
-      --accent-soft: hsl(0 48% 92%);
-      --ink: hsl(0 30% 12%);
-      --paper: hsl(0 40% 97%);
+      --ink: #16271d;
+      --paper: #f2efe6;
+      --paper-2: #e7e0d1;
+      --accent: #2f7350;
+      --clay: #b65b34;
+      --muted: #56655a;
+      --line: rgba(22, 39, 29, 0.15);
     }
-    body { background: var(--paper); color: var(--ink); }
-    .stage { min-height: 100svh; display: grid; grid-template-rows: auto 1fr auto; max-width: 860px; margin-inline: auto; padding: clamp(1.5rem, 5vw, 4rem); }
-    .crumb { font-family: var(--font-body); font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
-    .crumb a { color: inherit; text-decoration: none; }
-    .glyph { font-size: clamp(4rem, 16vw, 10rem); line-height: 1; color: var(--accent); opacity: .9; }
-    .translit { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.5rem, 9vw, 5.5rem); line-height: .95; margin: .1em 0 0; }
-    .gloss { font-style: italic; font-size: clamp(1.1rem, 3vw, 1.5rem); color: var(--accent); margin-top: .4rem; }
-    .sutra { font-style: italic; border-left: 3px solid var(--accent); padding-left: 1rem; margin: 2.5rem 0; color: hsl(0 25% 30%); }
-    .definition { font-size: clamp(1.15rem, 2.6vw, 1.5rem); line-height: 1.5; }
-    .note { margin-top: 1.5rem; color: hsl(0 18% 32%); line-height: 1.7; }
-    .seam { font-family: var(--font-body); font-size: .75rem; letter-spacing: .15em; text-transform: uppercase; color: hsl(0 15% 55%); }
+
+    body { background: var(--paper); color: var(--ink); overflow-x: hidden; }
+
+    /* faint paper grain for atmosphere */
+    body::after {
+      content: ""; position: fixed; inset: 0; z-index: 9; pointer-events: none;
+      opacity: 0.04; mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ── chrome ─────────────────────────────────────────── */
+    .progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 50; background: transparent; }
+    .progress__bar { height: 100%; width: 100%; transform: scaleX(0); transform-origin: left center;
+      background: linear-gradient(90deg, var(--accent), var(--clay)); }
+
+    .home { position: fixed; top: clamp(1rem, 3vw, 1.8rem); left: clamp(1rem, 4vw, 2.4rem); z-index: 40;
+      font: 500 0.74rem/1 var(--font-body); letter-spacing: 0.24em; text-transform: uppercase;
+      text-decoration: none; color: var(--ink); mix-blend-mode: difference; filter: invert(1); }
+    .home::before { content: "←"; margin-right: 0.5em; display: inline-block; }
+
+    /* ── shared type ────────────────────────────────────── */
+    .kicker { font: 500 0.78rem/1 var(--font-body); letter-spacing: 0.32em; text-transform: uppercase; color: var(--accent); margin: 0 0 1.4rem; }
+    .scene .kicker { color: rgba(255, 255, 255, 0.82); }
+    .display { font: 300 clamp(2.3rem, 6.4vw, 5rem)/1.04 var(--font-display); letter-spacing: -0.018em; margin: 0; }
+    .lede { font: 400 clamp(1.12rem, 2.3vw, 1.5rem)/1.6 var(--font-body); color: var(--muted); max-width: 34ch; }
+    .scene .lede { color: rgba(255, 255, 255, 0.88); }
+    .body-copy { font: 400 clamp(1.05rem, 1.5vw, 1.22rem)/1.72 var(--font-body); max-width: 56ch; }
+
+    .panel { max-width: 1080px; margin-inline: auto; padding: clamp(4.5rem, 13vh, 10rem) clamp(1.4rem, 6vw, 5rem); }
+
+    /* ── full-bleed photographic scenes ─────────────────── */
+    .scene { position: relative; min-height: 100svh; display: grid; align-items: center; overflow: clip; color: #fff; }
+    .scene__bg { position: absolute; inset: -12% 0; width: 100%; height: 124%; object-fit: cover; will-change: transform; }
+    .scene__tint { position: absolute; inset: 0; z-index: 1; }
+    .scene__inner { position: relative; z-index: 2; width: 100%; max-width: 1080px; margin-inline: auto; padding: clamp(2rem, 8vw, 6rem) clamp(1.4rem, 6vw, 5rem); }
+    .scene__inner.right { display: flex; justify-content: flex-end; text-align: right; }
+    .scene__inner.right > div { max-width: 42ch; }
+
+    /* ── hero ───────────────────────────────────────────── */
+    .hero { text-align: center; place-items: center; }
+    .hero__tint { background:
+      radial-gradient(120% 90% at 50% 12%, rgba(12, 26, 18, 0.10), transparent 55%),
+      linear-gradient(180deg, rgba(14, 26, 18, 0.46) 0%, rgba(14, 26, 18, 0.20) 42%, rgba(12, 22, 16, 0.66) 100%); }
+    .hero__inner { display: grid; justify-items: center; gap: 0.2rem; }
+    .hero__num { font: 500 0.8rem/1 var(--font-body); letter-spacing: 0.42em; text-transform: uppercase; color: rgba(255,255,255,0.78); margin: 0 0 2.2rem; }
+    .hero__glyph { font-family: var(--font-display); font-weight: 400; font-size: clamp(3.6rem, 12vw, 8.5rem); line-height: 1; color: #fff; text-shadow: 0 2px 40px rgba(0,0,0,0.35); }
+    .hero__title { font: 300 clamp(3rem, 11vw, 7.5rem)/0.92 var(--font-display); letter-spacing: -0.02em; margin: 0.1em 0 0; }
+    .hero__sub { font: 500 clamp(0.9rem, 2vw, 1.15rem)/1 var(--font-body); letter-spacing: 0.4em; text-transform: uppercase; color: #e7a07a; margin: 1.4rem 0 0; }
+    .hero__say { font: 400 clamp(1.05rem, 2.2vw, 1.35rem)/1.6 var(--font-body); color: rgba(255,255,255,0.9); max-width: 32ch; margin: 2.4rem auto 0; }
+    .cue { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 3;
+      font: 500 0.68rem/1 var(--font-body); letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.8);
+      display: grid; justify-items: center; gap: 0.7rem; }
+    .cue__line { width: 1px; height: 46px; background: rgba(255,255,255,0.6); transform-origin: top; }
+
+    /* ── definition (two facing blocks) ─────────────────── */
+    .sutra { font: 400 clamp(1.2rem, 2.6vw, 1.7rem)/1.5 var(--font-display); color: var(--accent);
+      border-left: 2px solid var(--clay); padding-left: clamp(1rem, 2vw, 1.6rem); margin: 2.6rem 0 0; max-width: 40ch; }
+    .defs { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 6vw, 5rem); margin-top: 3rem; }
+    .def h3 { font: 500 clamp(1.6rem, 3.4vw, 2.4rem)/1 var(--font-display); margin: 0 0 0.2rem; }
+    .def .sa { font-family: var(--font-display); color: var(--accent); font-size: 1.4rem; margin: 0 0 0.9rem; }
+    .def--harm h3 { color: var(--clay); }
+    .def p { font: 400 1.08rem/1.66 var(--font-body); color: var(--muted); margin: 0; }
+    .pull { margin-top: clamp(2.6rem, 6vw, 4rem); padding-top: 2rem; border-top: 1px solid var(--line);
+      font: 300 clamp(1.5rem, 3.6vw, 2.4rem)/1.32 var(--font-display); letter-spacing: -0.01em; max-width: 26ch; }
+    .pull b { font-weight: 600; color: var(--clay); }
+
+    /* ── átatáyii — pinned reveal of the six aggressors ──── */
+    .atat { color: #fff; place-items: center; }
+    .atat__tint { background: linear-gradient(180deg, rgba(20, 12, 8, 0.80), rgba(14, 20, 14, 0.78)); }
+    .atat__inner { display: grid; justify-items: center; gap: 1.6rem; max-width: 920px; }
+    .atat__sa { font: 400 clamp(1.05rem, 2.4vw, 1.5rem)/1.5 var(--font-display); color: #e7a07a; max-width: 40ch; text-align: center; }
+    .atat__list { list-style: none; margin: 0.6rem 0 0; padding: 0; display: grid; gap: 0.9rem; width: 100%; max-width: 30ch; }
+    .atat__list li { font: 400 clamp(1.15rem, 2.6vw, 1.6rem)/1.3 var(--font-display); color: rgba(255,255,255,0.94);
+      display: flex; align-items: baseline; gap: 1rem; }
+    .atat__list li span { font: 500 0.8rem/1 var(--font-body); letter-spacing: 0.2em; color: var(--clay); width: 1.4em; flex: none; }
+    .atat__verdict { font: 300 clamp(1.5rem, 4vw, 2.6rem)/1.3 var(--font-display); max-width: 24ch; text-align: center; margin-top: 0.6rem; }
+    .atat__verdict b { font-weight: 600; color: #e7a07a; }
+
+    /* ── method cards ───────────────────────────────────── */
+    .cards { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.2rem, 3vw, 2rem); margin-top: 3rem; }
+    .card { background: var(--paper-2); border: 1px solid var(--line); border-radius: 4px; padding: clamp(1.6rem, 3vw, 2.6rem); }
+    .card__tag { font: 500 0.72rem/1 var(--font-body); letter-spacing: 0.26em; text-transform: uppercase; color: var(--accent); margin: 0 0 1rem; }
+    .card--warn .card__tag { color: var(--clay); }
+    .card h3 { font: 500 clamp(1.5rem, 3vw, 2rem)/1.04 var(--font-display); margin: 0 0 0.8rem; }
+    .card p { font: 400 1.04rem/1.66 var(--font-body); color: var(--muted); margin: 0; }
+    .verdict { margin-top: clamp(2.4rem, 5vw, 3.4rem); font: 300 clamp(1.5rem, 3.6vw, 2.4rem)/1.34 var(--font-display); max-width: 28ch; }
+    .verdict b { font-weight: 600; color: var(--accent); }
+
+    /* ── closing ────────────────────────────────────────── */
+    .close__tint { background: linear-gradient(180deg, rgba(14, 26, 18, 0.50), rgba(12, 22, 16, 0.80)); }
+    .close__inner { max-width: 760px; }
+    .close .body-copy { color: rgba(255,255,255,0.9); max-width: 52ch; }
+    .close em { font-style: normal; color: #e7a07a; }
+    .nav { display: flex; flex-wrap: wrap; gap: 1.4rem 2.4rem; margin-top: clamp(2.6rem, 6vw, 4rem);
+      padding-top: 1.6rem; border-top: 1px solid rgba(255,255,255,0.25); }
+    .nav a { font: 500 0.82rem/1.4 var(--font-body); letter-spacing: 0.14em; text-transform: uppercase; color: #fff; text-decoration: none; opacity: 0.82; transition: opacity 0.25s; }
+    .nav a:hover { opacity: 1; }
+    .nav a small { display: block; font-size: 0.66rem; letter-spacing: 0.2em; color: #e7a07a; margin-top: 0.3rem; }
+    .nav .next { margin-left: auto; text-align: right; }
+    .attribution { margin-top: 3rem; font: 400 0.74rem/1.5 var(--font-body); letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
+
+    /* reveal gating — only hero pieces are pre-hidden (above the fold) */
+    .anim .hero [data-load] { opacity: 0; }
+
+    @media (max-width: 720px) {
+      .defs, .cards { grid-template-columns: 1fr; }
+      .scene__inner.right { justify-content: flex-start; text-align: left; }
+      .nav .next { margin-left: 0; text-align: left; }
+    }
   </style>
 </head>
 <body>
-  <main class="stage">
-    <p class="crumb"><a href="/yama-niyama/">Yama & Niyama</a> · Yama · 01</p>
-    <div>
-      <div class="glyph" lang="sa">अहिंसा</div>
-      <h1 class="translit">Ahiṃsá</h1>
-      <p class="gloss">Non-harming</p>
-      <blockquote class="sutra">Manovákkáyaeh sarvabhútánámapiidánamahiṃsá.</blockquote>
-      <p class="definition">Not inflicting pain or hurt on anybody by thought, word or action — guiding one's conduct so that it is unjust to none.</p>
-      <p class="note">Ahiṃsá is not the impossible refusal to ever take life. Existence itself depends on other forms of life. What it forbids is the intention to harm. The use of force against an aggressor is valour; desisting from it is cowardice.</p>
-    </div>
-    <p class="seam">A Guide to Human Conduct — scaffold placeholder, design pending</p>
+  <div class="progress"><div class="progress__bar"></div></div>
+  <a class="home" href="/yama-niyama/">Yama &amp; Niyama</a>
+
+  <main>
+    <!-- ░░ HERO ░░ -->
+    <section class="hero scene">
+      <img class="scene__bg" data-hero-bg src="./img/a_soil.jpg" alt="Two cupped hands cradling a mound of dark earth, lit by warm low light with fine dust falling" />
+      <div class="scene__tint hero__tint"></div>
+      <div class="scene__inner">
+        <div class="hero__inner">
+          <p class="hero__num" data-load>Yama · The First Observance · 01</p>
+          <div class="hero__glyph" lang="sa" data-load>अहिंसा</div>
+          <h1 class="hero__title" data-load>Ahiṃsá</h1>
+          <p class="hero__sub" data-load>Non-harming</p>
+          <p class="hero__say" data-load>Not inflicting pain by thought, word or action. Not the refusal to ever take life — the refusal of the intention to harm.</p>
+        </div>
+      </div>
+      <div class="cue" data-load><span>Scroll</span><span class="cue__line"></span></div>
+    </section>
+
+    <!-- ░░ THE WORD ░░ -->
+    <section class="panel">
+      <p class="kicker" data-reveal>The word</p>
+      <h2 class="display" data-split>To cause pain to none — in thought, in word, in deed.</h2>
+      <p class="sutra" data-reveal lang="sa">Manovákkáyaeh sarvabhútánámapiidánamahiṃsá.</p>
+      <div class="defs">
+        <div class="def def--harm" data-reveal>
+          <p class="sa" lang="sa">हिंसा</p>
+          <h3>Hiṃsá</h3>
+          <p>Any thought or action carried out with the intention of causing harm to another. The mark is not the outcome — it is the will behind the act.</p>
+        </div>
+        <div class="def" data-reveal>
+          <p class="sa" lang="sa">अहिंसा</p>
+          <h3>Ahiṃsá</h3>
+          <p>To guide your conduct so that your thought and action cause pain to nobody, and are unjust to none. The whole of the discipline turns on that one word: intention.</p>
+        </div>
+      </div>
+      <p class="pull" data-reveal>This word is wrongly interpreted by many. Read it strictly and you cannot live <b>in a society, a forest, or a cave.</b></p>
+    </section>
+
+    <!-- ░░ THE IMPOSSIBLE READING — fern in the dark ░░ -->
+    <section class="scene">
+      <img class="scene__bg" data-parallax src="./img/a_fern.jpg" alt="A single fern frond catching faint light against a deep green, near-black forest floor" />
+      <div class="scene__tint" style="background:linear-gradient(180deg,rgba(8,18,12,.58),rgba(8,18,12,.7))"></div>
+      <div class="scene__inner">
+        <p class="kicker" data-reveal>The impossible reading</p>
+        <h2 class="display" data-split>If killing alone were the sin, no one could draw breath.</h2>
+        <p class="body-copy" data-reveal style="color:rgba(255,255,255,.9);margin-top:1.6rem">
+          Some so-called learned people forbade the plough, since tilling crushes the creatures under the soil. They poured sugar into ant-hills while human beings went hungry. But respiration kills numberless microbes; medicine destroys the bacteria of disease; even filtering water means killing what lives in it. Followed to its end, this reading leaves nowhere to stand. It is no definition of ahiṃsá — it is against the very laws of existence.
+        </p>
+      </div>
+    </section>
+
+    <!-- ░░ EXISTENCE DEPENDS ON LIFE — seedling ░░ -->
+    <section class="scene">
+      <img class="scene__bg" data-parallax src="./img/a_seedling.jpg" alt="Two cupped hands holding a small fern seedling rooted in dark soil, over a forest floor" />
+      <div class="scene__tint" style="background:linear-gradient(180deg,rgba(12,24,14,.40),rgba(10,20,12,.66))"></div>
+      <div class="scene__inner right">
+        <div>
+          <p class="kicker" data-reveal>The law of existence</p>
+          <h2 class="display" data-split>Life lives on life.</h2>
+          <p class="body-copy" data-reveal style="color:rgba(255,255,255,.92);margin-top:1.6rem;margin-left:auto">
+            Rice is got by killing the paddy — and paddy can sprout, paddy can reproduce; there is life in it too. To eat is to destroy lower forms, whether or not you mean any harm. Such acts are done to maintain life, not to inflict pain, and so they are not hiṃsá. Where there is no intention to harm, the question of hiṃsá does not arise at all.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ THE AGGRESSOR — pinned reveal ░░ -->
+    <section class="atat scene">
+      <img class="scene__bg" src="./img/a_tree_sky.jpg" alt="A single small tree alone on a bare ploughed hill beneath a vast, heavy, brooding sky" />
+      <div class="scene__tint atat__tint"></div>
+      <div class="scene__inner">
+        <div class="atat__inner">
+          <p class="kicker">The aggressor — átatáyii</p>
+          <p class="atat__sa" data-atat lang="sa">Kśetradárápahárii ca shastradhárii dhanápaháh / Agnidagaradashcaeva śadete hyátatáyinah</p>
+          <ul class="atat__list">
+            <li data-atat><span>i</span>Seizes your land by force</li>
+            <li data-atat><span>ii</span>Abducts your wife</li>
+            <li data-atat><span>iii</span>Comes with a weapon to kill you</li>
+            <li data-atat><span>iv</span>Snatches away your wealth</li>
+            <li data-atat><span>v</span>Sets fire to your house</li>
+            <li data-atat><span>vi</span>Takes life by administering poison</li>
+          </ul>
+          <p class="atat__verdict" data-atat>To use force against such a one <b>is not against ahiṃsá.</b> Hiṃsá and the use of force are not the same thing.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ VALOUR, NOT COWARDICE — lion ░░ -->
+    <section class="scene">
+      <img class="scene__bg" data-parallax src="./img/a_lion.jpg" alt="A close portrait of a lion's face, calm and powerful, in warm low light against darkness" />
+      <div class="scene__tint" style="background:linear-gradient(90deg,rgba(14,12,8,.74),rgba(14,12,8,.34))"></div>
+      <div class="scene__inner">
+        <p class="kicker" data-reveal>Valour</p>
+        <h2 class="display" data-split>The use of force against an aggressor is valour; desisting from it is cowardice.</h2>
+        <p class="body-copy" data-reveal style="color:rgba(255,255,255,.92);margin-top:1.6rem">
+          Heroism shows itself in the fight against aggressors. Ráma waged war on Rávaṇa — not to conquer Laṅká, but to recover what was stolen. Krṣṇa pressed the Pándavas to take up arms against usurpers. Maháprabhu, the very incarnation of mercy, pounced like a lion on the tyrant judge. To hide weakness behind the word ahiṃsá may serve a political end, but it does not protect the sanctity of righteousness.
+        </p>
+      </div>
+    </section>
+
+    <!-- ░░ TWO TESTS — cards ░░ -->
+    <section class="panel">
+      <p class="kicker" data-reveal>Two tests before you act</p>
+      <h2 class="display" data-split>Correction is not harm. But neither is courage the same as folly.</h2>
+      <div class="cards">
+        <div class="card" data-reveal>
+          <p class="card__tag">The intention</p>
+          <h3>Correction is not hiṃsá</h3>
+          <p>When a parent punishes a child, the aim is not to make it weep — it is to correct. Any act done in the true spirit of rectification, however harsh it seems, is not hiṃsá. To pardon an aggressor before reforming them only encourages injustice.</p>
+        </div>
+        <div class="card card--warn" data-reveal>
+          <p class="card__tag">The strength</p>
+          <h3>Measure your power first</h3>
+          <p>The weak must assess their strength before fighting a powerful aggressor. History calls the opposite error “Rájput folly” — to charge valiantly, again and again, without ever counting the cost, and so to lose every battle and die a heroic death.</p>
+        </div>
+      </div>
+      <p class="verdict" data-reveal>So gain the power to resist evil — then make proper use of it. <b>Inability is no virtue.</b></p>
+    </section>
+
+    <!-- ░░ WHERE IT LEADS — tree at dawn ░░ -->
+    <section class="close scene">
+      <img class="scene__bg" data-parallax src="./img/a_tree_dawn.jpg" alt="A single broad tree standing rooted in a misty meadow at sunrise, warm light low on the horizon" />
+      <div class="scene__tint close__tint"></div>
+      <div class="scene__inner close__inner">
+        <p class="kicker" data-reveal>Where it leads</p>
+        <h2 class="display" data-split>Guard every life, including the one you must defend.</h2>
+        <p class="body-copy" data-reveal>
+          Ahiṃsá is the first of the five Yama — regulated conduct toward the world. It does not ask you to be harmless; it asks you to be just. Once the intention to harm is gone, what remains is <em>Satya</em>, the next observance: not bare fact, but truth bent toward the welfare of all.
+        </p>
+        <nav class="nav" data-reveal>
+          <a href="/yama-niyama/">All ten<small>Index</small></a>
+          <a class="next" href="/yama-niyama/satya">Satya →<small>02 · Truth</small></a>
+        </nav>
+        <p class="attribution" data-reveal>A Guide to Human Conduct · after Shrii Shrii Ánandamúrti</p>
+      </div>
+    </section>
   </main>
+
+  <script type="module">
+    import gsap from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    import { SplitText } from "gsap/SplitText";
+    import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    gsap.registerPlugin(ScrollToPlugin);
+    setupKeyboardNav();
+
+    if (!reduce) {
+      gsap.registerPlugin(ScrollTrigger, SplitText);
+      document.fonts.ready.then(init);
+    }
+
+    // ← / → (and ↑ / ↓ / PgUp / PgDn) step between sections; Home / End jump to the ends.
+    // Tops are recomputed live each press with getBoundingClientRect so GSAP's pin
+    // spacers (which reparent pinned sections) can never desync the navigation.
+    function setupKeyboardNav() {
+      const tops = () => {
+        const ys = Array.from(document.querySelectorAll("main section"))
+          .map((s) => Math.round(s.getBoundingClientRect().top + window.scrollY))
+          .sort((a, b) => a - b);
+        return ys.filter((y, i) => i === 0 || y - ys[i - 1] > 8); // de-dupe near-equal
+      };
+
+      const scrollTo = (y) =>
+        gsap.to(window, { duration: reduce ? 0 : 0.9, ease: "power2.inOut", scrollTo: { y, autoKill: false } });
+
+      const step = (dir) => {
+        const ys = tops();
+        const y = window.scrollY;
+        const target = dir > 0
+          ? ys.find((t) => t > y + 8) ?? ys[ys.length - 1]
+          : [...ys].reverse().find((t) => t < y - 8) ?? ys[0];
+        scrollTo(target);
+      };
+
+      addEventListener("keydown", (e) => {
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        const fwd = e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === "PageDown";
+        const back = e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "PageUp";
+        if (!fwd && !back && e.key !== "Home" && e.key !== "End") return;
+        e.preventDefault();
+        const ys = tops();
+        if (e.key === "Home") return scrollTo(ys[0]);
+        if (e.key === "End") return scrollTo(ys[ys.length - 1]);
+        step(fwd ? 1 : -1);
+      });
+    }
+
+    function init() {
+      // scroll progress bar
+      gsap.to(".progress__bar", {
+        scaleX: 1, ease: "none",
+        scrollTrigger: { trigger: document.documentElement, start: "top top", end: "bottom bottom", scrub: true },
+      });
+
+      // hero entrance — fromTo with explicit visible end state, because the
+      // .anim CSS pre-hides these (a plain .from() would treat 0 as the target).
+      const heroTl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      heroTl
+        .fromTo(".hero__num", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.8 })
+        .fromTo(".hero__glyph", { opacity: 0, scale: 0.86, filter: "blur(14px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 1.4 }, "-=0.4")
+        .fromTo(".hero__title", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1.1 }, "-=0.9")
+        .fromTo(".hero__sub", { opacity: 0, y: 18, letterSpacing: "0.7em" }, { opacity: 1, y: 0, letterSpacing: "0.4em", duration: 0.9 }, "-=0.6")
+        .fromTo(".hero__say", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9 }, "-=0.5")
+        .fromTo(".cue", { opacity: 0 }, { opacity: 1, duration: 0.8 }, "-=0.4");
+      gsap.fromTo(".cue__line", { scaleY: 0 }, { scaleY: 1, transformOrigin: "top", duration: 1, ease: "power2.out", delay: 1.6, repeat: -1, repeatDelay: 0.6, yoyo: true });
+
+      // hero parallax + fade on scroll out
+      gsap.to("[data-hero-bg]", { yPercent: 16, scale: 1.12, ease: "none",
+        scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+      gsap.to(".hero__inner", { yPercent: -14, opacity: 0, ease: "none",
+        scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+
+      // parallax on every full-bleed scene image
+      gsap.utils.toArray("[data-parallax]").forEach((img) => {
+        gsap.fromTo(img, { yPercent: -10 }, { yPercent: 10, ease: "none",
+          scrollTrigger: { trigger: img.closest(".scene"), start: "top bottom", end: "bottom top", scrub: true } });
+      });
+
+      // heading line reveals
+      gsap.utils.toArray("[data-split]").forEach((el) => {
+        const split = new SplitText(el, { type: "lines", linesClass: "split-line" });
+        gsap.from(split.lines, {
+          yPercent: 110, opacity: 0, duration: 1, ease: "power3.out", stagger: 0.1,
+          scrollTrigger: { trigger: el, start: "top 82%" },
+        });
+      });
+
+      // generic fade-up reveals
+      gsap.utils.toArray("[data-reveal]").forEach((el) => {
+        gsap.from(el, {
+          y: 34, opacity: 0, duration: 0.9, ease: "power2.out",
+          scrollTrigger: { trigger: el, start: "top 88%" },
+        });
+      });
+
+      // signature moment — the átatáyii revealed one line at a time while pinned.
+      // Each of the six aggressors fades up in turn, then the verdict lands.
+      const atatTl = gsap.timeline({
+        scrollTrigger: { trigger: ".atat", start: "top top", end: "+=150%", pin: true, scrub: 0.5 },
+      });
+      atatTl.from("[data-atat]", { opacity: 0, y: 30, stagger: 0.5, ease: "power2.out" });
+
+      ScrollTrigger.refresh();
+    }
+  </script>
 </body>
 </html>
