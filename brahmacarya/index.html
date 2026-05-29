@@ -1,47 +1,417 @@
 <!doctype html>
-<!-- generated:scaffold -->
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Brahmacarya — Remaining in Brahma · Yama & Niyama</title>
-  <meta name="description" content="To treat every object one comes in contact with as an expression of Brahma, not as a crude finite thing — so the mind never detaches from the Cosmic." />
+  <title>Brahmacarya — Remaining in Brahma · Yama &amp; Niyama</title>
+  <meta name="description" content="Brahmacarya, the fourth Yama: to treat every object you meet as an expression of Brahma, not as a crude finite thing — so the mind never detaches from the Cosmic even as it moves between objects." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,400&family=Spectral:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Spectral:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/src/shared/base.css" />
+  <!-- Hide above-the-fold hero pieces only when motion is allowed, so reduced-motion
+       users (and the no-JS case) always see fully-rendered content. -->
+  <script>
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches)
+      document.documentElement.classList.add("anim");
+  </script>
   <style>
     :root {
-      --accent: hsl(108 58% 52%);
-      --accent-soft: hsl(108 48% 92%);
-      --ink: hsl(108 30% 12%);
-      --paper: hsl(108 40% 97%);
+      --ink: #0c1430;
+      --paper: #f0eef7;
+      --paper-2: #e6e2f2;
+      --accent: #2f7f96;
+      --gold: #d7a94a;
+      --star: #e9d8a0;
+      --muted: #545d78;
+      --line: rgba(12, 20, 48, 0.14);
     }
-    body { background: var(--paper); color: var(--ink); }
-    .stage { min-height: 100svh; display: grid; grid-template-rows: auto 1fr auto; max-width: 860px; margin-inline: auto; padding: clamp(1.5rem, 5vw, 4rem); }
-    .crumb { font-family: var(--font-body); font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
-    .crumb a { color: inherit; text-decoration: none; }
-    .glyph { font-size: clamp(4rem, 16vw, 10rem); line-height: 1; color: var(--accent); opacity: .9; }
-    .translit { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.5rem, 9vw, 5.5rem); line-height: .95; margin: .1em 0 0; }
-    .gloss { font-style: italic; font-size: clamp(1.1rem, 3vw, 1.5rem); color: var(--accent); margin-top: .4rem; }
-    .sutra { font-style: italic; border-left: 3px solid var(--accent); padding-left: 1rem; margin: 2.5rem 0; color: hsl(108 25% 30%); }
-    .definition { font-size: clamp(1.15rem, 2.6vw, 1.5rem); line-height: 1.5; }
-    .note { margin-top: 1.5rem; color: hsl(108 18% 32%); line-height: 1.7; }
-    .seam { font-family: var(--font-body); font-size: .75rem; letter-spacing: .15em; text-transform: uppercase; color: hsl(108 15% 55%); }
+
+    body { background: var(--paper); color: var(--ink); overflow-x: hidden; }
+
+    /* faint paper grain for atmosphere */
+    body::after {
+      content: ""; position: fixed; inset: 0; z-index: 9; pointer-events: none;
+      opacity: 0.04; mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ── chrome ─────────────────────────────────────────── */
+    .progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 50; background: transparent; }
+    .progress__bar { height: 100%; width: 100%; transform: scaleX(0); transform-origin: left center;
+      background: linear-gradient(90deg, var(--accent), var(--gold)); }
+
+    .home { position: fixed; top: clamp(1rem, 3vw, 1.8rem); left: clamp(1rem, 4vw, 2.4rem); z-index: 40;
+      font: 500 0.74rem/1 var(--font-body); letter-spacing: 0.24em; text-transform: uppercase;
+      text-decoration: none; color: var(--ink); mix-blend-mode: difference; filter: invert(1); }
+    .home::before { content: "←"; margin-right: 0.5em; display: inline-block; }
+
+    /* ── shared type ────────────────────────────────────── */
+    .kicker { font: 500 0.78rem/1 var(--font-body); letter-spacing: 0.32em; text-transform: uppercase; color: var(--accent); margin: 0 0 1.4rem; }
+    .scene .kicker { color: rgba(233, 216, 160, 0.92); }
+    .display { font: 300 clamp(2.3rem, 6.4vw, 5rem)/1.04 var(--font-display); letter-spacing: -0.018em; margin: 0; }
+    .lede { font: 400 clamp(1.12rem, 2.3vw, 1.5rem)/1.6 var(--font-body); color: var(--muted); max-width: 34ch; }
+    .scene .lede { color: rgba(255, 255, 255, 0.88); }
+    .body-copy { font: 400 clamp(1.05rem, 1.5vw, 1.22rem)/1.72 var(--font-body); max-width: 56ch; }
+
+    .panel { max-width: 1080px; margin-inline: auto; padding: clamp(4.5rem, 13vh, 10rem) clamp(1.4rem, 6vw, 5rem); }
+
+    /* ── full-bleed photographic scenes ─────────────────── */
+    .scene { position: relative; min-height: 100svh; display: grid; align-items: center; overflow: clip; color: #fff; }
+    .scene__bg { position: absolute; inset: -12% 0; width: 100%; height: 124%; object-fit: cover; will-change: transform; }
+    .scene__tint { position: absolute; inset: 0; z-index: 1; }
+    .scene__inner { position: relative; z-index: 2; width: 100%; max-width: 1080px; margin-inline: auto; padding: clamp(2rem, 8vw, 6rem) clamp(1.4rem, 6vw, 5rem); }
+    .scene__inner.right { display: flex; justify-content: flex-end; text-align: right; }
+    .scene__inner.right > div { max-width: 42ch; }
+
+    /* ── hero ───────────────────────────────────────────── */
+    .hero { text-align: center; place-items: center; }
+    .hero__tint { background:
+      radial-gradient(120% 90% at 50% 12%, rgba(8, 12, 36, 0.10), transparent 55%),
+      linear-gradient(180deg, rgba(8, 12, 36, 0.46) 0%, rgba(8, 12, 36, 0.20) 44%, rgba(8, 12, 36, 0.66) 100%); }
+    .hero__inner { display: grid; justify-items: center; gap: 0.2rem; }
+    .hero__num { font: 500 0.8rem/1 var(--font-body); letter-spacing: 0.42em; text-transform: uppercase; color: rgba(255,255,255,0.78); margin: 0 0 2.2rem; }
+    .hero__glyph { font-family: var(--font-display); font-weight: 400; font-size: clamp(3.2rem, 11vw, 7.6rem); line-height: 1; color: #fff; text-shadow: 0 2px 50px rgba(120, 150, 220, 0.45); }
+    .hero__title { font: 300 clamp(3rem, 11vw, 7.5rem)/0.92 var(--font-display); letter-spacing: -0.02em; margin: 0.1em 0 0; }
+    .hero__sub { font: 500 clamp(0.9rem, 2vw, 1.15rem)/1 var(--font-body); letter-spacing: 0.4em; text-transform: uppercase; color: var(--star); margin: 1.4rem 0 0; }
+    .hero__say { font: 400 clamp(1.05rem, 2.2vw, 1.35rem)/1.6 var(--font-body); color: rgba(255,255,255,0.9); max-width: 32ch; margin: 2.4rem auto 0; }
+    .cue { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 3;
+      font: 500 0.68rem/1 var(--font-body); letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.8);
+      display: grid; justify-items: center; gap: 0.7rem; }
+    .cue__line { width: 1px; height: 46px; background: rgba(255,255,255,0.6); transform-origin: top; }
+
+    /* ── definition (two facing blocks) ─────────────────── */
+    .defs { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 6vw, 5rem); margin-top: 3rem; }
+    .def h3 { font: 500 clamp(1.6rem, 3.4vw, 2.4rem)/1 var(--font-display); margin: 0 0 0.2rem; }
+    .def .sa { font-family: var(--font-display); color: var(--accent); font-size: 1.4rem; margin: 0 0 0.9rem; }
+    .def--proper h3 { color: var(--accent); }
+    .def p { font: 400 1.08rem/1.66 var(--font-body); color: var(--muted); margin: 0; }
+    .pull { margin-top: clamp(2.6rem, 6vw, 4rem); padding-top: 2rem; border-top: 1px solid var(--line);
+      font: 300 clamp(1.5rem, 3.6vw, 2.4rem)/1.32 var(--font-display); letter-spacing: -0.01em; max-width: 26ch; }
+    .pull b { font-weight: 600; color: var(--accent); }
+
+    /* ── transformation (pinned signature) ──────────────── */
+    .morph { color: #fff; text-align: center; place-items: center; }
+    .morph__tint { background: linear-gradient(180deg, rgba(6, 10, 30, 0.62), rgba(6, 10, 30, 0.5) 50%, rgba(6, 10, 30, 0.7)); }
+    .morph__inner { display: grid; justify-items: center; gap: 1.1rem; }
+    .morph__stage { position: relative; display: grid; place-items: center; min-height: clamp(7rem, 18vw, 11rem); width: min(90vw, 30ch); }
+    .morph__word { grid-area: 1 / 1; font: 300 clamp(3rem, 12vw, 7rem)/1 var(--font-display); letter-spacing: -0.01em; }
+    .morph__word .sa { display: block; font-size: 0.36em; letter-spacing: 0.04em; color: rgba(255,255,255,0.6); margin-top: 0.6em; }
+    .morph__from { color: rgba(255,255,255,0.82); }
+    .morph__to { color: var(--star); text-shadow: 0 2px 40px rgba(215, 169, 74, 0.4); }
+    .morph__gloss { font: 400 1.05rem/1.6 var(--font-body); color: rgba(255,255,255,0.82); max-width: 44ch; }
+    .morph__arrow { font: 500 0.82rem/1 var(--font-body); letter-spacing: 0.34em; text-transform: uppercase; color: var(--gold); }
+
+    /* ── method cards ───────────────────────────────────── */
+    .cards { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.2rem, 3vw, 2rem); margin-top: 3rem; }
+    .card { background: var(--paper-2); border: 1px solid var(--line); border-radius: 4px; padding: clamp(1.6rem, 3vw, 2.6rem); }
+    .card__tag { font: 500 0.72rem/1 var(--font-body); letter-spacing: 0.26em; text-transform: uppercase; color: var(--accent); margin: 0 0 1rem; }
+    .card--off .card__tag { color: var(--muted); }
+    .card h3 { font: 500 clamp(1.5rem, 3vw, 2rem)/1.04 var(--font-display); margin: 0 0 0.8rem; }
+    .card p { font: 400 1.04rem/1.66 var(--font-body); color: var(--muted); margin: 0; }
+    .card p b { font-weight: 600; color: var(--ink); }
+    .verdict { margin-top: clamp(2.4rem, 5vw, 3.4rem); font: 300 clamp(1.5rem, 3.6vw, 2.4rem)/1.34 var(--font-display); max-width: 28ch; }
+    .verdict b { font-weight: 600; color: var(--accent); }
+
+    /* ── sutra band ─────────────────────────────────────── */
+    .sutra { background: var(--ink); color: var(--paper); }
+    .sutra__inner { max-width: 1080px; margin-inline: auto; padding: clamp(4rem, 12vh, 8rem) clamp(1.4rem, 6vw, 5rem); }
+    .sutra .kicker { color: var(--star); }
+    .sutra__sa { font: 300 clamp(1.8rem, 5vw, 3.4rem)/1.3 var(--font-display); letter-spacing: -0.01em; margin: 0; color: #fff; }
+    .sutra__gloss { font: 400 clamp(1.05rem, 1.6vw, 1.25rem)/1.7 var(--font-body); color: rgba(240, 238, 247, 0.66); max-width: 52ch; margin: 1.6rem 0 0; }
+
+    /* ── closing ────────────────────────────────────────── */
+    .close__tint { background: linear-gradient(180deg, rgba(8, 12, 32, 0.5), rgba(8, 12, 32, 0.8)); }
+    .close__inner { max-width: 760px; }
+    .close .body-copy { color: rgba(255,255,255,0.9); max-width: 52ch; }
+    .close em { font-style: normal; color: var(--star); }
+    .nav { display: flex; flex-wrap: wrap; gap: 1.4rem 2.4rem; margin-top: clamp(2.6rem, 6vw, 4rem);
+      padding-top: 1.6rem; border-top: 1px solid rgba(255,255,255,0.25); }
+    .nav a { font: 500 0.82rem/1.4 var(--font-body); letter-spacing: 0.14em; text-transform: uppercase; color: #fff; text-decoration: none; opacity: 0.82; transition: opacity 0.25s; }
+    .nav a:hover { opacity: 1; }
+    .nav a small { display: block; font-size: 0.66rem; letter-spacing: 0.2em; color: var(--star); margin-top: 0.3rem; }
+    .nav .next { margin-left: auto; text-align: right; }
+    .attribution { margin-top: 3rem; font: 400 0.74rem/1.5 var(--font-body); letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
+
+    /* reveal gating — only hero pieces are pre-hidden (above the fold) */
+    .anim .hero [data-load] { opacity: 0; }
+
+    @media (max-width: 720px) {
+      .defs, .cards { grid-template-columns: 1fr; }
+      .scene__inner.right { justify-content: flex-start; text-align: left; }
+      .scene__inner.right > div { margin-left: 0; }
+      .nav .next { margin-left: 0; text-align: left; }
+    }
   </style>
 </head>
 <body>
-  <main class="stage">
-    <p class="crumb"><a href="/yama-niyama/">Yama & Niyama</a> · Yama · 04</p>
-    <div>
-      <div class="glyph" lang="sa">ब्रह्मचर्य</div>
-      <h1 class="translit">Brahmacarya</h1>
-      <p class="gloss">Remaining in Brahma</p>
-      <blockquote class="sutra">Brahmańi vicarańam iti Brahmacaryam.</blockquote>
-      <p class="definition">To treat every object one comes in contact with as an expression of Brahma, not as a crude finite thing — so the mind never detaches from the Cosmic.</p>
-      <p class="note">It has nothing to do with the preservation of semen. Through this ideation, Preya (attraction to the crude) becomes Shreya (attraction to the ultimate), and Káma becomes Prema. Control means abiding by nature's laws, not killing desire.</p>
-    </div>
-    <p class="seam">A Guide to Human Conduct — scaffold placeholder, design pending</p>
+  <div class="progress"><div class="progress__bar"></div></div>
+  <a class="home" href="/yama-niyama/">Yama &amp; Niyama</a>
+
+  <main>
+    <!-- ░░ HERO ░░ -->
+    <section class="hero scene">
+      <img class="scene__bg" data-hero-bg src="./img/b_milkyway.jpg" alt="A lone figure standing on a dark ridge beneath the vast, glowing arc of the Milky Way" />
+      <div class="scene__tint hero__tint"></div>
+      <div class="scene__inner">
+        <div class="hero__inner">
+          <p class="hero__num" data-load>Yama · The Fourth Principle · 04</p>
+          <div class="hero__glyph" lang="sa" data-load>ब्रह्मचर्य</div>
+          <h1 class="hero__title" data-load>Brahmacarya</h1>
+          <p class="hero__sub" data-load>Remaining in Brahma</p>
+          <p class="hero__say" data-load>To move among finite things and never once mistake them for finite — to feel the Cosmic behind every object you touch.</p>
+        </div>
+      </div>
+      <div class="cue" data-load><span>Scroll</span><span class="cue__line"></span></div>
+    </section>
+
+    <!-- ░░ THE WORD ░░ -->
+    <section class="panel">
+      <p class="kicker" data-reveal>The word</p>
+      <h2 class="display" data-split>To remain attached to Brahma.</h2>
+      <div class="defs">
+        <div class="def" data-reveal>
+          <p class="sa" lang="sa">चर्य</p>
+          <h3>Carya</h3>
+          <p>To move, to range, to keep dealing with the world. The mind does not stop. It travels from one object to the next, all day, all life. Carya is simply that motion.</p>
+        </div>
+        <div class="def def--proper" data-reveal>
+          <p class="sa" lang="sa">ब्रह्मचर्य</p>
+          <h3>Brahmacarya</h3>
+          <p>To range <b>within Brahma</b> — to keep moving among objects while never leaving the Cosmic. The motion stays; what changes is what you take each object to be.</p>
+        </div>
+      </div>
+      <p class="pull" data-reveal>So the practice is not to stop the mind from wandering. It is to <b>change what it lands on.</b></p>
+    </section>
+
+    <!-- ░░ THE CRUDE HABIT — dawn meadow ░░ -->
+    <section class="scene">
+      <img class="scene__bg" data-parallax src="./img/b_dawn.jpg" alt="First light pouring across a misted meadow at sunrise, the field glowing gold" />
+      <div class="scene__tint" style="background:linear-gradient(180deg,rgba(10,16,40,.46),rgba(20,14,8,.6))"></div>
+      <div class="scene__inner">
+        <p class="kicker" data-reveal>The crude habit</p>
+        <h2 class="display" data-split>Take a thing as a thing, and the mind goes crude.</h2>
+        <p class="body-copy" data-reveal style="color:rgba(255,255,255,.92);margin-top:1.6rem">
+          When we set out to do or to want anything in the world, we look on the object we meet as a crude, finite entity — a thing to be had. Held in that constant aspiration for material achievement, the mind is so engrossed in objects that consciousness itself becomes crude. Nothing is wrong with the object. The crudity is in how it is seen.
+        </p>
+      </div>
+    </section>
+
+    <!-- ░░ THE IDEATION — nebula ░░ -->
+    <section class="scene">
+      <img class="scene__bg" data-parallax src="./img/b_lightorb.jpg" alt="A luminous teal and gold nebula bubble suspended in deep space, lit from within" />
+      <div class="scene__tint" style="background:linear-gradient(180deg,rgba(6,12,34,.5),rgba(6,12,34,.62))"></div>
+      <div class="scene__inner right">
+        <div>
+          <p class="kicker" data-reveal>The ideation</p>
+          <h2 class="display" data-split>Treat each object as an expression of Brahma.</h2>
+          <p class="body-copy" data-reveal style="color:rgba(255,255,255,.92);margin-top:1.6rem;margin-left:auto">
+            This is the whole of the sādhaná: to meet every object, not as a crude form, but as a different face of the Infinite. Then, even as the mind wanders from one object to another, it never detaches from Brahma — because the Cosmic feeling is carried into each and every thing it touches.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ THE TRANSFORMATION — pinned morph ░░ -->
+    <section class="morph scene">
+      <img class="scene__bg" src="./img/b_stars.jpg" alt="A purple star-filled sky with a faint meteor trail arcing over dark mountains" />
+      <div class="scene__tint morph__tint"></div>
+      <div class="scene__inner">
+        <div class="morph__inner">
+          <p class="kicker" style="margin-bottom:0.4rem">What it turns into</p>
+          <div class="morph__stage">
+            <div class="morph__word morph__from" data-morph-from>
+              Preya<span class="sa" lang="sa">प्रेय · the pull toward the crude</span>
+            </div>
+            <div class="morph__word morph__to" data-morph-to>
+              Shreya<span class="sa" lang="sa">श्रेय · the pull toward the ultimate</span>
+            </div>
+          </div>
+          <p class="morph__arrow" data-morph-line>becomes</p>
+          <p class="morph__gloss" data-morph-line>And Káma — desire for finite objects — becomes Prema, desire for the Infinite. The wanting is not killed. Its aim is lifted.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ THE GREAT MISREADING — cards ░░ -->
+    <section class="panel">
+      <p class="kicker" data-reveal>The great misreading</p>
+      <h2 class="display" data-split>It has nothing to do with the preservation of semen.</h2>
+      <div class="cards">
+        <div class="card card--off" data-reveal>
+          <p class="card__tag">What it is not</p>
+          <h3>The bluff of so-called celibacy</h3>
+          <p>Neither the word <b>Brahma</b> nor the word <b>carya</b> has any relevance to semen. Even physiologically, such preservation is a bluff — short of maiming, it cannot be observed. Suppression only roughens the body and turns the thwarted desire into a fiercer anger.</p>
+        </div>
+        <div class="card" data-reveal>
+          <p class="card__tag">Where it came from</p>
+          <h3>A machinery of exploitation</h3>
+          <p>When self-serving monks declared married life a sin, they kept ordinary people feeling maimed and inferior — easy to exploit. But Shiva, Viśńu, Krśńa were worldly people; the Puráńas name their wives and children. Marriage is a natural function, like bath, food, sleep.</p>
+        </div>
+      </div>
+      <p class="verdict" data-reveal>Control does not mean killing desire. <b>Control means abiding by the laws of nature.</b></p>
+    </section>
+
+    <!-- ░░ THE SŪTRA ░░ -->
+    <section class="sutra">
+      <div class="sutra__inner">
+        <p class="kicker" data-reveal>The sūtra</p>
+        <p class="sutra__sa" lang="sa" data-split>Brahmańi vicarańam iti Brahmacaryam.</p>
+        <p class="sutra__gloss" data-reveal>
+          “Ranging within Brahma — that is Brahmacarya.” To want is no sin; to want without control causes disease, as surely as overeating does. The desire is kept, and only its movement is brought back under the laws of nature.
+        </p>
+      </div>
+    </section>
+
+    <!-- ░░ WHAT IT RESTS ON — misted forest ░░ -->
+    <section class="scene">
+      <img class="scene__bg" data-parallax src="./img/b_firstlight.jpg" alt="A forested hillside dissolving upward into pale, luminous mist" />
+      <div class="scene__tint" style="background:linear-gradient(180deg,rgba(10,16,40,.5),rgba(10,16,40,.66))"></div>
+      <div class="scene__inner">
+        <p class="kicker" data-reveal>What it rests on</p>
+        <h2 class="display" data-split>Dharma is founded on Satya.</h2>
+        <p class="body-copy" data-reveal style="color:rgba(255,255,255,.92);margin-top:1.6rem">
+          “Where there is no satya, there is no dharma.” The peculiar reading of Brahmacarya may contain anything and everything except truth — so it holds no dharma, no Brahma. Humanity progresses by accepting what is true. To deny the simple truth of practical life may be a privilege of parasites; it is not the path of a sādhaka.
+        </p>
+      </div>
+    </section>
+
+    <!-- ░░ WHERE IT LEADS — milky-way close ░░ -->
+    <section class="close scene">
+      <img class="scene__bg" data-parallax src="./img/b_milkyway.jpg" alt="A figure standing small beneath the immense, star-strewn arc of the Milky Way" />
+      <div class="scene__tint close__tint"></div>
+      <div class="scene__inner close__inner">
+        <p class="kicker" data-reveal>Where it leads</p>
+        <h2 class="display" data-split>Move through everything; leave nothing behind.</h2>
+        <p class="body-copy" data-reveal>
+          Where <em>Asteya</em> guards what passes between people, Brahmacarya governs what passes within you — the subjective grip on every object you enjoy. Its outward face is <em>Aparigraha</em>, the same restraint turned toward what you hold. Range as widely as you like. Only carry the Cosmic with you, so that the mind, wandering, never once leaves home.
+        </p>
+        <nav class="nav" data-reveal>
+          <a class="prev" href="/yama-niyama/asteya">← Asteya<small>03 · Non-stealing</small></a>
+          <a href="/yama-niyama/">All ten<small>Index</small></a>
+          <a class="next" href="/yama-niyama/aparigraha">Aparigraha →<small>05 · Non-accumulation</small></a>
+        </nav>
+        <p class="attribution" data-reveal>A Guide to Human Conduct · after Shrii Shrii Ánandamúrti</p>
+      </div>
+    </section>
   </main>
+
+  <script type="module">
+    import gsap from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    import { SplitText } from "gsap/SplitText";
+    import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    gsap.registerPlugin(ScrollToPlugin);
+    setupKeyboardNav();
+
+    if (!reduce) {
+      gsap.registerPlugin(ScrollTrigger, SplitText);
+      document.fonts.ready.then(init);
+    }
+
+    // ← / → (and ↑ / ↓ / PgUp / PgDn) step between sections; Home / End jump to the ends.
+    // Tops are recomputed live each press with getBoundingClientRect so GSAP's pin
+    // spacers (which reparent pinned sections) can never desync the navigation.
+    function setupKeyboardNav() {
+      const tops = () => {
+        const ys = Array.from(document.querySelectorAll("main section"))
+          .map((s) => Math.round(s.getBoundingClientRect().top + window.scrollY))
+          .sort((a, b) => a - b);
+        return ys.filter((y, i) => i === 0 || y - ys[i - 1] > 8); // de-dupe near-equal
+      };
+
+      const scrollTo = (y) =>
+        gsap.to(window, { duration: reduce ? 0 : 0.9, ease: "power2.inOut", scrollTo: { y, autoKill: false } });
+
+      const step = (dir) => {
+        const ys = tops();
+        const y = window.scrollY;
+        const target = dir > 0
+          ? ys.find((t) => t > y + 8) ?? ys[ys.length - 1]
+          : [...ys].reverse().find((t) => t < y - 8) ?? ys[0];
+        scrollTo(target);
+      };
+
+      addEventListener("keydown", (e) => {
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        const fwd = e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === "PageDown";
+        const back = e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "PageUp";
+        if (!fwd && !back && e.key !== "Home" && e.key !== "End") return;
+        e.preventDefault();
+        const ys = tops();
+        if (e.key === "Home") return scrollTo(ys[0]);
+        if (e.key === "End") return scrollTo(ys[ys.length - 1]);
+        step(fwd ? 1 : -1);
+      });
+    }
+
+    function init() {
+      // scroll progress bar
+      gsap.to(".progress__bar", {
+        scaleX: 1, ease: "none",
+        scrollTrigger: { trigger: document.documentElement, start: "top top", end: "bottom bottom", scrub: true },
+      });
+
+      // hero entrance — fromTo with explicit visible end state, because the
+      // .anim CSS pre-hides these (a plain .from() would treat 0 as the target).
+      const heroTl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      heroTl
+        .fromTo(".hero__num", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.8 })
+        .fromTo(".hero__glyph", { opacity: 0, scale: 0.86, filter: "blur(14px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 1.4 }, "-=0.4")
+        .fromTo(".hero__title", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1.1 }, "-=0.9")
+        .fromTo(".hero__sub", { opacity: 0, y: 18, letterSpacing: "0.7em" }, { opacity: 1, y: 0, letterSpacing: "0.4em", duration: 0.9 }, "-=0.6")
+        .fromTo(".hero__say", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9 }, "-=0.5")
+        .fromTo(".cue", { opacity: 0 }, { opacity: 1, duration: 0.8 }, "-=0.4");
+      gsap.fromTo(".cue__line", { scaleY: 0 }, { scaleY: 1, transformOrigin: "top", duration: 1, ease: "power2.out", delay: 1.6, repeat: -1, repeatDelay: 0.6, yoyo: true });
+
+      // hero parallax + fade on scroll out
+      gsap.to("[data-hero-bg]", { yPercent: 16, scale: 1.12, ease: "none",
+        scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+      gsap.to(".hero__inner", { yPercent: -14, opacity: 0, ease: "none",
+        scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+
+      // parallax on every full-bleed scene image
+      gsap.utils.toArray("[data-parallax]").forEach((img) => {
+        gsap.fromTo(img, { yPercent: -10 }, { yPercent: 10, ease: "none",
+          scrollTrigger: { trigger: img.closest(".scene"), start: "top bottom", end: "bottom top", scrub: true } });
+      });
+
+      // heading line reveals
+      gsap.utils.toArray("[data-split]").forEach((el) => {
+        const split = new SplitText(el, { type: "lines", linesClass: "split-line" });
+        gsap.from(split.lines, {
+          yPercent: 110, opacity: 0, duration: 1, ease: "power3.out", stagger: 0.1,
+          scrollTrigger: { trigger: el, start: "top 82%" },
+        });
+      });
+
+      // generic fade-up reveals
+      gsap.utils.toArray("[data-reveal]").forEach((el) => {
+        gsap.from(el, {
+          y: 34, opacity: 0, duration: 0.9, ease: "power2.out",
+          scrollTrigger: { trigger: el, start: "top 88%" },
+        });
+      });
+
+      // pinned transformation — Preya crossfades up into Shreya as you scroll
+      const fromEl = document.querySelector("[data-morph-from]");
+      const toEl = document.querySelector("[data-morph-to]");
+      gsap.set(toEl, { opacity: 0, y: 26, filter: "blur(12px)" });
+      gsap.set("[data-morph-line]", { opacity: 0, y: 20 });
+
+      const mtl = gsap.timeline({
+        scrollTrigger: { trigger: ".morph", start: "top top", end: "+=130%", pin: true, scrub: 0.6 },
+      });
+      mtl
+        .to(fromEl, { opacity: 0, y: -26, filter: "blur(12px)", ease: "power1.in", duration: 1 }, 0.15)
+        .to(toEl, { opacity: 1, y: 0, filter: "blur(0px)", ease: "power2.out", duration: 1 }, 0.5)
+        .to("[data-morph-line]", { opacity: 1, y: 0, stagger: 0.25, ease: "power2.out", duration: 0.8 }, 0.7);
+
+      ScrollTrigger.refresh();
+    }
+  </script>
 </body>
 </html>
