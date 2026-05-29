@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Yama &amp; Niyama — A Guide to Human Conduct</title>
+  <meta name="description" content="The ten moral principles of Yama and Niyama. Each principle, its own page." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,400;1,9..144,500&family=Spectral:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/shared/base.css" />
+  <style>
+    :root {
+      --paper: #f4efe6;
+      --ink: #1a1612;
+      --accent: #9a3b1b;
+      --muted: #6f6557;
+    }
+    body { background: var(--paper); color: var(--ink); }
+    .wrap { max-width: 1040px; margin-inline: auto; padding: clamp(2rem, 6vw, 6rem) clamp(1.5rem, 5vw, 4rem); }
+
+    header.mast { margin-bottom: clamp(3rem, 8vw, 6rem); }
+    .kicker { font-size: .8rem; letter-spacing: .3em; text-transform: uppercase; color: var(--accent); margin: 0 0 1.2rem; }
+    .mast h1 {
+      font-weight: 300; font-size: clamp(3rem, 12vw, 8rem); line-height: .9;
+      letter-spacing: -0.02em;
+    }
+    .mast h1 em { font-style: italic; font-weight: 500; color: var(--accent); }
+    .lede { font-size: clamp(1.1rem, 2.4vw, 1.4rem); max-width: 46ch; margin-top: 1.8rem; color: var(--muted); line-height: 1.55; }
+
+    .group { margin-top: clamp(2.5rem, 6vw, 4.5rem); }
+    .group > h2 {
+      display: flex; align-items: baseline; gap: 1rem;
+      font-weight: 300; font-size: clamp(1.6rem, 4vw, 2.4rem);
+      padding-bottom: .8rem; border-bottom: 1px solid rgba(0,0,0,.12);
+    }
+    .group > h2 span { font-family: var(--font-body); font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+
+    ol { list-style: none; margin: 0; padding: 0; }
+    .row {
+      display: grid; grid-template-columns: 3rem auto 1fr auto; align-items: center;
+      gap: 1.2rem; padding: 1.1rem .4rem; text-decoration: none; color: inherit;
+      border-bottom: 1px solid rgba(0,0,0,.07);
+      transition: background .25s ease, padding-left .25s ease, color .25s ease;
+    }
+    .row:hover { background: rgba(154,59,27,.06); padding-left: 1rem; color: var(--accent); }
+    .num { font-family: var(--font-body); font-size: .9rem; color: var(--muted); }
+    .glyph { font-size: 1.9rem; line-height: 1; min-width: 2.4ch; }
+    .name { font-family: var(--font-display); font-style: italic; font-size: clamp(1.3rem, 3vw, 1.7rem); }
+    .name small { font-style: normal; font-family: var(--font-body); font-size: .9rem; color: var(--muted); margin-left: .6rem; }
+    .row:hover .name small { color: inherit; }
+    .arrow { font-size: 1.2rem; opacity: 0; transform: translateX(-6px); transition: all .25s ease; }
+    .row:hover .arrow { opacity: 1; transform: translateX(0); }
+
+    footer { margin-top: 5rem; font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+
+    @media (max-width: 560px) {
+      .row { grid-template-columns: 2rem auto 1fr; }
+      .name small { display: block; margin: .2rem 0 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="mast">
+      <p class="kicker">A Guide to Human Conduct</p>
+      <h1>Yama<br />&amp; <em>Niyama</em></h1>
+      <p class="lede">Ten moral principles — the foundation beneath all spiritual practice. Each one keeps its own page.</p>
+    </header>
+    <main id="index"></main>
+    <footer id="seam"></footer>
+  </div>
+
+  <script type="module">
+    import { principles, groups, site } from "/src/shared/principles.js";
+
+    const index = document.getElementById("index");
+    for (const key of ["yama", "niyama"]) {
+      const g = groups[key];
+      const section = document.createElement("section");
+      section.className = "group";
+      const items = principles
+        .filter((p) => p.group === key)
+        .map(
+          (p) => `
+          <a class="row" href="/${p.slug}/">
+            <span class="num">${String(p.order).padStart(2, "0")}</span>
+            <span class="glyph" lang="sa">${p.sanskrit}</span>
+            <span class="name">${p.translit}<small>${p.gloss}</small></span>
+            <span class="arrow">→</span>
+          </a>`
+        )
+        .join("");
+      section.innerHTML = `<h2>${g.title} <span>${g.meaning}</span></h2><ol>${items}</ol>`;
+      index.appendChild(section);
+    }
+
+    document.getElementById("seam").textContent = site.attribution;
+  </script>
+</body>
+</html>
