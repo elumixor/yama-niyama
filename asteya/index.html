@@ -1,47 +1,430 @@
 <!doctype html>
-<!-- generated:scaffold -->
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Asteya — Non-stealing · Yama & Niyama</title>
-  <meta name="description" content="Not taking possession of what belongs to others — in deed or in thought, by depriving or by planning to deprive." />
+  <title>Asteya — Non-stealing · Yama &amp; Niyama</title>
+  <meta name="description" content="Asteya, the third Yama: not taking possession of what belongs to others. Theft is fourfold — in deed, in plan, by depriving, and by planning to deprive. Even ticketless travel and adulterated goods violate it." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,400&family=Spectral:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,900&family=Spectral:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/src/shared/base.css" />
+  <!-- Hide above-the-fold hero pieces only when motion is allowed, so reduced-motion
+       users (and the no-JS case) always see fully-rendered content. -->
+  <script>
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches)
+      document.documentElement.classList.add("anim");
+  </script>
   <style>
     :root {
-      --accent: hsl(72 58% 52%);
-      --accent-soft: hsl(72 48% 92%);
-      --ink: hsl(72 30% 12%);
-      --paper: hsl(72 40% 97%);
+      --ink: #131c24;
+      --paper: #eef1f3;
+      --paper-2: #e2e7ea;
+      --accent: #2c6c92;       /* steel / slate blue ~205° */
+      --brass: #b07c2e;        /* warm brass / bronze */
+      --muted: #56636d;
+      --line: rgba(19, 28, 36, 0.14);
     }
-    body { background: var(--paper); color: var(--ink); }
-    .stage { min-height: 100svh; display: grid; grid-template-rows: auto 1fr auto; max-width: 860px; margin-inline: auto; padding: clamp(1.5rem, 5vw, 4rem); }
-    .crumb { font-family: var(--font-body); font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
-    .crumb a { color: inherit; text-decoration: none; }
-    .glyph { font-size: clamp(4rem, 16vw, 10rem); line-height: 1; color: var(--accent); opacity: .9; }
-    .translit { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.5rem, 9vw, 5.5rem); line-height: .95; margin: .1em 0 0; }
-    .gloss { font-style: italic; font-size: clamp(1.1rem, 3vw, 1.5rem); color: var(--accent); margin-top: .4rem; }
-    .sutra { font-style: italic; border-left: 3px solid var(--accent); padding-left: 1rem; margin: 2.5rem 0; color: hsl(72 25% 30%); }
-    .definition { font-size: clamp(1.15rem, 2.6vw, 1.5rem); line-height: 1.5; }
-    .note { margin-top: 1.5rem; color: hsl(72 18% 32%); line-height: 1.7; }
-    .seam { font-family: var(--font-body); font-size: .75rem; letter-spacing: .15em; text-transform: uppercase; color: hsl(72 15% 55%); }
+
+    body { background: var(--paper); color: var(--ink); overflow-x: hidden; }
+
+    /* faint paper grain for atmosphere */
+    body::after {
+      content: ""; position: fixed; inset: 0; z-index: 9; pointer-events: none;
+      opacity: 0.04; mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ── chrome ─────────────────────────────────────────── */
+    .progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 50; background: transparent; }
+    .progress__bar { height: 100%; width: 100%; transform: scaleX(0); transform-origin: left center;
+      background: linear-gradient(90deg, var(--accent), var(--brass)); }
+
+    .home { position: fixed; top: clamp(1rem, 3vw, 1.8rem); left: clamp(1rem, 4vw, 2.4rem); z-index: 40;
+      font: 500 0.74rem/1 var(--font-body); letter-spacing: 0.24em; text-transform: uppercase;
+      text-decoration: none; color: var(--ink); mix-blend-mode: difference; filter: invert(1); }
+    .home::before { content: "←"; margin-right: 0.5em; display: inline-block; }
+
+    /* ── shared type ────────────────────────────────────── */
+    .kicker { font: 500 0.78rem/1 var(--font-body); letter-spacing: 0.32em; text-transform: uppercase; color: var(--accent); margin: 0 0 1.4rem; }
+    .scene .kicker { color: rgba(255, 255, 255, 0.82); }
+    .display { font: 300 clamp(2.3rem, 6.4vw, 5rem)/1.04 var(--font-display); letter-spacing: -0.018em; margin: 0; }
+    .lede { font: 400 clamp(1.12rem, 2.3vw, 1.5rem)/1.6 var(--font-body); color: var(--muted); max-width: 34ch; }
+    .scene .lede { color: rgba(255, 255, 255, 0.88); }
+    .body-copy { font: 400 clamp(1.05rem, 1.5vw, 1.22rem)/1.72 var(--font-body); max-width: 56ch; }
+
+    .panel { max-width: 1080px; margin-inline: auto; padding: clamp(4.5rem, 13vh, 10rem) clamp(1.4rem, 6vw, 5rem); }
+
+    /* ── full-bleed photographic scenes ─────────────────── */
+    .scene { position: relative; min-height: 100svh; display: grid; align-items: center; overflow: clip; color: #fff; }
+    .scene__bg { position: absolute; inset: -12% 0; width: 100%; height: 124%; object-fit: cover; will-change: transform; }
+    .scene__tint { position: absolute; inset: 0; z-index: 1; }
+    .scene__inner { position: relative; z-index: 2; width: 100%; max-width: 1080px; margin-inline: auto; padding: clamp(2rem, 8vw, 6rem) clamp(1.4rem, 6vw, 5rem); }
+    .scene__inner.right { display: flex; justify-content: flex-end; text-align: right; }
+    .scene__inner.right > div { max-width: 42ch; }
+
+    /* ── hero ───────────────────────────────────────────── */
+    .hero { text-align: center; place-items: center; }
+    .hero__tint { background:
+      radial-gradient(120% 90% at 50% 8%, rgba(8, 14, 20, 0.18), transparent 55%),
+      linear-gradient(180deg, rgba(10, 18, 26, 0.5) 0%, rgba(10, 18, 26, 0.3) 42%, rgba(10, 18, 26, 0.68) 100%); }
+    .hero__inner { display: grid; justify-items: center; gap: 0.2rem; }
+    .hero__num { font: 500 0.8rem/1 var(--font-body); letter-spacing: 0.42em; text-transform: uppercase; color: rgba(255,255,255,0.78); margin: 0 0 2.2rem; }
+    .hero__glyph { font-family: var(--font-display); font-weight: 400; font-size: clamp(3.6rem, 12vw, 8.5rem); line-height: 1; color: #fff; text-shadow: 0 2px 40px rgba(0,0,0,0.4); }
+    .hero__title { font: 300 clamp(3rem, 11vw, 7.5rem)/0.92 var(--font-display); letter-spacing: -0.02em; margin: 0.1em 0 0; }
+    .hero__sub { font: 500 clamp(0.9rem, 2vw, 1.15rem)/1 var(--font-body); letter-spacing: 0.4em; text-transform: uppercase; color: var(--brass); margin: 1.4rem 0 0; }
+    .hero__say { font: 400 clamp(1.05rem, 2.2vw, 1.35rem)/1.6 var(--font-body); color: rgba(255,255,255,0.9); max-width: 32ch; margin: 2.4rem auto 0; }
+    .cue { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 3;
+      font: 500 0.68rem/1 var(--font-body); letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.8);
+      display: grid; justify-items: center; gap: 0.7rem; }
+    .cue__line { width: 1px; height: 46px; background: rgba(255,255,255,0.6); transform-origin: top; }
+
+    /* ── the word / sutra ───────────────────────────────── */
+    .sutra { margin-top: clamp(2.4rem, 6vw, 3.6rem); padding: 1.6rem 0 0; border-top: 1px solid var(--line);
+      font-family: var(--font-display); }
+    .sutra .sa { display: block; font: 400 clamp(1.3rem, 3vw, 1.9rem)/1.3 var(--font-display); color: var(--accent); }
+    .sutra .en { display: block; margin-top: 0.7rem; font: 400 1.02rem/1.6 var(--font-body); color: var(--muted); max-width: 44ch; }
+
+    .defs { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 6vw, 5rem); margin-top: 3rem; }
+    .def h3 { font: 500 clamp(1.6rem, 3.4vw, 2.4rem)/1 var(--font-display); margin: 0 0 0.2rem; }
+    .def .sa { font-family: var(--font-display); color: var(--accent); font-size: 1.4rem; margin: 0 0 0.9rem; }
+    .def--proper h3 { color: var(--accent); }
+    .def p { font: 400 1.08rem/1.66 var(--font-body); color: var(--muted); margin: 0; }
+    .pull { margin-top: clamp(2.6rem, 6vw, 4rem); padding-top: 2rem; border-top: 1px solid var(--line);
+      font: 300 clamp(1.5rem, 3.6vw, 2.4rem)/1.32 var(--font-display); letter-spacing: -0.01em; max-width: 26ch; }
+    .pull b { font-weight: 600; color: var(--accent); }
+
+    /* ── the fourfold ledger (pinned signature reveal) ──── */
+    .ledger { color: #fff; place-items: center; }
+    .ledger__tint { background: linear-gradient(180deg, rgba(9, 16, 22, 0.82), rgba(9, 16, 22, 0.7)); }
+    .ledger__inner { display: grid; justify-items: center; gap: clamp(1.8rem, 5vw, 2.8rem); width: 100%; }
+    .ledger__head { text-align: center; }
+    .ledger__head .display { color: #fff; }
+    .ledger__list { width: 100%; max-width: 760px; display: grid; gap: 0; border-top: 1px solid rgba(255,255,255,0.16); }
+    .ledger__row { display: grid; grid-template-columns: auto 1fr; align-items: baseline; gap: clamp(1rem, 3vw, 2.2rem);
+      padding: clamp(1.1rem, 2.6vw, 1.7rem) 0; border-bottom: 1px solid rgba(255,255,255,0.16); }
+    .ledger__no { font: 500 1rem/1 var(--font-body); letter-spacing: 0.18em; color: var(--brass);
+      font-variant-numeric: tabular-nums; }
+    .ledger__row h3 { font: 500 clamp(1.3rem, 3vw, 1.95rem)/1.12 var(--font-display); margin: 0 0 0.35rem; }
+    .ledger__row p { font: 400 0.98rem/1.6 var(--font-body); color: rgba(255,255,255,0.78); margin: 0; max-width: 52ch; }
+
+    /* ── parable / cards on paper ───────────────────────── */
+    .cards { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.2rem, 3vw, 2rem); margin-top: 3rem; }
+    .card { background: var(--paper-2); border: 1px solid var(--line); border-radius: 4px; padding: clamp(1.6rem, 3vw, 2.6rem); }
+    .card__tag { font: 500 0.72rem/1 var(--font-body); letter-spacing: 0.26em; text-transform: uppercase; color: var(--accent); margin: 0 0 1rem; }
+    .card--off .card__tag { color: var(--brass); }
+    .card h3 { font: 500 clamp(1.5rem, 3vw, 2rem)/1.04 var(--font-display); margin: 0 0 0.8rem; }
+    .card p { font: 400 1.04rem/1.66 var(--font-body); color: var(--muted); margin: 0; }
+    .verdict { margin-top: clamp(2.4rem, 5vw, 3.4rem); font: 300 clamp(1.5rem, 3.6vw, 2.4rem)/1.34 var(--font-display); max-width: 28ch; }
+    .verdict b { font-weight: 600; color: var(--accent); }
+
+    /* ── closing ────────────────────────────────────────── */
+    .close__tint { background: linear-gradient(180deg, rgba(12, 20, 28, 0.58), rgba(12, 20, 28, 0.8)); }
+    .close__inner { max-width: 760px; }
+    .close .body-copy { color: rgba(255,255,255,0.9); max-width: 52ch; }
+    .close em { font-style: normal; color: var(--brass); }
+    .nav { display: flex; flex-wrap: wrap; gap: 1.4rem 2.4rem; margin-top: clamp(2.6rem, 6vw, 4rem);
+      padding-top: 1.6rem; border-top: 1px solid rgba(255,255,255,0.25); }
+    .nav a { font: 500 0.82rem/1.4 var(--font-body); letter-spacing: 0.14em; text-transform: uppercase; color: #fff; text-decoration: none; opacity: 0.82; transition: opacity 0.25s; }
+    .nav a:hover { opacity: 1; }
+    .nav a small { display: block; font-size: 0.66rem; letter-spacing: 0.2em; color: var(--brass); margin-top: 0.3rem; }
+    .nav .next { margin-left: auto; text-align: right; }
+    .attribution { margin-top: 3rem; font: 400 0.74rem/1.5 var(--font-body); letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
+
+    /* reveal gating — only hero pieces are pre-hidden (above the fold) */
+    .anim .hero [data-load] { opacity: 0; }
+
+    @media (max-width: 720px) {
+      .defs, .cards { grid-template-columns: 1fr; }
+      .scene__inner.right { justify-content: flex-start; text-align: left; }
+      .scene__inner.right > div { margin-left: 0; }
+      .nav .next { margin-left: 0; text-align: left; }
+    }
   </style>
 </head>
 <body>
-  <main class="stage">
-    <p class="crumb"><a href="/yama-niyama/">Yama & Niyama</a> · Yama · 03</p>
-    <div>
-      <div class="glyph" lang="sa">अस्तेय</div>
-      <h1 class="translit">Asteya</h1>
-      <p class="gloss">Non-stealing</p>
-      <blockquote class="sutra">Paradravyápaharańa tyágo'steyam.</blockquote>
-      <p class="definition">Not taking possession of what belongs to others — in deed or in thought, by depriving or by planning to deprive.</p>
-      <p class="note">Theft is fourfold: taking physically, planning to take, depriving others of their due, and planning that deprivation. Petty cheating — ticketless travel, adulterated goods — violates asteya as surely as armed robbery.</p>
-    </div>
-    <p class="seam">A Guide to Human Conduct — scaffold placeholder, design pending</p>
+  <div class="progress"><div class="progress__bar"></div></div>
+  <a class="home" href="/yama-niyama/">Yama &amp; Niyama</a>
+
+  <main>
+    <!-- ░░ HERO ░░ -->
+    <section class="hero scene">
+      <img class="scene__bg" data-hero-bg src="./img/a_tracks.jpg" alt="A freight train running on steel rails beneath a heavy sky, a speed-limit sign at the trackside" />
+      <div class="scene__tint hero__tint"></div>
+      <div class="scene__inner">
+        <div class="hero__inner">
+          <p class="hero__num" data-load>Yama · The Third Principle · 03</p>
+          <div class="hero__glyph" lang="sa" data-load>अस्तेय</div>
+          <h1 class="hero__title" data-load>Asteya</h1>
+          <p class="hero__sub" data-load>Non-stealing</p>
+          <p class="hero__say" data-load>Not taking what belongs to another — not by force, not by plan, not by quietly withholding what is owed.</p>
+        </div>
+      </div>
+      <div class="cue" data-load><span>Scroll</span><span class="cue__line"></span></div>
+    </section>
+
+    <!-- ░░ THE WORD ░░ -->
+    <section class="panel">
+      <p class="kicker" data-reveal>The word</p>
+      <h2 class="display" data-split>Steya is theft. Asteya is its undoing.</h2>
+      <div class="defs">
+        <div class="def" data-reveal>
+          <p class="sa" lang="sa">स्तेय</p>
+          <h3>Steya</h3>
+          <p>To take possession of what belongs to others — whether by an armed hand, by brute strength, or by a clever turn of intellect. The thief is not only the one who flees with the loot.</p>
+        </div>
+        <div class="def def--proper" data-reveal>
+          <p class="sa" lang="sa">अस्तेय</p>
+          <h3>Asteya</h3>
+          <p>The settled refusal to deprive — in act and in intention. Honest exchange is never theft: to give money for crops or gold in the proper way takes nothing from anyone.</p>
+        </div>
+      </div>
+      <div class="sutra" data-reveal>
+        <span class="sa" lang="sa">Paradravyápaharańa tyágo'steyam.</span>
+        <span class="en">To relinquish the taking of others' property — that is asteya.</span>
+      </div>
+      <p class="pull" data-reveal>The line is drawn not at the act, but at the <b>intention to deprive.</b></p>
+    </section>
+
+    <!-- ░░ THE FOUR TYPES — pinned ledger reveal ░░ -->
+    <section class="ledger scene">
+      <img class="scene__bg" src="./img/a_scale.jpg" alt="A bronze statue of blindfolded Justice holding a set of balance scales" />
+      <div class="scene__tint ledger__tint"></div>
+      <div class="scene__inner">
+        <div class="ledger__inner">
+          <div class="ledger__head">
+            <p class="kicker">The reckoning</p>
+            <h2 class="display" data-ledger-head>Theft is fourfold.</h2>
+          </div>
+          <div class="ledger__list">
+            <div class="ledger__row" data-ledger-row>
+              <div class="ledger__no">01</div>
+              <div>
+                <h3>Physical theft</h3>
+                <p>Taking a material object — money or goods — by force of arms, of muscle, or of intellect. Behind the act lies the intention of taking another's property by deceit.</p>
+              </div>
+            </div>
+            <div class="ledger__row" data-ledger-row>
+              <div class="ledger__no">02</div>
+              <div>
+                <h3>Psychic theft</h3>
+                <p>You took nothing, but you planned it in the mind. Only the fear of the law, or of being criticised, held your hand. The theft was already committed inwardly.</p>
+              </div>
+            </div>
+            <div class="ledger__row" data-ledger-row>
+              <div class="ledger__no">03</div>
+              <div>
+                <h3>Depriving others of their due</h3>
+                <p>You possess nothing of theirs, yet you withhold what is rightfully owed. Their loss is on your account. That too is stealing.</p>
+              </div>
+            </div>
+            <div class="ledger__row" data-ledger-row>
+              <div class="ledger__no">04</div>
+              <div>
+                <h3>Planning that deprivation</h3>
+                <p>You did not actually withhold anyone's due — but you intended to. The plan alone is theft, because asteya breaks in the mind before the hand ever moves.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ THE TICKETLESS TRAIN — parable scene ░░ -->
+    <section class="scene">
+      <img class="scene__bg" data-parallax src="./img/a_train.jpg" alt="A green steam locomotive emerging from a tunnel of overhanging trees" />
+      <div class="scene__tint" style="background:linear-gradient(180deg,rgba(10,24,18,.5),rgba(8,18,14,.7))"></div>
+      <div class="scene__inner right">
+        <div>
+          <p class="kicker" data-reveal>The barter you forgot</p>
+          <h2 class="display" data-split>Riding without a ticket is theft.</h2>
+          <p class="body-copy" data-reveal style="color:rgba(255,255,255,.92);margin-top:1.6rem;margin-left:auto">
+            You pocket no cash from the railway, but a ticket is your half of a bargain — you took the facility and never paid for it. Educated people do it; missionaries do it; leaders with noble purposes do it. They criticise corruption loudly, then ride for a few rupees less. It is not only theft. It is also pettiness.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ THE SHOPKEEPER — cards on paper ░░ -->
+    <section class="panel">
+      <p class="kicker" data-reveal>The two faces</p>
+      <h2 class="display" data-split>One shop, two grades of honesty.</h2>
+      <div class="cards">
+        <div class="card" data-reveal>
+          <p class="card__tag">To his friends</p>
+          <h3>The genuine article</h3>
+          <p>The shopkeeper sets aside the real, unadulterated goods. These he gives to his guests, his friends, the people he must look in the eye.</p>
+        </div>
+        <div class="card card--off" data-reveal>
+          <p class="card__tag">To his customers</p>
+          <h3>The adulterated</h3>
+          <p>To the stranger across the counter — and to the well-to-do, and to the government — he hands the diluted, the cut, the false. He has decided some people may be cheated.</p>
+        </div>
+      </div>
+      <p class="verdict" data-reveal>Any deal carried out with this background is against asteya. <b>There is no class of person it is fair to rob.</b></p>
+    </section>
+
+    <!-- ░░ THE MARKET — honest exchange scene ░░ -->
+    <section class="scene">
+      <img class="scene__bg" data-parallax src="./img/a_market.jpg" alt="A market stall heaped with fresh fruit and vegetables, hung with small price tags" />
+      <div class="scene__tint" style="background:linear-gradient(180deg,rgba(8,16,24,.46),rgba(8,16,24,.66))"></div>
+      <div class="scene__inner">
+        <p class="kicker" data-reveal>What asteya is not</p>
+        <h2 class="display" data-split>It does not forbid honest trade.</h2>
+        <p class="body-copy" data-reveal style="color:rgba(255,255,255,.92);margin-top:1.6rem">
+          Accepting money, crops, or gold in fair exchange takes nothing from anyone — the scale stays level. The railway, having charged the full fare, owes you no free service, and you owe it the fare. Asteya does not shrink the marketplace. It only insists that every weight on the scale be true.
+        </p>
+      </div>
+    </section>
+
+    <!-- ░░ THE CURE — auto-suggestion / children scene ░░ -->
+    <section class="scene">
+      <img class="scene__bg" data-parallax src="./img/a_children.jpg" alt="A cluster of children looking up with open hands raised toward the camera" />
+      <div class="scene__tint" style="background:linear-gradient(180deg,rgba(20,14,8,.42),rgba(14,12,10,.66))"></div>
+      <div class="scene__inner right">
+        <div>
+          <p class="kicker" data-reveal>The cure</p>
+          <h2 class="display" data-split>Plant the code before temptation arrives.</h2>
+          <p class="body-copy" data-reveal style="color:rgba(255,255,255,.92);margin-top:1.6rem;margin-left:auto">
+            The easiest way to practise asteya is auto-suggestion. If, from childhood, a person keeps reminding themselves what is correct, they do not go astray once grown — even in the midst of temptation. Character is the habit rehearsed long before it was tested.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ WHERE IT LEADS — closing ░░ -->
+    <section class="close scene">
+      <img class="scene__bg" data-parallax src="./img/a_notes.jpg" alt="Banknotes of many currencies overlapping, filling the frame" />
+      <div class="scene__tint close__tint"></div>
+      <div class="scene__inner close__inner">
+        <p class="kicker" data-reveal>Where it leads</p>
+        <h2 class="display" data-split>Owe no one, and the mind is light to carry.</h2>
+        <p class="body-copy" data-reveal>
+          Asteya is the ledger kept honest down to the few rupees. Where <em>Satya</em> guards what you say and <em>Ahiṃsá</em> guards what you do, asteya guards what you quietly take. Settle every due, abandon even the plan to deprive, and the mind is freed of the small corruptions that crude it — clear now for <em>Brahmacarya</em>, the seeing of Brahma in every thing.
+        </p>
+        <nav class="nav" data-reveal>
+          <a class="prev" href="/yama-niyama/satya">← Satya<small>02 · Truth</small></a>
+          <a href="/yama-niyama/">All ten<small>Index</small></a>
+          <a class="next" href="/yama-niyama/brahmacarya">Brahmacarya →<small>04 · In Brahma</small></a>
+        </nav>
+        <p class="attribution" data-reveal>A Guide to Human Conduct · after Shrii Shrii Ánandamúrti</p>
+      </div>
+    </section>
   </main>
+
+  <script type="module">
+    import gsap from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    import { SplitText } from "gsap/SplitText";
+    import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    gsap.registerPlugin(ScrollToPlugin);
+    setupKeyboardNav();
+
+    if (!reduce) {
+      gsap.registerPlugin(ScrollTrigger, SplitText);
+      document.fonts.ready.then(init);
+    }
+
+    // ← / → (and ↑ / ↓ / PgUp / PgDn) step between sections; Home / End jump to the ends.
+    // Tops are recomputed live each press with getBoundingClientRect so GSAP's pin
+    // spacers (which reparent pinned sections) can never desync the navigation.
+    function setupKeyboardNav() {
+      const tops = () => {
+        const ys = Array.from(document.querySelectorAll("main section"))
+          .map((s) => Math.round(s.getBoundingClientRect().top + window.scrollY))
+          .sort((a, b) => a - b);
+        return ys.filter((y, i) => i === 0 || y - ys[i - 1] > 8); // de-dupe near-equal
+      };
+
+      const scrollTo = (y) =>
+        gsap.to(window, { duration: reduce ? 0 : 0.9, ease: "power2.inOut", scrollTo: { y, autoKill: false } });
+
+      const step = (dir) => {
+        const ys = tops();
+        const y = window.scrollY;
+        const target = dir > 0
+          ? ys.find((t) => t > y + 8) ?? ys[ys.length - 1]
+          : [...ys].reverse().find((t) => t < y - 8) ?? ys[0];
+        scrollTo(target);
+      };
+
+      addEventListener("keydown", (e) => {
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        const fwd = e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === "PageDown";
+        const back = e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "PageUp";
+        if (!fwd && !back && e.key !== "Home" && e.key !== "End") return;
+        e.preventDefault();
+        const ys = tops();
+        if (e.key === "Home") return scrollTo(ys[0]);
+        if (e.key === "End") return scrollTo(ys[ys.length - 1]);
+        step(fwd ? 1 : -1);
+      });
+    }
+
+    function init() {
+      // scroll progress bar
+      gsap.to(".progress__bar", {
+        scaleX: 1, ease: "none",
+        scrollTrigger: { trigger: document.documentElement, start: "top top", end: "bottom bottom", scrub: true },
+      });
+
+      // hero entrance — fromTo with explicit visible end state, because the
+      // .anim CSS pre-hides these (a plain .from() would treat 0 as the target).
+      const heroTl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      heroTl
+        .fromTo(".hero__num", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.8 })
+        .fromTo(".hero__glyph", { opacity: 0, scale: 0.86, filter: "blur(14px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 1.4 }, "-=0.4")
+        .fromTo(".hero__title", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1.1 }, "-=0.9")
+        .fromTo(".hero__sub", { opacity: 0, y: 18, letterSpacing: "0.7em" }, { opacity: 1, y: 0, letterSpacing: "0.4em", duration: 0.9 }, "-=0.6")
+        .fromTo(".hero__say", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9 }, "-=0.5")
+        .fromTo(".cue", { opacity: 0 }, { opacity: 1, duration: 0.8 }, "-=0.4");
+      gsap.fromTo(".cue__line", { scaleY: 0 }, { scaleY: 1, transformOrigin: "top", duration: 1, ease: "power2.out", delay: 1.6, repeat: -1, repeatDelay: 0.6, yoyo: true });
+
+      // hero parallax + fade on scroll out
+      gsap.to("[data-hero-bg]", { yPercent: 16, scale: 1.12, ease: "none",
+        scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+      gsap.to(".hero__inner", { yPercent: -14, opacity: 0, ease: "none",
+        scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+
+      // parallax on every full-bleed scene image
+      gsap.utils.toArray("[data-parallax]").forEach((img) => {
+        gsap.fromTo(img, { yPercent: -10 }, { yPercent: 10, ease: "none",
+          scrollTrigger: { trigger: img.closest(".scene"), start: "top bottom", end: "bottom top", scrub: true } });
+      });
+
+      // heading line reveals
+      gsap.utils.toArray("[data-split]").forEach((el) => {
+        const split = new SplitText(el, { type: "lines", linesClass: "split-line" });
+        gsap.from(split.lines, {
+          yPercent: 110, opacity: 0, duration: 1, ease: "power3.out", stagger: 0.1,
+          scrollTrigger: { trigger: el, start: "top 82%" },
+        });
+      });
+
+      // generic fade-up reveals
+      gsap.utils.toArray("[data-reveal]").forEach((el) => {
+        gsap.from(el, {
+          y: 34, opacity: 0, duration: 0.9, ease: "power2.out",
+          scrollTrigger: { trigger: el, start: "top 88%" },
+        });
+      });
+
+      // signature moment: the fourfold ledger reveals one row at a time while pinned
+      const rows = gsap.utils.toArray("[data-ledger-row]");
+      gsap.set(rows, { opacity: 0.16, x: -18 });
+      const ltl = gsap.timeline({
+        scrollTrigger: { trigger: ".ledger", start: "top top", end: "+=150%", pin: true, scrub: 0.5 },
+      });
+      ltl.from("[data-ledger-head]", { opacity: 0, y: 24, duration: 0.5 }, 0);
+      rows.forEach((row, i) => {
+        ltl.to(row, { opacity: 1, x: 0, duration: 0.8, ease: "power2.out" }, 0.5 + i * 0.8);
+      });
+
+      ScrollTrigger.refresh();
+    }
+  </script>
 </body>
 </html>
