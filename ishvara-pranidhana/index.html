@@ -1,47 +1,423 @@
 <!doctype html>
-<!-- generated:scaffold -->
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Iishvara Prańidhána — Shelter in the Cosmic · Yama & Niyama</title>
-  <meta name="description" content="To establish oneself in the Cosmic idea — to accept Iishvara as the only ideal of life, moving with accelerated speed toward the Supreme Shelter." />
+  <title>Iishvara Prańidhána — Shelter in the Cosmic · Yama &amp; Niyama</title>
+  <meta name="description" content="Iishvara Prańidhána, the tenth and final Niyama: to establish oneself in the Cosmic idea and accept Iishvara as the only ideal of life. Entirely an effort of ideation — your Iishvara is not deaf." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,400&family=Spectral:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Spectral:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/src/shared/base.css" />
+  <!-- Hide above-the-fold hero pieces only when motion is allowed, so reduced-motion
+       users (and the no-JS case) always see fully-rendered content. -->
+  <script>
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches)
+      document.documentElement.classList.add("anim");
+  </script>
   <style>
     :root {
-      --accent: hsl(324 58% 52%);
-      --accent-soft: hsl(324 48% 92%);
-      --ink: hsl(324 30% 12%);
-      --paper: hsl(324 40% 97%);
+      --ink: #0c0b1c;
+      --paper: #f1eef6;
+      --paper-2: #e6e1f0;
+      --accent: #6a5ad9;
+      --gold: #d9b15a;
+      --starlight: #f0e3b8;
+      --muted: #5b5870;
+      --line: rgba(20, 16, 44, 0.14);
     }
-    body { background: var(--paper); color: var(--ink); }
-    .stage { min-height: 100svh; display: grid; grid-template-rows: auto 1fr auto; max-width: 860px; margin-inline: auto; padding: clamp(1.5rem, 5vw, 4rem); }
-    .crumb { font-family: var(--font-body); font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
-    .crumb a { color: inherit; text-decoration: none; }
-    .glyph { font-size: clamp(4rem, 16vw, 10rem); line-height: 1; color: var(--accent); opacity: .9; }
-    .translit { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.5rem, 9vw, 5.5rem); line-height: .95; margin: .1em 0 0; }
-    .gloss { font-style: italic; font-size: clamp(1.1rem, 3vw, 1.5rem); color: var(--accent); margin-top: .4rem; }
-    .sutra { font-style: italic; border-left: 3px solid var(--accent); padding-left: 1rem; margin: 2.5rem 0; color: hsl(324 25% 30%); }
-    .definition { font-size: clamp(1.15rem, 2.6vw, 1.5rem); line-height: 1.5; }
-    .note { margin-top: 1.5rem; color: hsl(324 18% 32%); line-height: 1.7; }
-    .seam { font-family: var(--font-body); font-size: .75rem; letter-spacing: .15em; text-transform: uppercase; color: hsl(324 15% 55%); }
+
+    body { background: var(--paper); color: var(--ink); overflow-x: hidden; }
+
+    /* faint paper grain for atmosphere */
+    body::after {
+      content: ""; position: fixed; inset: 0; z-index: 9; pointer-events: none;
+      opacity: 0.04; mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ── chrome ─────────────────────────────────────────── */
+    .progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 50; background: transparent; }
+    .progress__bar { height: 100%; width: 100%; transform: scaleX(0); transform-origin: left center;
+      background: linear-gradient(90deg, var(--accent), var(--gold)); }
+
+    .home { position: fixed; top: clamp(1rem, 3vw, 1.8rem); left: clamp(1rem, 4vw, 2.4rem); z-index: 40;
+      font: 500 0.74rem/1 var(--font-body); letter-spacing: 0.24em; text-transform: uppercase;
+      text-decoration: none; color: var(--ink); mix-blend-mode: difference; filter: invert(1); }
+    .home::before { content: "←"; margin-right: 0.5em; display: inline-block; }
+
+    /* ── shared type ────────────────────────────────────── */
+    .kicker { font: 500 0.78rem/1 var(--font-body); letter-spacing: 0.32em; text-transform: uppercase; color: var(--accent); margin: 0 0 1.4rem; }
+    .scene .kicker { color: var(--starlight); }
+    .display { font: 300 clamp(2.3rem, 6.4vw, 5rem)/1.04 var(--font-display); letter-spacing: -0.018em; margin: 0; }
+    .lede { font: 400 clamp(1.12rem, 2.3vw, 1.5rem)/1.6 var(--font-body); color: var(--muted); max-width: 34ch; }
+    .scene .lede { color: rgba(255, 255, 255, 0.88); }
+    .body-copy { font: 400 clamp(1.05rem, 1.5vw, 1.22rem)/1.72 var(--font-body); max-width: 56ch; }
+
+    .panel { max-width: 1080px; margin-inline: auto; padding: clamp(4.5rem, 13vh, 10rem) clamp(1.4rem, 6vw, 5rem); }
+
+    /* ── full-bleed photographic scenes ─────────────────── */
+    .scene { position: relative; min-height: 100svh; display: grid; align-items: center; overflow: clip; color: #fff; }
+    .scene__bg { position: absolute; inset: -12% 0; width: 100%; height: 124%; object-fit: cover; will-change: transform; }
+    .scene__tint { position: absolute; inset: 0; z-index: 1; }
+    .scene__inner { position: relative; z-index: 2; width: 100%; max-width: 1080px; margin-inline: auto; padding: clamp(2rem, 8vw, 6rem) clamp(1.4rem, 6vw, 5rem); }
+    .scene__inner.right { display: flex; justify-content: flex-end; text-align: right; }
+    .scene__inner.right > div { max-width: 42ch; }
+
+    /* ── hero ───────────────────────────────────────────── */
+    .hero { text-align: center; place-items: center; }
+    .hero__tint { background:
+      radial-gradient(120% 100% at 50% 70%, rgba(106, 90, 217, 0.22), transparent 60%),
+      linear-gradient(180deg, rgba(8, 7, 22, 0.5) 0%, rgba(8, 7, 22, 0.28) 44%, rgba(8, 7, 22, 0.72) 100%); }
+    .hero__inner { display: grid; justify-items: center; gap: 0.2rem; }
+    .hero__num { font: 500 0.8rem/1 var(--font-body); letter-spacing: 0.42em; text-transform: uppercase; color: rgba(240, 227, 184, 0.82); margin: 0 0 2.2rem; }
+    .hero__glyph { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.6rem, 8.4vw, 5.6rem); line-height: 1.1; color: #fff; text-shadow: 0 2px 50px rgba(106, 90, 217, 0.55); }
+    .hero__title { font: 300 clamp(2.6rem, 9.6vw, 6.6rem)/0.96 var(--font-display); letter-spacing: -0.02em; margin: 0.12em 0 0; }
+    .hero__sub { font: 500 clamp(0.9rem, 2vw, 1.15rem)/1 var(--font-body); letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); margin: 1.4rem 0 0; }
+    .hero__say { font: 400 clamp(1.05rem, 2.2vw, 1.35rem)/1.6 var(--font-body); color: rgba(255,255,255,0.9); max-width: 32ch; margin: 2.4rem auto 0; }
+    .cue { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 3;
+      font: 500 0.68rem/1 var(--font-body); letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.8);
+      display: grid; justify-items: center; gap: 0.7rem; }
+    .cue__line { width: 1px; height: 46px; background: rgba(255,255,255,0.6); transform-origin: top; }
+
+    /* ── definition (two facing blocks) ─────────────────── */
+    .defs { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 6vw, 5rem); margin-top: 3rem; }
+    .def h3 { font: 500 clamp(1.6rem, 3.4vw, 2.4rem)/1 var(--font-display); margin: 0 0 0.2rem; }
+    .def .sa { font-family: var(--font-display); color: var(--accent); font-size: 1.5rem; margin: 0 0 0.9rem; }
+    .def--proper h3 { color: var(--accent); }
+    .def p { font: 400 1.08rem/1.66 var(--font-body); color: var(--muted); margin: 0; }
+    .def p b { color: var(--ink); font-weight: 600; }
+    .pull { margin-top: clamp(2.6rem, 6vw, 4rem); padding-top: 2rem; border-top: 1px solid var(--line);
+      font: 300 clamp(1.5rem, 3.6vw, 2.4rem)/1.32 var(--font-display); letter-spacing: -0.01em; max-width: 26ch; }
+    .pull b { font-weight: 600; color: var(--accent); }
+
+    /* ── sutra band ─────────────────────────────────────── */
+    .sutra { background: var(--ink); color: var(--paper); }
+    .sutra__inner { max-width: 1080px; margin-inline: auto; padding: clamp(4rem, 11vh, 8rem) clamp(1.4rem, 6vw, 5rem); }
+    .sutra .kicker { color: var(--gold); }
+    .sutra__line { font: 300 clamp(1.6rem, 4.2vw, 3rem)/1.36 var(--font-display); letter-spacing: -0.01em; max-width: 24ch; margin: 0; }
+    .sutra__gloss { font: 400 1.06rem/1.66 var(--font-body); color: rgba(241, 238, 246, 0.62); max-width: 48ch; margin: 1.8rem 0 0; }
+
+    /* ── three japas — pinned signature ─────────────────── */
+    .japa { color: #fff; text-align: center; place-items: center; }
+    .japa__tint { background: radial-gradient(120% 90% at 50% 50%, rgba(40, 30, 90, 0.45), transparent 70%),
+      linear-gradient(180deg, rgba(8, 7, 22, 0.86), rgba(8, 7, 22, 0.78)); }
+    .japa__inner { display: grid; justify-items: center; gap: 1.2rem; max-width: 40ch; }
+    .japa__rank { font: 500 0.8rem/1 var(--font-body); letter-spacing: 0.34em; text-transform: uppercase; }
+    .japa__sa { font: 400 clamp(2.4rem, 9vw, 5.6rem)/1 var(--font-display); letter-spacing: -0.01em; color: #fff;
+      text-shadow: 0 2px 40px rgba(106, 90, 217, 0.5); }
+    .japa__name { font: 500 1.1rem/1 var(--font-body); letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); }
+    .japa__gloss { font: 400 clamp(1.05rem, 2.2vw, 1.3rem)/1.6 var(--font-body); color: rgba(255,255,255,0.82); margin: 0; }
+    .japa__meter { display: flex; gap: 0.55rem; margin-top: 0.6rem; }
+    .japa__dot { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,0.22); transition: background 0.4s, box-shadow 0.4s; }
+    .japa__dot.on { background: var(--gold); box-shadow: 0 0 16px rgba(217, 177, 90, 0.8); }
+
+    /* ── cards (alone / together) ───────────────────────── */
+    .cards { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.2rem, 3vw, 2rem); margin-top: 3rem; }
+    .card { background: var(--paper-2); border: 1px solid var(--line); border-radius: 4px; padding: clamp(1.6rem, 3vw, 2.6rem); }
+    .card__tag { font: 500 0.72rem/1 var(--font-body); letter-spacing: 0.26em; text-transform: uppercase; color: var(--accent); margin: 0 0 1rem; }
+    .card h3 { font: 500 clamp(1.5rem, 3vw, 2rem)/1.04 var(--font-display); margin: 0 0 0.8rem; }
+    .card p { font: 400 1.04rem/1.66 var(--font-body); color: var(--muted); margin: 0; }
+    .verdict { margin-top: clamp(2.4rem, 5vw, 3.4rem); font: 300 clamp(1.5rem, 3.6vw, 2.4rem)/1.34 var(--font-display); max-width: 28ch; }
+    .verdict b { font-weight: 600; color: var(--accent); }
+
+    /* ── closing ────────────────────────────────────────── */
+    .close__tint { background:
+      radial-gradient(120% 100% at 50% 86%, rgba(106, 90, 217, 0.2), transparent 60%),
+      linear-gradient(180deg, rgba(10, 9, 26, 0.5), rgba(10, 9, 26, 0.8)); }
+    .close__inner { max-width: 780px; }
+    .close .body-copy { color: rgba(255,255,255,0.9); max-width: 52ch; }
+    .close em { font-style: normal; color: var(--gold); }
+    .nav { display: flex; flex-wrap: wrap; gap: 1.4rem 2.4rem; margin-top: clamp(2.6rem, 6vw, 4rem);
+      padding-top: 1.6rem; border-top: 1px solid rgba(255,255,255,0.25); }
+    .nav a { font: 500 0.82rem/1.4 var(--font-body); letter-spacing: 0.14em; text-transform: uppercase; color: #fff; text-decoration: none; opacity: 0.82; transition: opacity 0.25s; }
+    .nav a:hover { opacity: 1; }
+    .nav a small { display: block; font-size: 0.66rem; letter-spacing: 0.2em; color: var(--gold); margin-top: 0.3rem; }
+    .nav .index { margin-left: auto; text-align: right; }
+    .attribution { margin-top: 3rem; font: 400 0.74rem/1.5 var(--font-body); letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
+
+    /* reveal gating — only hero pieces are pre-hidden (above the fold) */
+    .anim .hero [data-load] { opacity: 0; }
+
+    @media (max-width: 720px) {
+      .defs, .cards { grid-template-columns: 1fr; }
+      .scene__inner.right { justify-content: flex-start; text-align: left; }
+      .scene__inner.right > div { margin-left: 0; }
+      .nav .index { margin-left: 0; text-align: left; }
+    }
   </style>
 </head>
 <body>
-  <main class="stage">
-    <p class="crumb"><a href="/yama-niyama/">Yama & Niyama</a> · Niyama · 10</p>
-    <div>
-      <div class="glyph" lang="sa">ईश्वर प्रणिधान</div>
-      <h1 class="translit">Iishvara Prańidhána</h1>
-      <p class="gloss">Shelter in the Cosmic</p>
-      <blockquote class="sutra">Klesha-karma-vipákáshaeraparámrśt́ah Puruśavisheśa Iishvarah.</blockquote>
-      <p class="definition">To establish oneself in the Cosmic idea — to accept Iishvara as the only ideal of life, moving with accelerated speed toward the Supreme Shelter.</p>
-      <p class="note">Entirely an effort of bháva, of ideation. Your Iishvara is not deaf — do not shout. Mental japa, witnessed by the mind itself, is the highest process. The most important of all ten observances.</p>
-    </div>
-    <p class="seam">A Guide to Human Conduct — scaffold placeholder, design pending</p>
+  <div class="progress"><div class="progress__bar"></div></div>
+  <a class="home" href="/yama-niyama/">Yama &amp; Niyama</a>
+
+  <main>
+    <!-- ░░ HERO ░░ -->
+    <section class="hero scene">
+      <img class="scene__bg" data-hero-bg src="./img/hero_stars.jpg" alt="A lone figure standing under the vast arc of the Milky Way, the sky burning with starlight from horizon to horizon" />
+      <div class="scene__tint hero__tint"></div>
+      <div class="scene__inner">
+        <div class="hero__inner">
+          <p class="hero__num" data-load>Niyama · The Tenth Observance · 10</p>
+          <div class="hero__glyph" lang="sa" data-load>ईश्वर प्रणिधान</div>
+          <h1 class="hero__title" data-load>Iishvara Prańidhána</h1>
+          <p class="hero__sub" data-load>Shelter in the Cosmic</p>
+          <p class="hero__say" data-load>To take the whole of the infinite as your one ideal, and move toward it with accelerated speed. The last of the ten — and the greatest.</p>
+        </div>
+      </div>
+      <div class="cue" data-load><span>Scroll</span><span class="cue__line"></span></div>
+    </section>
+
+    <!-- ░░ THE WORD ░░ -->
+    <section class="panel">
+      <p class="kicker" data-reveal>The word</p>
+      <h2 class="display" data-split>Who you take shelter in, and how.</h2>
+      <div class="defs">
+        <div class="def" data-reveal>
+          <p class="sa" lang="sa">ईश्वर</p>
+          <h3>Iishvara</h3>
+          <p>The controller of this universe — He who governs its thought-waves. The witnessing entity of the causal world, free from all bondage. To a sádhaka, nothing other than <b>God</b>.</p>
+        </div>
+        <div class="def def--proper" data-reveal>
+          <p class="sa" lang="sa">प्रणिधान</p>
+          <h3>Prańidhána</h3>
+          <p>To understand clearly, and to adopt something as a shelter. So <b>Iishvara prańidhána</b> means to establish yourself in the Cosmic idea — to accept Iishvara as the only ideal of life.</p>
+        </div>
+      </div>
+      <p class="pull" data-reveal>The body never disobeys the laws of His thought-cycle. It is the mind that violates them — and the mind that, here, learns to <b>come home.</b></p>
+    </section>
+
+    <!-- ░░ HE IS NOT DEAF — sunrise figure ░░ -->
+    <section class="scene">
+      <img class="scene__bg" data-parallax src="./img/sunrise_figure.jpg" alt="A figure standing with arms outstretched against a rising sun, silhouetted over a valley of mist" />
+      <div class="scene__tint" style="background:linear-gradient(180deg,rgba(30,18,46,.42),rgba(16,10,30,.7))"></div>
+      <div class="scene__inner">
+        <p class="kicker" data-reveal>An effort of feeling</p>
+        <h2 class="display" data-split>Your Iishvara is not deaf.</h2>
+        <p class="body-copy" data-reveal style="color:rgba(255,255,255,.92);margin-top:1.6rem">
+          This is no outward show. Shouting for a crowd to gather, beating drums to prove your devotion — none of it has any place here. Respect, affection, sincerity, devotion: these belong to the inner heart, not the loud language of flatterers. Iishvara prańidhána is based entirely on bháva, on ideation. It is a mental effort in its entirety. Don't shout to convey your feelings to Him.
+        </p>
+      </div>
+    </section>
+
+    <!-- ░░ THE SUTRA ░░ -->
+    <section class="sutra">
+      <div class="sutra__inner">
+        <p class="kicker" data-reveal>The definition</p>
+        <p class="sutra__line" lang="sa" data-split>Klesha-karma-vipákáshaer&#8203;aparámrśt́ah Puruśavisheśa Iishvarah.</p>
+        <p class="sutra__gloss" data-reveal>He is the subtlest Entity — the Supreme Consciousness untouched by affliction, action, or its fruits. Withdraw the mind from the limited &ldquo;I&rdquo;, gather it to a point, then take the thought of the Macrocosm around that point. He can be realized only through feeling, and by no other means.</p>
+      </div>
+    </section>
+
+    <!-- ░░ THE THREE JAPAS — pinned signature ░░ -->
+    <section class="japa scene">
+      <img class="scene__bg" src="./img/milkyway.jpg" alt="A purple night sky thick with stars over a dark mountain ridge, the Milky Way rising at the edge" />
+      <div class="scene__tint japa__tint"></div>
+      <div class="scene__inner">
+        <div class="japa__inner">
+          <p class="kicker">Three ways to call</p>
+          <p class="japa__rank" data-rank style="color:rgba(255,255,255,.7)">The lowest</p>
+          <div class="japa__sa" lang="sa" data-sa>वाचनिक</div>
+          <p class="japa__name" data-name>Vácanika</p>
+          <p class="japa__gloss" data-gloss>Spoken aloud, to attract His attention by reciting prayers in a loud voice. Absolutely meaningless — it serves no purpose at all.</p>
+          <div class="japa__meter" aria-hidden="true">
+            <span class="japa__dot" data-dot></span>
+            <span class="japa__dot" data-dot></span>
+            <span class="japa__dot" data-dot></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ REALIZED THROUGH FEELING — candle ░░ -->
+    <section class="scene">
+      <img class="scene__bg" data-parallax src="./img/candle.jpg" alt="A single candle flame burning steadily in complete darkness" />
+      <div class="scene__tint" style="background:linear-gradient(180deg,rgba(10,8,20,.55),rgba(10,8,20,.7))"></div>
+      <div class="scene__inner right">
+        <div>
+          <p class="kicker" data-reveal>What it opens</p>
+          <h2 class="display" data-split>The mind moves faster than its Maker.</h2>
+          <p class="body-copy" data-reveal style="color:rgba(255,255,255,.92);margin-top:1.6rem;margin-left:auto">
+            Practised regularly and properly, mental japa carries the mind forward along the path of Pratisaiṋcara. The speed a sádhaka generates this way is faster than the speed by which Brahma leads all creation toward perfection. The animative force, divinity's own potential, rises above every tendency, every saḿskára — and proceeds toward eternal bliss. Pay no attention to the outer signs along the way. Cosmic feeling is above everything else.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ ALONE AND TOGETHER — cards ░░ -->
+    <section class="panel">
+      <p class="kicker" data-reveal>The practice</p>
+      <h2 class="display" data-split>Practise it alone. And do not miss it together.</h2>
+      <div class="cards">
+        <div class="card" data-reveal>
+          <p class="card__tag">In a lonely place</p>
+          <h3>Alone</h3>
+          <p>Like every lesson of sádhaná, Iishvara prańidhána is to be practised by yourself, in solitude. The mind withdraws, gathers, and ideates — witnessed by nothing but itself.</p>
+        </div>
+        <div class="card" data-reveal>
+          <p class="card__tag">Dharmacakra</p>
+          <h3>Together</h3>
+          <p>Unlike the others, this one may also be done collectively. Combined mental efforts work as one and raise the higher signs in a very short time — an indomitable force that helps solve any problem on earth.</p>
+        </div>
+      </div>
+      <p class="verdict" data-reveal>So be zealous to meet for weekly dharmacakra. <b>What one mind cannot, many ideating as one can.</b></p>
+    </section>
+
+    <!-- ░░ WHERE IT LEADS — summit at dawn ░░ -->
+    <section class="close scene">
+      <img class="scene__bg" data-parallax src="./img/summit.jpg" alt="A high snow peak catching the first gold of dawn above a sea of cloud, the sky lightening toward sunrise" />
+      <div class="scene__tint close__tint"></div>
+      <div class="scene__inner close__inner">
+        <p class="kicker" data-reveal>The last observance</p>
+        <h2 class="display" data-split>Of all ten, this is the most important.</h2>
+        <p class="body-copy" data-reveal>
+          The nine before it cleared the ground — conduct toward the world, conduct toward the self, the mind washed and steadied and turned to understand. <em>Iishvara Prańidhána</em> is where they were always headed: shelter in the Cosmic, held in higher esteem than the rest. The whole guide ends not with a rule but with an invitation — to move, with accelerated speed, toward the one Shelter that does not end.
+        </p>
+        <nav class="nav" data-reveal>
+          <a class="prev" href="/yama-niyama/svadhyaya">← Svádhyáya<small>09 · Understanding</small></a>
+          <a class="index" href="/yama-niyama/">All ten<small>Begin again</small></a>
+        </nav>
+        <p class="attribution" data-reveal>A Guide to Human Conduct · after Shrii Shrii Ánandamúrti</p>
+      </div>
+    </section>
   </main>
+
+  <script type="module">
+    import gsap from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    import { SplitText } from "gsap/SplitText";
+    import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    gsap.registerPlugin(ScrollToPlugin);
+    setupKeyboardNav();
+
+    if (!reduce) {
+      gsap.registerPlugin(ScrollTrigger, SplitText);
+      document.fonts.ready.then(init);
+    }
+
+    // ← / → (and ↑ / ↓ / PgUp / PgDn) step between sections; Home / End jump to the ends.
+    // Tops are recomputed live each press with getBoundingClientRect so GSAP's pin
+    // spacers (which reparent pinned sections) can never desync the navigation.
+    function setupKeyboardNav() {
+      const tops = () => {
+        const ys = Array.from(document.querySelectorAll("main section"))
+          .map((s) => Math.round(s.getBoundingClientRect().top + window.scrollY))
+          .sort((a, b) => a - b);
+        return ys.filter((y, i) => i === 0 || y - ys[i - 1] > 8); // de-dupe near-equal
+      };
+
+      const scrollTo = (y) =>
+        gsap.to(window, { duration: reduce ? 0 : 0.9, ease: "power2.inOut", scrollTo: { y, autoKill: false } });
+
+      const step = (dir) => {
+        const ys = tops();
+        const y = window.scrollY;
+        const target = dir > 0
+          ? ys.find((t) => t > y + 8) ?? ys[ys.length - 1]
+          : [...ys].reverse().find((t) => t < y - 8) ?? ys[0];
+        scrollTo(target);
+      };
+
+      addEventListener("keydown", (e) => {
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        const fwd = e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === "PageDown";
+        const back = e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "PageUp";
+        if (!fwd && !back && e.key !== "Home" && e.key !== "End") return;
+        e.preventDefault();
+        const ys = tops();
+        if (e.key === "Home") return scrollTo(ys[0]);
+        if (e.key === "End") return scrollTo(ys[ys.length - 1]);
+        step(fwd ? 1 : -1);
+      });
+    }
+
+    function init() {
+      // scroll progress bar
+      gsap.to(".progress__bar", {
+        scaleX: 1, ease: "none",
+        scrollTrigger: { trigger: document.documentElement, start: "top top", end: "bottom bottom", scrub: true },
+      });
+
+      // hero entrance — fromTo with explicit visible end state, because the
+      // .anim CSS pre-hides these (a plain .from() would treat 0 as the target).
+      const heroTl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      heroTl
+        .fromTo(".hero__num", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.8 })
+        .fromTo(".hero__glyph", { opacity: 0, scale: 0.86, filter: "blur(16px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 1.5 }, "-=0.4")
+        .fromTo(".hero__title", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1.1 }, "-=0.95")
+        .fromTo(".hero__sub", { opacity: 0, y: 18, letterSpacing: "0.7em" }, { opacity: 1, y: 0, letterSpacing: "0.4em", duration: 0.9 }, "-=0.6")
+        .fromTo(".hero__say", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9 }, "-=0.5")
+        .fromTo(".cue", { opacity: 0 }, { opacity: 1, duration: 0.8 }, "-=0.4");
+      gsap.fromTo(".cue__line", { scaleY: 0 }, { scaleY: 1, transformOrigin: "top", duration: 1, ease: "power2.out", delay: 1.7, repeat: -1, repeatDelay: 0.6, yoyo: true });
+
+      // hero parallax + fade on scroll out
+      gsap.to("[data-hero-bg]", { yPercent: 16, scale: 1.12, ease: "none",
+        scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+      gsap.to(".hero__inner", { yPercent: -14, opacity: 0, ease: "none",
+        scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+
+      // parallax on every full-bleed scene image
+      gsap.utils.toArray("[data-parallax]").forEach((img) => {
+        gsap.fromTo(img, { yPercent: -10 }, { yPercent: 10, ease: "none",
+          scrollTrigger: { trigger: img.closest(".scene"), start: "top bottom", end: "bottom top", scrub: true } });
+      });
+
+      // heading line reveals
+      gsap.utils.toArray("[data-split]").forEach((el) => {
+        const split = new SplitText(el, { type: "lines", linesClass: "split-line" });
+        gsap.from(split.lines, {
+          yPercent: 110, opacity: 0, duration: 1, ease: "power3.out", stagger: 0.1,
+          scrollTrigger: { trigger: el, start: "top 82%" },
+        });
+      });
+
+      // generic fade-up reveals
+      gsap.utils.toArray("[data-reveal]").forEach((el) => {
+        gsap.from(el, {
+          y: 34, opacity: 0, duration: 0.9, ease: "power2.out",
+          scrollTrigger: { trigger: el, start: "top 88%" },
+        });
+      });
+
+      // pinned three-japas — ascends from loud noise to silent inner ideation
+      const stages = [
+        { rank: "The lowest", sa: "वाचनिक", name: "Vácanika", lit: 1,
+          gloss: "Spoken aloud, to attract His attention by reciting prayers in a loud voice. Absolutely meaningless — it serves no purpose at all." },
+        { rank: "Better", sa: "उपांशु", name: "Upáṃshu", lit: 2,
+          gloss: "Whispered — uttered so low it is hardly audible. Better than the loud kind, yet still not the ideal style of japa." },
+        { rank: "The best", sa: "मानसिक", name: "Mánasika", lit: 3,
+          gloss: "Mental. The ideation expressed within, the mind its own sole witness. The highest process of Iishvara prańidhána." },
+      ];
+      const rankEl = document.querySelector("[data-rank]");
+      const saEl = document.querySelector("[data-sa]");
+      const nameEl = document.querySelector("[data-name]");
+      const glossEl = document.querySelector("[data-gloss]");
+      const dots = gsap.utils.toArray("[data-dot]");
+      let current = -1;
+      const show = (i) => {
+        if (i === current) return;
+        current = i;
+        const s = stages[i];
+        rankEl.textContent = s.rank;
+        rankEl.style.color = i === 2 ? "var(--gold)" : "rgba(255,255,255,.7)";
+        saEl.textContent = s.sa;
+        nameEl.textContent = s.name;
+        glossEl.textContent = s.gloss;
+        dots.forEach((d, k) => d.classList.toggle("on", k < s.lit));
+        gsap.fromTo([saEl, nameEl, glossEl], { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.6, stagger: 0.08, ease: "power2.out", overwrite: true });
+      };
+      show(0);
+
+      ScrollTrigger.create({
+        trigger: ".japa", start: "top top", end: "+=200%", pin: true, scrub: 0.4,
+        onUpdate: (self) => show(Math.min(2, Math.floor(self.progress * 3))),
+      });
+
+      ScrollTrigger.refresh();
+    }
+  </script>
 </body>
 </html>
