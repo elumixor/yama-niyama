@@ -1,47 +1,430 @@
 <!doctype html>
-<!-- generated:scaffold -->
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Aparigraha — Non-accumulation · Yama & Niyama</title>
-  <meta name="description" content="Non-indulgence in amenities and comforts superfluous to the preservation of life." />
+  <title>Aparigraha — Non-accumulation · Yama &amp; Niyama</title>
+  <meta name="description" content="Aparigraha, the fifth Yama: non-indulgence in amenities and comforts superfluous to the preservation of life. The minimum is relative — it shifts with person, place and time — and final establishment is the individual's own." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,400&family=Spectral:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Spectral:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/src/shared/base.css" />
+  <!-- Hide above-the-fold hero pieces only when motion is allowed, so reduced-motion
+       users (and the no-JS case) always see fully-rendered content. -->
+  <script>
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches)
+      document.documentElement.classList.add("anim");
+  </script>
   <style>
     :root {
-      --accent: hsl(144 58% 52%);
-      --accent-soft: hsl(144 48% 92%);
-      --ink: hsl(144 30% 12%);
-      --paper: hsl(144 40% 97%);
+      --ink: #2a241c;
+      --paper: #f4efe6;
+      --paper-2: #ebe3d4;
+      --accent: #a8552f;        /* muted terracotta, warm ~22° */
+      --accent-2: #8c6b4a;       /* warm secondary */
+      --muted: #6f6557;
+      --line: rgba(42, 36, 28, 0.13);
     }
-    body { background: var(--paper); color: var(--ink); }
-    .stage { min-height: 100svh; display: grid; grid-template-rows: auto 1fr auto; max-width: 860px; margin-inline: auto; padding: clamp(1.5rem, 5vw, 4rem); }
-    .crumb { font-family: var(--font-body); font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
-    .crumb a { color: inherit; text-decoration: none; }
-    .glyph { font-size: clamp(4rem, 16vw, 10rem); line-height: 1; color: var(--accent); opacity: .9; }
-    .translit { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.5rem, 9vw, 5.5rem); line-height: .95; margin: .1em 0 0; }
-    .gloss { font-style: italic; font-size: clamp(1.1rem, 3vw, 1.5rem); color: var(--accent); margin-top: .4rem; }
-    .sutra { font-style: italic; border-left: 3px solid var(--accent); padding-left: 1rem; margin: 2.5rem 0; color: hsl(144 25% 30%); }
-    .definition { font-size: clamp(1.15rem, 2.6vw, 1.5rem); line-height: 1.5; }
-    .note { margin-top: 1.5rem; color: hsl(144 18% 32%); line-height: 1.7; }
-    .seam { font-family: var(--font-body); font-size: .75rem; letter-spacing: .15em; text-transform: uppercase; color: hsl(144 15% 55%); }
+
+    body { background: var(--paper); color: var(--ink); overflow-x: hidden; }
+
+    /* faint paper grain for atmosphere */
+    body::after {
+      content: ""; position: fixed; inset: 0; z-index: 9; pointer-events: none;
+      opacity: 0.04; mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ── chrome ─────────────────────────────────────────── */
+    .progress { position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 50; background: transparent; }
+    .progress__bar { height: 100%; width: 100%; transform: scaleX(0); transform-origin: left center;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+
+    .home { position: fixed; top: clamp(1rem, 3vw, 1.8rem); left: clamp(1rem, 4vw, 2.4rem); z-index: 40;
+      font: 500 0.72rem/1 var(--font-body); letter-spacing: 0.26em; text-transform: uppercase;
+      text-decoration: none; color: var(--ink); mix-blend-mode: difference; filter: invert(1); }
+    .home::before { content: "←"; margin-right: 0.5em; display: inline-block; }
+
+    /* ── shared type ────────────────────────────────────── */
+    .kicker { font: 500 0.76rem/1 var(--font-body); letter-spacing: 0.34em; text-transform: uppercase; color: var(--accent); margin: 0 0 1.5rem; }
+    .scene .kicker { color: rgba(255, 255, 255, 0.82); }
+    .display { font: 300 clamp(2.2rem, 6vw, 4.8rem)/1.06 var(--font-display); letter-spacing: -0.018em; margin: 0; }
+    .lede { font: 400 clamp(1.1rem, 2.2vw, 1.45rem)/1.62 var(--font-body); color: var(--muted); max-width: 36ch; }
+    .scene .lede { color: rgba(255, 255, 255, 0.88); }
+    .body-copy { font: 400 clamp(1.04rem, 1.5vw, 1.2rem)/1.74 var(--font-body); max-width: 56ch; }
+
+    /* very generous negative space — emptiness carries the argument */
+    .panel { max-width: 1040px; margin-inline: auto; padding: clamp(6rem, 19vh, 13rem) clamp(1.5rem, 6vw, 5rem); }
+
+    /* ── full-bleed photographic scenes ─────────────────── */
+    .scene { position: relative; min-height: 100svh; display: grid; align-items: center; overflow: clip; color: #fff; }
+    .scene__bg { position: absolute; inset: -12% 0; width: 100%; height: 124%; object-fit: cover; will-change: transform; }
+    .scene__tint { position: absolute; inset: 0; z-index: 1; }
+    .scene__inner { position: relative; z-index: 2; width: 100%; max-width: 1040px; margin-inline: auto; padding: clamp(2rem, 8vw, 6rem) clamp(1.5rem, 6vw, 5rem); }
+    .scene__inner.right { display: flex; justify-content: flex-end; text-align: right; }
+    .scene__inner.right > div { max-width: 40ch; }
+
+    /* ── hero ───────────────────────────────────────────── */
+    .hero { text-align: center; place-items: center; }
+    .hero__tint { background:
+      radial-gradient(120% 90% at 50% 10%, rgba(30, 16, 8, 0.10), transparent 56%),
+      linear-gradient(180deg, rgba(36, 22, 12, 0.40) 0%, rgba(36, 22, 12, 0.22) 44%, rgba(30, 18, 10, 0.60) 100%); }
+    .hero__inner { display: grid; justify-items: center; gap: 0.2rem; }
+    .hero__num { font: 500 0.78rem/1 var(--font-body); letter-spacing: 0.42em; text-transform: uppercase; color: rgba(255,255,255,0.78); margin: 0 0 2.4rem; }
+    .hero__glyph { font-family: var(--font-display); font-weight: 400; font-size: clamp(3.4rem, 11vw, 8rem); line-height: 1; color: #fff; text-shadow: 0 2px 40px rgba(0,0,0,0.35); }
+    .hero__title { font: 300 clamp(2.9rem, 10.5vw, 7rem)/0.94 var(--font-display); letter-spacing: -0.02em; margin: 0.12em 0 0; }
+    .hero__sub { font: 500 clamp(0.88rem, 2vw, 1.1rem)/1 var(--font-body); letter-spacing: 0.42em; text-transform: uppercase; color: var(--accent); margin: 1.4rem 0 0;
+      text-shadow: 0 1px 18px rgba(0,0,0,0.4); }
+    .hero__say { font: 400 clamp(1.04rem, 2.1vw, 1.3rem)/1.62 var(--font-body); color: rgba(255,255,255,0.9); max-width: 32ch; margin: 2.4rem auto 0; }
+    .cue { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 3;
+      font: 500 0.66rem/1 var(--font-body); letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.8);
+      display: grid; justify-items: center; gap: 0.7rem; }
+    .cue__line { width: 1px; height: 46px; background: rgba(255,255,255,0.6); transform-origin: top; }
+
+    /* ── definition (two facing blocks) ─────────────────── */
+    .defs { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 6vw, 5rem); margin-top: 3.4rem; }
+    .def h3 { font: 500 clamp(1.5rem, 3.2vw, 2.2rem)/1 var(--font-display); margin: 0 0 0.2rem; }
+    .def .sa { font-family: var(--font-display); color: var(--accent-2); font-size: 1.35rem; margin: 0 0 0.9rem; }
+    .def--this h3 { color: var(--accent); }
+    .def p { font: 400 1.06rem/1.66 var(--font-body); color: var(--muted); margin: 0; }
+    .sutra { margin-top: clamp(3rem, 7vw, 4.6rem); padding-top: 2rem; border-top: 1px solid var(--line); }
+    .sutra p { font: 400 clamp(1.1rem, 2.4vw, 1.55rem)/1.5 var(--font-display); color: var(--ink); margin: 0; }
+    .sutra small { display: block; margin-top: 1rem; font: 400 0.95rem/1.6 var(--font-body); color: var(--muted); letter-spacing: 0.02em; }
+
+    /* ── relative-minimum toggle (signature moment) ─────── */
+    .relative { color: #fff; place-items: center; text-align: center; }
+    .relative__tint { background: linear-gradient(180deg, rgba(28, 20, 12, 0.62), rgba(28, 20, 12, 0.72)); }
+    .relative__inner { display: grid; justify-items: center; gap: 1.2rem; max-width: 880px; }
+    .rel__lead { font: 500 0.76rem/1 var(--font-body); letter-spacing: 0.34em; text-transform: uppercase; color: rgba(255,255,255,0.74); margin: 0; }
+    .rel__stage { display: grid; justify-items: center; gap: 0.5rem; min-height: 9.5rem; align-content: center; }
+    .rel__axis { font: 500 0.74rem/1 var(--font-body); letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); }
+    .rel__line { font: 300 clamp(1.7rem, 5vw, 3.2rem)/1.18 var(--font-display); margin: 0; max-width: 22ch; }
+    .rel__line b { font-weight: 500; color: #fff; }
+    .rel__sub { font: 400 1.02rem/1.6 var(--font-body); color: rgba(255,255,255,0.78); max-width: 40ch; margin: 0; }
+    .rel__dots { display: flex; gap: 0.6rem; margin-top: 0.4rem; }
+    .rel__dots span { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.3); transition: background 0.3s, transform 0.3s; }
+    .rel__dots span.on { background: var(--accent); transform: scale(1.25); }
+
+    /* ── society / individual cards ─────────────────────── */
+    .cards { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.2rem, 3vw, 2rem); margin-top: 3.4rem; }
+    .card { background: var(--paper-2); border: 1px solid var(--line); border-radius: 4px; padding: clamp(1.7rem, 3vw, 2.7rem); }
+    .card__tag { font: 500 0.72rem/1 var(--font-body); letter-spacing: 0.26em; text-transform: uppercase; color: var(--accent-2); margin: 0 0 1rem; }
+    .card--you .card__tag { color: var(--accent); }
+    .card h3 { font: 500 clamp(1.4rem, 3vw, 1.9rem)/1.06 var(--font-display); margin: 0 0 0.8rem; }
+    .card p { font: 400 1.02rem/1.66 var(--font-body); color: var(--muted); margin: 0; }
+    .verdict { margin-top: clamp(2.6rem, 5vw, 3.6rem); font: 300 clamp(1.5rem, 3.4vw, 2.3rem)/1.34 var(--font-display); max-width: 27ch; }
+    .verdict b { font-weight: 500; color: var(--accent); }
+
+    /* ── closing ────────────────────────────────────────── */
+    .close__tint { background: linear-gradient(180deg, rgba(26, 18, 12, 0.50), rgba(22, 16, 10, 0.78)); }
+    .close__inner { max-width: 760px; }
+    .close .body-copy { color: rgba(255,255,255,0.9); max-width: 52ch; }
+    .close em { font-style: normal; color: var(--accent); font-weight: 500; }
+    .nav { display: flex; flex-wrap: wrap; gap: 1.4rem 2.4rem; margin-top: clamp(2.8rem, 6vw, 4rem);
+      padding-top: 1.6rem; border-top: 1px solid rgba(255,255,255,0.25); }
+    .nav a { font: 500 0.8rem/1.4 var(--font-body); letter-spacing: 0.14em; text-transform: uppercase; color: #fff; text-decoration: none; opacity: 0.82; transition: opacity 0.25s; }
+    .nav a:hover { opacity: 1; }
+    .nav a small { display: block; font-size: 0.64rem; letter-spacing: 0.2em; color: var(--accent); margin-top: 0.3rem; }
+    .nav .next { margin-left: auto; text-align: right; }
+    .attribution { margin-top: 3rem; font: 400 0.72rem/1.5 var(--font-body); letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
+
+    /* reveal gating — only hero pieces are pre-hidden (above the fold) */
+    .anim .hero [data-load] { opacity: 0; }
+
+    @media (max-width: 720px) {
+      .defs, .cards { grid-template-columns: 1fr; }
+      .scene__inner.right { justify-content: flex-start; text-align: left; }
+      .nav .next { margin-left: 0; text-align: left; }
+    }
   </style>
 </head>
 <body>
-  <main class="stage">
-    <p class="crumb"><a href="/yama-niyama/">Yama & Niyama</a> · Yama · 05</p>
-    <div>
-      <div class="glyph" lang="sa">अपरिग्रह</div>
-      <h1 class="translit">Aparigraha</h1>
-      <p class="gloss">Non-accumulation</p>
-      <blockquote class="sutra">Deharakśátiriktabhogasádhanásviikaro'parigraha.</blockquote>
-      <p class="definition">Non-indulgence in amenities and comforts superfluous to the preservation of life.</p>
-      <p class="note">An endless fight to reduce one's own objects of comfort out of sympathy for common people. What counts as 'necessary' shifts with person, place and time — the bullock-cart in the age of railways has no meaning here.</p>
-    </div>
-    <p class="seam">A Guide to Human Conduct — scaffold placeholder, design pending</p>
+  <div class="progress"><div class="progress__bar"></div></div>
+  <a class="home" href="/yama-niyama/">Yama &amp; Niyama</a>
+
+  <main>
+    <!-- ░░ HERO ░░ -->
+    <section class="hero scene">
+      <img class="scene__bg" data-hero-bg src="./img/dune.jpg" alt="A vast spare desert of red rock and open scrub stretching to distant buttes under a pale sky" />
+      <div class="scene__tint hero__tint"></div>
+      <div class="scene__inner">
+        <div class="hero__inner">
+          <p class="hero__num" data-load>Yama · The Fifth Principle · 05</p>
+          <div class="hero__glyph" lang="sa" data-load>अपरिग्रह</div>
+          <h1 class="hero__title" data-load>Aparigraha</h1>
+          <p class="hero__sub" data-load>Non-accumulation</p>
+          <p class="hero__say" data-load>Not the refusal of comfort, but the steady choice to carry no more of it than the keeping of life requires.</p>
+        </div>
+      </div>
+      <div class="cue" data-load><span>Scroll</span><span class="cue__line"></span></div>
+    </section>
+
+    <!-- ░░ THE WORD — control over objectivity ░░ -->
+    <section class="panel">
+      <p class="kicker" data-reveal>The word</p>
+      <h2 class="display" data-split>Brahmacarya turns the gaze inward. Aparigraha turns it out.</h2>
+      <div class="defs">
+        <div class="def" data-reveal>
+          <p class="sa" lang="sa">ब्रह्मचर्य</p>
+          <h3>The subject</h3>
+          <p>In the enjoyment of any object, control over the subjectivity — how the mind holds the thing — is Brahmacarya. The work done within.</p>
+        </div>
+        <div class="def def--this" data-reveal>
+          <p class="sa" lang="sa">अपरिग्रह</p>
+          <h3>The object</h3>
+          <p>Control over the objectivity — how many things the mind gathers around itself — is Aparigraha. Non-indulgence in amenities and comforts superfluous to the preservation of life.</p>
+        </div>
+      </div>
+      <div class="sutra" data-reveal>
+        <p lang="sa">Deharakśátiriktabhogasádhanásviikaro&#8217;parigraha.</p>
+        <small>To take no possession of the means of enjoyment beyond what protects the body — that is Aparigraha.</small>
+      </div>
+    </section>
+
+    <!-- ░░ WHAT LIFE REQUIRES — sea/sky ░░ -->
+    <section class="scene">
+      <img class="scene__bg" data-parallax src="./img/walk2.jpg" alt="A calm open sea meeting a pale warm sky at dawn, almost featureless" />
+      <div class="scene__tint" style="background:linear-gradient(180deg,rgba(40,30,20,.40),rgba(30,22,14,.62))"></div>
+      <div class="scene__inner">
+        <p class="kicker" data-reveal>What life requires</p>
+        <h2 class="display" data-split>First, the floor beneath the practice.</h2>
+        <p class="body-copy" data-reveal style="color:rgba(255,255,255,.92);margin-top:1.6rem">
+          For existence we need food, clothing, a house to live in — and provision for old age, money and cultivable land for those who depend on us. Aparigraha never asks you to drop below that. It begins only above it, where comfort starts to outrun what the keeping of life actually needs.
+        </p>
+      </div>
+    </section>
+
+    <!-- ░░ THE RELATIVE MINIMUM — signature toggle ░░ -->
+    <section class="relative scene">
+      <img class="scene__bg" src="./img/light.jpg" alt="A long, near-empty interior of muted stone, light raking down the polished floor" />
+      <div class="scene__tint relative__tint"></div>
+      <div class="scene__inner">
+        <div class="relative__inner">
+          <p class="rel__lead">The minimum is not fixed</p>
+          <div class="rel__stage">
+            <p class="rel__axis" data-rel-axis>Place</p>
+            <p class="rel__line" data-rel-line>Wool is needless in an Indian summer — and keeps a body alive through a <b>Siberian</b> winter.</p>
+            <p class="rel__sub" data-rel-sub>The same garment is excess in one place and necessity in another.</p>
+          </div>
+          <div class="rel__dots"><span class="on"></span><span></span><span></span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ DON'T FETISHISE PRIMITIVENESS — field ░░ -->
+    <section class="scene">
+      <img class="scene__bg" data-parallax src="./img/field.jpg" alt="A wide golden field under a low sun, open hills and quiet sky beyond" />
+      <div class="scene__tint" style="background:linear-gradient(180deg,rgba(46,30,10,.30),rgba(36,24,10,.6))"></div>
+      <div class="scene__inner right">
+        <div>
+          <p class="kicker" data-reveal>A warning</p>
+          <h2 class="display" data-split>Poverty is not the practice.</h2>
+          <p class="body-copy" data-reveal style="color:rgba(255,255,255,.92);margin-top:1.6rem;margin-left:auto">
+            Advocating raw gur in the age of sugar, or the bullock-cart in the age of railways, has no meaning here. Neglect the time you live in and you make yourself unfit for the world and have to withdraw from it. Aparigraha is not the worship of the primitive. It measures the need of the person you actually are, here, now.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ SOCIETY AND THE INDIVIDUAL — cards ░░ -->
+    <section class="panel">
+      <p class="kicker" data-reveal>Who draws the line</p>
+      <h2 class="display" data-split>Society can set the ceiling. Only you can find the floor.</h2>
+      <div class="cards">
+        <div class="card" data-reveal>
+          <p class="card__tag">The collective</p>
+          <h3>It caps the excess</h3>
+          <p>Society can decide that no one holds more than so much money, so many houses, so much land. A useful ceiling. But it cannot ration what each mouth eats or each whim spends — the voracious overeat, the luxurious overspend.</p>
+        </div>
+        <div class="card card--you" data-reveal>
+          <p class="card__tag">The individual</p>
+          <h3>You set the floor</h3>
+          <p>What is left to your own discretion rests on your own idea of comfort. So the cap helps, but the complete establishment in Aparigraha ultimately depends on you. No limit imposed from outside can finish the work.</p>
+        </div>
+      </div>
+      <p class="verdict" data-reveal>Cooperate with the limit, and the rest is <b>your own quiet accounting.</b></p>
+    </section>
+
+    <!-- ░░ THE REAL DEFINITION — closing, lone figure ░░ -->
+    <section class="close scene">
+      <img class="scene__bg" data-parallax src="./img/walk.jpg" alt="A single small figure standing on a rock amid vast misty mountains, dwarfed by open space" />
+      <div class="scene__tint close__tint"></div>
+      <div class="scene__inner close__inner">
+        <p class="kicker" data-reveal>What it really is</p>
+        <h2 class="display" data-split>An endless fight to need a little less.</h2>
+        <p class="body-copy" data-reveal>
+          Aparigraha is <em>an endless fight to reduce one&#8217;s own objects of comfort out of sympathy for the common people</em> — once your own life, and your family&#8217;s, stands secure in body, mind and spirit. The things will rise and fall with person, place and time. The definition does not. It holds for everyone, everywhere, always.
+        </p>
+        <p class="body-copy" data-reveal style="margin-top:1.4rem">
+          Here the five Yama close. The war waged outward, against every pull of greed, now turns inward — toward <em>Shaoca</em>, the cleansing of the body and the mind it leaves behind.
+        </p>
+        <nav class="nav" data-reveal>
+          <a class="prev" href="/yama-niyama/brahmacarya">← Brahmacarya<small>04 · In Brahma</small></a>
+          <a href="/yama-niyama/">All ten<small>Index</small></a>
+          <a class="next" href="/yama-niyama/shaoca">Shaoca →<small>06 · Purity</small></a>
+        </nav>
+        <p class="attribution" data-reveal>A Guide to Human Conduct · after Shrii Shrii Ánandamúrti</p>
+      </div>
+    </section>
   </main>
+
+  <script type="module">
+    import gsap from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    import { SplitText } from "gsap/SplitText";
+    import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    gsap.registerPlugin(ScrollToPlugin);
+    setupKeyboardNav();
+
+    if (!reduce) {
+      gsap.registerPlugin(ScrollTrigger, SplitText);
+      document.fonts.ready.then(init);
+    }
+
+    // ← / → (and ↑ / ↓ / PgUp / PgDn) step between sections; Home / End jump to the ends.
+    // Tops are recomputed live each press with getBoundingClientRect so GSAP's pin
+    // spacers (which reparent pinned sections) can never desync the navigation.
+    function setupKeyboardNav() {
+      const tops = () => {
+        const ys = Array.from(document.querySelectorAll("main section"))
+          .map((s) => Math.round(s.getBoundingClientRect().top + window.scrollY))
+          .sort((a, b) => a - b);
+        return ys.filter((y, i) => i === 0 || y - ys[i - 1] > 8); // de-dupe near-equal
+      };
+
+      const scrollTo = (y) =>
+        gsap.to(window, { duration: reduce ? 0 : 0.9, ease: "power2.inOut", scrollTo: { y, autoKill: false } });
+
+      const step = (dir) => {
+        const ys = tops();
+        const y = window.scrollY;
+        const target = dir > 0
+          ? ys.find((t) => t > y + 8) ?? ys[ys.length - 1]
+          : [...ys].reverse().find((t) => t < y - 8) ?? ys[0];
+        scrollTo(target);
+      };
+
+      addEventListener("keydown", (e) => {
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        const fwd = e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === "PageDown";
+        const back = e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "PageUp";
+        if (!fwd && !back && e.key !== "Home" && e.key !== "End") return;
+        e.preventDefault();
+        const ys = tops();
+        if (e.key === "Home") return scrollTo(ys[0]);
+        if (e.key === "End") return scrollTo(ys[ys.length - 1]);
+        step(fwd ? 1 : -1);
+      });
+    }
+
+    function init() {
+      // scroll progress bar
+      gsap.to(".progress__bar", {
+        scaleX: 1, ease: "none",
+        scrollTrigger: { trigger: document.documentElement, start: "top top", end: "bottom bottom", scrub: true },
+      });
+
+      // hero entrance — fromTo with explicit visible end state, because the
+      // .anim CSS pre-hides these (a plain .from() would treat 0 as the target).
+      const heroTl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      heroTl
+        .fromTo(".hero__num", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.8 })
+        .fromTo(".hero__glyph", { opacity: 0, scale: 0.86, filter: "blur(14px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 1.4 }, "-=0.4")
+        .fromTo(".hero__title", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1.1 }, "-=0.9")
+        .fromTo(".hero__sub", { opacity: 0, y: 18, letterSpacing: "0.8em" }, { opacity: 1, y: 0, letterSpacing: "0.42em", duration: 0.9 }, "-=0.6")
+        .fromTo(".hero__say", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9 }, "-=0.5")
+        .fromTo(".cue", { opacity: 0 }, { opacity: 1, duration: 0.8 }, "-=0.4");
+      gsap.fromTo(".cue__line", { scaleY: 0 }, { scaleY: 1, transformOrigin: "top", duration: 1, ease: "power2.out", delay: 1.6, repeat: -1, repeatDelay: 0.6, yoyo: true });
+
+      // hero parallax + fade on scroll out
+      gsap.to("[data-hero-bg]", { yPercent: 16, scale: 1.12, ease: "none",
+        scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+      gsap.to(".hero__inner", { yPercent: -14, opacity: 0, ease: "none",
+        scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+
+      // parallax on every full-bleed scene image
+      gsap.utils.toArray("[data-parallax]").forEach((img) => {
+        gsap.fromTo(img, { yPercent: -10 }, { yPercent: 10, ease: "none",
+          scrollTrigger: { trigger: img.closest(".scene"), start: "top bottom", end: "bottom top", scrub: true } });
+      });
+
+      // heading line reveals
+      gsap.utils.toArray("[data-split]").forEach((el) => {
+        const split = new SplitText(el, { type: "lines", linesClass: "split-line" });
+        gsap.from(split.lines, {
+          yPercent: 110, opacity: 0, duration: 1, ease: "power3.out", stagger: 0.1,
+          scrollTrigger: { trigger: el, start: "top 82%" },
+        });
+      });
+
+      // generic fade-up reveals
+      gsap.utils.toArray("[data-reveal]").forEach((el) => {
+        gsap.from(el, {
+          y: 34, opacity: 0, duration: 0.9, ease: "power2.out",
+          scrollTrigger: { trigger: el, start: "top 88%" },
+        });
+      });
+
+      // ── signature moment: the relative minimum ─────────────
+      // Pin the panel and step through three readings of "necessary" —
+      // person, place, time — to dramatise that the minimum is relative.
+      const axisEl = document.querySelector("[data-rel-axis]");
+      const lineEl = document.querySelector("[data-rel-line]");
+      const subEl = document.querySelector("[data-rel-sub]");
+      const dots = gsap.utils.toArray(".rel__dots span");
+      const readings = [
+        {
+          axis: "Place",
+          line: "Wool is needless in an Indian summer — and keeps a body alive through a <b>Siberian</b> winter.",
+          sub: "The same garment is excess in one place and necessity in another.",
+        },
+        {
+          axis: "Person",
+          line: "One body bears hardship lightly; another, in the same straits, would <b>die</b> without more comfort.",
+          sub: "Greater need is not greater greed. It is simply a different body.",
+        },
+        {
+          axis: "Time",
+          line: "What an ordinary person needs today is more than the <b>prehistoric</b> minimum — and tomorrow it will be more again.",
+          sub: "The objects of ease grow easier to reach; the line moves with the age.",
+        },
+      ];
+
+      const setReading = (i) => {
+        const r = readings[i];
+        const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
+        tl.to([axisEl, lineEl, subEl], { opacity: 0, y: -14, duration: 0.3, stagger: 0.04 })
+          .add(() => {
+            axisEl.textContent = r.axis;
+            lineEl.innerHTML = r.line;
+            subEl.textContent = r.sub;
+            dots.forEach((d, k) => d.classList.toggle("on", k === i));
+          })
+          .fromTo([axisEl, lineEl, subEl], { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.45, stagger: 0.06 });
+      };
+
+      let current = 0;
+      const relTl = gsap.timeline({
+        scrollTrigger: { trigger: ".relative", start: "top top", end: "+=200%", pin: true, scrub: 0.4 },
+      });
+      // three equal dwell windows; swap reading as each is entered
+      relTl.to({}, { duration: 1 })
+        .add(() => { if (current !== 1) { current = 1; setReading(1); } }, 1)
+        .to({}, { duration: 1 })
+        .add(() => { if (current !== 2) { current = 2; setReading(2); } }, 2)
+        .to({}, { duration: 1 });
+      // when scrubbing back up, restore earlier readings
+      relTl.eventCallback("onUpdate", () => {
+        const p = relTl.progress();
+        const want = p < 0.34 ? 0 : p < 0.67 ? 1 : 2;
+        if (want !== current) { current = want; setReading(want); }
+      });
+
+      ScrollTrigger.refresh();
+    }
+  </script>
 </body>
 </html>
