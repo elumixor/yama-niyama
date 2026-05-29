@@ -1,47 +1,427 @@
 <!doctype html>
-<!-- generated:scaffold -->
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Satya — Benevolent truthfulness · Yama & Niyama</title>
-  <meta name="description" content="The proper action of mind and the right use of words, with the spirit of welfare. Not mere fact (rta), but truth bent toward the good." />
+  <title>Satya — Benevolent truthfulness · Yama &amp; Niyama</title>
+  <meta name="description" content="Satya, the second Yama: the proper action of mind and the right use of words, with the spirit of welfare. Not mere fact, but truth bent toward the good." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,400&family=Spectral:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,900&family=Spectral:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/src/shared/base.css" />
+  <!-- Hide above-the-fold hero pieces only when motion is allowed, so reduced-motion
+       users (and the no-JS case) always see fully-rendered content. -->
+  <script>
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches)
+      document.documentElement.classList.add("anim");
+  </script>
   <style>
     :root {
-      --accent: hsl(36 58% 52%);
-      --accent-soft: hsl(36 48% 92%);
-      --ink: hsl(36 30% 12%);
-      --paper: hsl(36 40% 97%);
+      --ink: #2c2113;
+      --paper: #faf4e9;
+      --paper-2: #f1e6d2;
+      --accent: #c2872e;      /* honey gold, hue anchor ~38° */
+      --accent-deep: #9a5f1c;
+      --sky: #7a96a8;         /* soft warm-tempered sky for cool accents */
+      --muted: #7a6b53;
+      --line: rgba(44, 33, 19, 0.14);
     }
-    body { background: var(--paper); color: var(--ink); }
-    .stage { min-height: 100svh; display: grid; grid-template-rows: auto 1fr auto; max-width: 860px; margin-inline: auto; padding: clamp(1.5rem, 5vw, 4rem); }
-    .crumb { font-family: var(--font-body); font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
-    .crumb a { color: inherit; text-decoration: none; }
-    .glyph { font-size: clamp(4rem, 16vw, 10rem); line-height: 1; color: var(--accent); opacity: .9; }
-    .translit { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.5rem, 9vw, 5.5rem); line-height: .95; margin: .1em 0 0; }
-    .gloss { font-style: italic; font-size: clamp(1.1rem, 3vw, 1.5rem); color: var(--accent); margin-top: .4rem; }
-    .sutra { font-style: italic; border-left: 3px solid var(--accent); padding-left: 1rem; margin: 2.5rem 0; color: hsl(36 25% 30%); }
-    .definition { font-size: clamp(1.15rem, 2.6vw, 1.5rem); line-height: 1.5; }
-    .note { margin-top: 1.5rem; color: hsl(36 18% 32%); line-height: 1.7; }
-    .seam { font-family: var(--font-body); font-size: .75rem; letter-spacing: .15em; text-transform: uppercase; color: hsl(36 15% 55%); }
+
+    body { background: var(--paper); color: var(--ink); overflow-x: hidden; }
+
+    /* faint paper grain for atmosphere */
+    body::after {
+      content: ""; position: fixed; inset: 0; z-index: 9; pointer-events: none;
+      opacity: 0.04; mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ── chrome ─────────────────────────────────────────── */
+    .progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 50; background: transparent; }
+    .progress__bar { height: 100%; width: 100%; transform: scaleX(0); transform-origin: left center;
+      background: linear-gradient(90deg, var(--accent-deep), var(--accent)); }
+
+    .home { position: fixed; top: clamp(1rem, 3vw, 1.8rem); left: clamp(1rem, 4vw, 2.4rem); z-index: 40;
+      font: 500 0.74rem/1 var(--font-body); letter-spacing: 0.24em; text-transform: uppercase;
+      text-decoration: none; color: var(--ink); mix-blend-mode: difference; filter: invert(1); }
+    .home::before { content: "←"; margin-right: 0.5em; display: inline-block; }
+
+    /* ── shared type ────────────────────────────────────── */
+    .kicker { font: 500 0.78rem/1 var(--font-body); letter-spacing: 0.32em; text-transform: uppercase; color: var(--accent-deep); margin: 0 0 1.4rem; }
+    .scene .kicker { color: rgba(255, 255, 255, 0.85); }
+    .display { font: 300 clamp(2.3rem, 6.4vw, 5rem)/1.04 var(--font-display); letter-spacing: -0.018em; margin: 0; }
+    .lede { font: 400 clamp(1.12rem, 2.3vw, 1.5rem)/1.6 var(--font-body); color: var(--muted); max-width: 34ch; }
+    .scene .lede { color: rgba(255, 255, 255, 0.88); }
+    .body-copy { font: 400 clamp(1.05rem, 1.5vw, 1.22rem)/1.72 var(--font-body); max-width: 56ch; }
+
+    .panel { max-width: 1080px; margin-inline: auto; padding: clamp(4.5rem, 13vh, 10rem) clamp(1.4rem, 6vw, 5rem); }
+
+    /* ── full-bleed photographic scenes ─────────────────── */
+    .scene { position: relative; min-height: 100svh; display: grid; align-items: center; overflow: clip; color: #fff; }
+    .scene__bg { position: absolute; inset: -12% 0; width: 100%; height: 124%; object-fit: cover; will-change: transform; }
+    .scene__tint { position: absolute; inset: 0; z-index: 1; }
+    .scene__inner { position: relative; z-index: 2; width: 100%; max-width: 1080px; margin-inline: auto; padding: clamp(2rem, 8vw, 6rem) clamp(1.4rem, 6vw, 5rem); }
+    .scene__inner.right { display: flex; justify-content: flex-end; text-align: right; }
+    .scene__inner.right > div { max-width: 42ch; }
+
+    /* ── hero ───────────────────────────────────────────── */
+    .hero { text-align: center; place-items: center; }
+    .hero__tint { background:
+      radial-gradient(120% 90% at 50% 12%, rgba(60, 36, 8, 0.10), transparent 55%),
+      linear-gradient(180deg, rgba(48, 30, 8, 0.34) 0%, rgba(48, 30, 8, 0.18) 42%, rgba(40, 26, 8, 0.58) 100%); }
+    .hero__inner { display: grid; justify-items: center; gap: 0.2rem; }
+    .hero__num { font: 500 0.8rem/1 var(--font-body); letter-spacing: 0.42em; text-transform: uppercase; color: rgba(255,255,255,0.82); margin: 0 0 2.2rem; }
+    .hero__glyph { font-family: var(--font-display); font-weight: 400; font-size: clamp(3.6rem, 12vw, 8.5rem); line-height: 1; color: #fff; text-shadow: 0 2px 40px rgba(40,24,4,0.4); }
+    .hero__title { font: 300 clamp(3rem, 11vw, 7.5rem)/0.92 var(--font-display); letter-spacing: -0.02em; margin: 0.1em 0 0; }
+    .hero__sub { font: 500 clamp(0.9rem, 2vw, 1.15rem)/1 var(--font-body); letter-spacing: 0.4em; text-transform: uppercase; color: #f2c879; margin: 1.4rem 0 0; }
+    .hero__say { font: 400 clamp(1.05rem, 2.2vw, 1.35rem)/1.6 var(--font-body); color: rgba(255,255,255,0.92); max-width: 32ch; margin: 2.4rem auto 0; }
+    .cue { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 3;
+      font: 500 0.68rem/1 var(--font-body); letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.82);
+      display: grid; justify-items: center; gap: 0.7rem; }
+    .cue__line { width: 1px; height: 46px; background: rgba(255,255,255,0.65); transform-origin: top; }
+
+    /* ── definition (two facing blocks) ─────────────────── */
+    .defs { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 6vw, 5rem); margin-top: 3rem; }
+    .def h3 { font: 500 clamp(1.6rem, 3.4vw, 2.4rem)/1 var(--font-display); margin: 0 0 0.2rem; }
+    .def .sa { font-family: var(--font-display); color: var(--accent-deep); font-size: 1.4rem; margin: 0 0 0.9rem; }
+    .def--proper h3 { color: var(--accent-deep); }
+    .def p { font: 400 1.08rem/1.66 var(--font-body); color: var(--muted); margin: 0; }
+    .pull { margin-top: clamp(2.6rem, 6vw, 4rem); padding-top: 2rem; border-top: 1px solid var(--line);
+      font: 300 clamp(1.5rem, 3.6vw, 2.4rem)/1.32 var(--font-display); letter-spacing: -0.01em; max-width: 26ch; }
+    .pull b { font-weight: 600; color: var(--accent-deep); }
+
+    /* ── the sūtra band ─────────────────────────────────── */
+    .sutra-band { background: var(--paper-2); }
+    .sutra-band .panel { text-align: center; }
+    .sutra { font: 300 clamp(1.7rem, 4.6vw, 3.1rem)/1.3 var(--font-display); letter-spacing: -0.01em; margin: 0 auto; max-width: 22ch; }
+    .sutra__sa { display: block; font: 500 0.92rem/1.7 var(--font-body); letter-spacing: 0.14em; color: var(--accent-deep); margin-top: 1.6rem; }
+    .sutra__gloss { font: 400 1.02rem/1.6 var(--font-body); color: var(--muted); margin-top: 0.4rem; }
+
+    /* ── the parable choice — pinned signature moment ───── */
+    .choice { color: #fff; text-align: center; place-items: center; }
+    .choice__tint { background: linear-gradient(180deg, rgba(28, 18, 8, 0.74), rgba(22, 14, 6, 0.6)); }
+    .choice__inner { display: grid; justify-items: center; gap: 1.6rem; max-width: 40ch; }
+    .choice__q { font: 400 0.82rem/1.5 var(--font-body); letter-spacing: 0.26em; text-transform: uppercase; color: rgba(255,255,255,0.78); }
+    .choice__ask { font: 300 clamp(1.5rem, 4.4vw, 2.7rem)/1.28 var(--font-display); }
+    .choice__answers { display: grid; gap: 1.1rem; width: 100%; margin-top: 0.6rem; }
+    .choice__row { display: grid; gap: 0.4rem; }
+    .choice__tag { font: 500 0.72rem/1 var(--font-body); letter-spacing: 0.26em; text-transform: uppercase; }
+    .choice__row--fact .choice__tag { color: #d8a3a3; }
+    .choice__row--satya .choice__tag { color: #f2c879; }
+    .choice__line { font: 400 clamp(1.1rem, 2.6vw, 1.5rem)/1.4 var(--font-display); }
+    .choice__row--fact .choice__line { position: relative; color: rgba(255,255,255,0.6); --strike: 0; }
+    .choice__row--fact .choice__line::after {
+      content: ""; position: absolute; left: 0; top: 52%; height: 2px; width: 100%;
+      background: #d88; transform: scaleX(var(--strike)); transform-origin: left center; }
+    .choice__verdict { font: 300 clamp(1.05rem, 2.4vw, 1.4rem)/1.5 var(--font-body); color: rgba(255,255,255,0.9); max-width: 34ch; margin-top: 0.6rem; }
+    .choice__verdict b { font-weight: 600; color: #f2c879; }
+
+    /* ── method / contrast cards ────────────────────────── */
+    .cards { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.2rem, 3vw, 2rem); margin-top: 3rem; }
+    .card { background: var(--paper-2); border: 1px solid var(--line); border-radius: 4px; padding: clamp(1.6rem, 3vw, 2.6rem); }
+    .card__tag { font: 500 0.72rem/1 var(--font-body); letter-spacing: 0.26em; text-transform: uppercase; color: var(--accent-deep); margin: 0 0 1rem; }
+    .card--off .card__tag { color: var(--sky); }
+    .card h3 { font: 500 clamp(1.5rem, 3vw, 2rem)/1.04 var(--font-display); margin: 0 0 0.8rem; }
+    .card .sa { font-family: var(--font-display); color: var(--muted); font-size: 1.1rem; margin: -0.4rem 0 0.7rem; }
+    .card p { font: 400 1.04rem/1.66 var(--font-body); color: var(--muted); margin: 0; }
+    .verdict { margin-top: clamp(2.4rem, 5vw, 3.4rem); font: 300 clamp(1.5rem, 3.6vw, 2.4rem)/1.34 var(--font-display); max-width: 28ch; }
+    .verdict b { font-weight: 600; color: var(--accent-deep); }
+
+    /* ── closing ────────────────────────────────────────── */
+    .close__tint { background: linear-gradient(180deg, rgba(40, 26, 8, 0.5), rgba(30, 20, 6, 0.78)); }
+    .close__inner { max-width: 760px; }
+    .close .body-copy { color: rgba(255,255,255,0.92); max-width: 52ch; }
+    .close em { font-style: normal; color: #f2c879; }
+    .nav { display: flex; flex-wrap: wrap; gap: 1.4rem 2.4rem; margin-top: clamp(2.6rem, 6vw, 4rem);
+      padding-top: 1.6rem; border-top: 1px solid rgba(255,255,255,0.25); }
+    .nav a { font: 500 0.82rem/1.4 var(--font-body); letter-spacing: 0.14em; text-transform: uppercase; color: #fff; text-decoration: none; opacity: 0.82; transition: opacity 0.25s; }
+    .nav a:hover { opacity: 1; }
+    .nav a small { display: block; font-size: 0.66rem; letter-spacing: 0.2em; color: #f2c879; margin-top: 0.3rem; }
+    .nav .next { margin-left: auto; text-align: right; }
+    .attribution { margin-top: 3rem; font: 400 0.74rem/1.5 var(--font-body); letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
+
+    /* reveal gating — only hero pieces are pre-hidden (above the fold) */
+    .anim .hero [data-load] { opacity: 0; }
+
+    @media (max-width: 720px) {
+      .defs, .cards { grid-template-columns: 1fr; }
+      .scene__inner.right { justify-content: flex-start; text-align: left; }
+      .scene__inner.right > div { margin-left: 0; }
+      .nav .next { margin-left: 0; text-align: left; }
+    }
   </style>
 </head>
 <body>
-  <main class="stage">
-    <p class="crumb"><a href="/yama-niyama/">Yama & Niyama</a> · Yama · 02</p>
-    <div>
-      <div class="glyph" lang="sa">सत्य</div>
-      <h1 class="translit">Satya</h1>
-      <p class="gloss">Benevolent truthfulness</p>
-      <blockquote class="sutra">Parahitártham váunmanaso yathárthatvaṃ satyam.</blockquote>
-      <p class="definition">The proper action of mind and the right use of words, with the spirit of welfare. Not mere fact (rta), but truth bent toward the good.</p>
-      <p class="note">If a fact, told plainly, would cause an innocent to be murdered, then to misguide the aggressor is the higher truth. The dignity of Satya is the welfare it serves, not the literalness of the words.</p>
-    </div>
-    <p class="seam">A Guide to Human Conduct — scaffold placeholder, design pending</p>
+  <div class="progress"><div class="progress__bar"></div></div>
+  <a class="home" href="/yama-niyama/">Yama &amp; Niyama</a>
+
+  <main>
+    <!-- ░░ HERO ░░ -->
+    <section class="hero scene">
+      <img class="scene__bg" data-hero-bg src="./img/s_hero.jpg" alt="First sunlight breaking through low cloud over green hills at dawn" />
+      <div class="scene__tint hero__tint"></div>
+      <div class="scene__inner">
+        <div class="hero__inner">
+          <p class="hero__num" data-load>Yama · The Second Principle · 02</p>
+          <div class="hero__glyph" lang="sa" data-load>सत्य</div>
+          <h1 class="hero__title" data-load>Satya</h1>
+          <p class="hero__sub" data-load>Benevolent truthfulness</p>
+          <p class="hero__say" data-load>Truth is not the bare fact. It is the word and the thought used for the welfare of all — and that has no English name.</p>
+        </div>
+      </div>
+      <div class="cue" data-load><span>Scroll</span><span class="cue__line"></span></div>
+    </section>
+
+    <!-- ░░ THE WORD — fact vs Satya ░░ -->
+    <section class="panel">
+      <p class="kicker" data-reveal>The word</p>
+      <h2 class="display" data-split>Two words the English language keeps confusing.</h2>
+      <div class="defs">
+        <div class="def" data-reveal>
+          <p class="sa" lang="sa">ऋत</p>
+          <h3>Rta</h3>
+          <p>The bare fact. To report a thing exactly as it stands — accurate, literal, indifferent to what the report will do. This is what most people mean by “truth.” The sādhaka is <em>not</em> asked to follow it.</p>
+        </div>
+        <div class="def def--proper" data-reveal>
+          <p class="sa" lang="sa">सत्य</p>
+          <h3>Satya</h3>
+          <p>The proper action of mind and the right use of words, <b>with the spirit of welfare.</b> Its practical side bends with circumstance; its finality rests in Parama Brahma. Fact serves the moment. Satya serves the good.</p>
+        </div>
+      </div>
+      <p class="pull" data-reveal>You can state every fact correctly and still <b>betray the truth.</b></p>
+    </section>
+
+    <!-- ░░ THE SŪTRA ░░ -->
+    <section class="sutra-band">
+      <div class="panel">
+        <p class="kicker" data-reveal>The definition</p>
+        <p class="sutra" data-reveal lang="sa">Parahitártham váunmanaso<br />yathárthatvaṃ satyam.</p>
+        <span class="sutra__sa" data-reveal>Parahitártham váunmanaso yathárthatvaṃ satyam.</span>
+        <p class="sutra__gloss" data-reveal>“Satya is the correct use of mind and words, done for the benefit of others.”</p>
+      </div>
+    </section>
+
+    <!-- ░░ THE REFUGEE — mist scene ░░ -->
+    <section class="scene">
+      <img class="scene__bg" data-parallax src="./img/s_mist.jpg" alt="Pale mist drifting across a dark pine forest, half-hiding the trees" />
+      <div class="scene__tint" style="background:linear-gradient(180deg,rgba(20,26,30,.52),rgba(16,20,24,.7))"></div>
+      <div class="scene__inner">
+        <p class="kicker" data-reveal>The refugee</p>
+        <h2 class="display" data-split>A terrified man hides in your house.</h2>
+        <p class="body-copy" data-reveal style="color:rgba(255,255,255,.92);margin-top:1.6rem">
+          You may know for certain he is innocent. A ruffian follows, bent on torturing him, and comes to your door asking where he is. Tell the plain fact and the man is murdered — and you, through your “truth,” become indirectly guilty of the crime. Here, fact and welfare point in opposite directions.
+        </p>
+      </div>
+    </section>
+
+    <!-- ░░ THE CHOICE — pinned signature moment ░░ -->
+    <section class="choice scene">
+      <img class="scene__bg" src="./img/s_refuge.jpg" alt="A quiet window seat with cushions and soft daylight, a place of shelter" />
+      <div class="scene__tint choice__tint"></div>
+      <div class="scene__inner">
+        <div class="choice__inner">
+          <p class="choice__q">The ruffian asks: where is he?</p>
+          <p class="choice__ask">Two answers. Both leave your lips. Only one is Satya.</p>
+          <div class="choice__answers">
+            <div class="choice__row choice__row--fact" data-fact>
+              <span class="choice__tag">Rta · the fact</span>
+              <span class="choice__line">“He is here, hiding inside.”</span>
+            </div>
+            <div class="choice__row choice__row--satya" data-satya>
+              <span class="choice__tag">Satya · the welfare</span>
+              <span class="choice__line">“No one came this way. Look elsewhere.”</span>
+            </div>
+          </div>
+          <p class="choice__verdict" data-satya>To misguide the aggressor so the innocent may safely return home — <b>that is the higher truth.</b></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ THE MOTHER — letter scene ░░ -->
+    <section class="scene">
+      <img class="scene__bg" data-parallax src="./img/s_letter.jpg" alt="A fountain pen resting on handwritten lines, lit by warm low light" />
+      <div class="scene__tint" style="background:linear-gradient(180deg,rgba(40,28,10,.4),rgba(30,20,8,.68))"></div>
+      <div class="scene__inner right">
+        <div>
+          <p class="kicker" data-reveal>The letter</p>
+          <h2 class="display" data-split>Your mother is eating when the news arrives.</h2>
+          <p class="body-copy" data-reveal style="color:rgba(255,255,255,.94);margin-top:1.6rem;margin-left:auto">
+            The letter says her father has died. She asks what it contains. Blurt the fact and the shock takes her food, perhaps her strength. So you say all is well at home; you let her finish; later you mention his illness, and prepare the ground gently. Something other than fact was uttered — and the dignity of Satya was kept whole.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ THE METHOD — relativity vs finality cards ░░ -->
+    <section class="panel">
+      <p class="kicker" data-reveal>How it holds together</p>
+      <h2 class="display" data-split>One foot in the moment, the other in the Absolute.</h2>
+      <div class="cards">
+        <div class="card" data-reveal>
+          <p class="card__tag">The practical side</p>
+          <h3>Relativity</h3>
+          <p>What welfare asks shifts with person, place and time. The sādhaka, dealing with the relativity of their surroundings, must judge each case by one measure: what is genuinely good for humanity. The words may change; the spirit does not.</p>
+        </div>
+        <div class="card card--off" data-reveal>
+          <p class="card__tag">The finality</p>
+          <h3>Parama Brahma</h3>
+          <p class="sa" lang="sa">Satyaṃ jiṋánam anantaṃ Brahma.</p>
+          <p>Truth, knowledge, infinity — that is Brahma. The finality of Satya does not rest in any fact at all, but in the Supreme Entity, so often called the very essence of Satya.</p>
+        </div>
+      </div>
+      <p class="verdict" data-reveal>Satya is anchored not in what is <em>said</em>, but in <b>what it is said for.</b></p>
+    </section>
+
+    <!-- ░░ THE SPIRIT OF WELFARE — open-arms scene ░░ -->
+    <section class="scene">
+      <img class="scene__bg" data-parallax src="./img/s_welfare.jpg" alt="A figure with arms open wide, silhouetted against a golden misty sunrise" />
+      <div class="scene__tint" style="background:linear-gradient(180deg,rgba(60,36,8,.34),rgba(46,28,8,.62))"></div>
+      <div class="scene__inner">
+        <p class="kicker" data-reveal>The spirit of welfare</p>
+        <h2 class="display" data-split>Parahitártham — for the benefit of others.</h2>
+        <p class="body-copy" data-reveal style="color:rgba(255,255,255,.94);margin-top:1.6rem">
+          This is the hinge of the whole principle. Humans are rational beings, able in varying degrees to do what is good for humanity. Thought, word and action turned toward that good — that, and not the literalness of the words, is what the discourse defines as Satya.
+        </p>
+      </div>
+    </section>
+
+    <!-- ░░ WHERE IT LEADS — golden field close ░░ -->
+    <section class="close scene">
+      <img class="scene__bg" data-parallax src="./img/s_field.jpg" alt="The rising sun spilling gold across a wide field of ripe grain" />
+      <div class="scene__tint close__tint"></div>
+      <div class="scene__inner close__inner">
+        <p class="kicker" data-reveal>Where it leads</p>
+        <h2 class="display" data-split>Every fact is relative. Truth is not.</h2>
+        <p class="body-copy" data-reveal>
+          Satya begins in the give-and-take of daily life, where the welfare of others guides each word — and it ends in <em>Parama Brahma</em>, the one entity that is itself the essence of truth. Where <em>Ahiṃsá</em> guards others from your harm, Satya turns your very speech into their good.
+        </p>
+        <nav class="nav" data-reveal>
+          <a class="prev" href="/yama-niyama/ahimsa">← Ahiṃsá<small>01 · Non-harming</small></a>
+          <a href="/yama-niyama/">All ten<small>Index</small></a>
+          <a class="next" href="/yama-niyama/asteya">Asteya →<small>03 · Non-stealing</small></a>
+        </nav>
+        <p class="attribution" data-reveal>A Guide to Human Conduct · after Shrii Shrii Ánandamúrti</p>
+      </div>
+    </section>
   </main>
+
+  <script type="module">
+    import gsap from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    import { SplitText } from "gsap/SplitText";
+    import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    gsap.registerPlugin(ScrollToPlugin);
+    setupKeyboardNav();
+
+    if (!reduce) {
+      gsap.registerPlugin(ScrollTrigger, SplitText);
+      document.fonts.ready.then(init);
+    }
+
+    // ← / → (and ↑ / ↓ / PgUp / PgDn) step between sections; Home / End jump to the ends.
+    // Tops are recomputed live each press with getBoundingClientRect so GSAP's pin
+    // spacers (which reparent pinned sections) can never desync the navigation.
+    function setupKeyboardNav() {
+      const tops = () => {
+        const ys = Array.from(document.querySelectorAll("main section"))
+          .map((s) => Math.round(s.getBoundingClientRect().top + window.scrollY))
+          .sort((a, b) => a - b);
+        return ys.filter((y, i) => i === 0 || y - ys[i - 1] > 8); // de-dupe near-equal
+      };
+
+      const scrollTo = (y) =>
+        gsap.to(window, { duration: reduce ? 0 : 0.9, ease: "power2.inOut", scrollTo: { y, autoKill: false } });
+
+      const step = (dir) => {
+        const ys = tops();
+        const y = window.scrollY;
+        const target = dir > 0
+          ? ys.find((t) => t > y + 8) ?? ys[ys.length - 1]
+          : [...ys].reverse().find((t) => t < y - 8) ?? ys[0];
+        scrollTo(target);
+      };
+
+      addEventListener("keydown", (e) => {
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        const fwd = e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === "PageDown";
+        const back = e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "PageUp";
+        if (!fwd && !back && e.key !== "Home" && e.key !== "End") return;
+        e.preventDefault();
+        const ys = tops();
+        if (e.key === "Home") return scrollTo(ys[0]);
+        if (e.key === "End") return scrollTo(ys[ys.length - 1]);
+        step(fwd ? 1 : -1);
+      });
+    }
+
+    function init() {
+      // scroll progress bar
+      gsap.to(".progress__bar", {
+        scaleX: 1, ease: "none",
+        scrollTrigger: { trigger: document.documentElement, start: "top top", end: "bottom bottom", scrub: true },
+      });
+
+      // hero entrance — fromTo with explicit visible end state, because the
+      // .anim CSS pre-hides these (a plain .from() would treat 0 as the target).
+      const heroTl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      heroTl
+        .fromTo(".hero__num", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.8 })
+        .fromTo(".hero__glyph", { opacity: 0, scale: 0.86, filter: "blur(14px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 1.4 }, "-=0.4")
+        .fromTo(".hero__title", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1.1 }, "-=0.9")
+        .fromTo(".hero__sub", { opacity: 0, y: 18, letterSpacing: "0.7em" }, { opacity: 1, y: 0, letterSpacing: "0.4em", duration: 0.9 }, "-=0.6")
+        .fromTo(".hero__say", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9 }, "-=0.5")
+        .fromTo(".cue", { opacity: 0 }, { opacity: 1, duration: 0.8 }, "-=0.4");
+      gsap.fromTo(".cue__line", { scaleY: 0 }, { scaleY: 1, transformOrigin: "top", duration: 1, ease: "power2.out", delay: 1.6, repeat: -1, repeatDelay: 0.6, yoyo: true });
+
+      // hero parallax + fade on scroll out
+      gsap.to("[data-hero-bg]", { yPercent: 16, scale: 1.12, ease: "none",
+        scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+      gsap.to(".hero__inner", { yPercent: -14, opacity: 0, ease: "none",
+        scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+
+      // parallax on every full-bleed scene image
+      gsap.utils.toArray("[data-parallax]").forEach((img) => {
+        gsap.fromTo(img, { yPercent: -10 }, { yPercent: 10, ease: "none",
+          scrollTrigger: { trigger: img.closest(".scene"), start: "top bottom", end: "bottom top", scrub: true } });
+      });
+
+      // heading line reveals
+      gsap.utils.toArray("[data-split]").forEach((el) => {
+        const split = new SplitText(el, { type: "lines", linesClass: "split-line" });
+        gsap.from(split.lines, {
+          yPercent: 110, opacity: 0, duration: 1, ease: "power3.out", stagger: 0.1,
+          scrollTrigger: { trigger: el, start: "top 82%" },
+        });
+      });
+
+      // generic fade-up reveals
+      gsap.utils.toArray("[data-reveal]").forEach((el) => {
+        gsap.from(el, {
+          y: 34, opacity: 0, duration: 0.9, ease: "power2.out",
+          scrollTrigger: { trigger: el, start: "top 88%" },
+        });
+      });
+
+      // ── signature moment: the fact-vs-Satya choice, pinned ──
+      // The two answers rise in; the plain "fact" answer is struck through (told
+      // plainly it gets the innocent killed); the Satya answer and verdict hold.
+      // Truth is not abandoned — it is bent toward welfare. The strike-through is a
+      // pseudo-element, so we scrub its scaleX through a CSS custom property (--strike).
+      const factLine = document.querySelector(".choice__row--fact .choice__line");
+      const cTl = gsap.timeline({
+        scrollTrigger: { trigger: ".choice", start: "top top", end: "+=150%", pin: true, scrub: 0.6 },
+      });
+      cTl
+        .from("[data-fact]", { opacity: 0, y: 26, ease: "power2.out" }, 0.0)
+        .to(factLine, { "--strike": 1, ease: "none", duration: 0.6 }, 0.35)
+        .to(factLine, { color: "rgba(255,255,255,0.3)", ease: "none", duration: 0.6 }, 0.35)
+        .from("[data-satya]", { opacity: 0, y: 26, stagger: 0.3, ease: "power2.out", duration: 0.6 }, 0.75);
+
+      ScrollTrigger.refresh();
+    }
+  </script>
 </body>
 </html>
