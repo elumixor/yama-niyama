@@ -1,47 +1,402 @@
 <!doctype html>
-<!-- generated:scaffold -->
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Svádhyáya — Clear understanding · Yama & Niyama</title>
-  <meta name="description" content="Not merely reading or hearing a spiritual subject, but understanding its underlying meaning and proper spirit." />
+  <title>Svádhyáya — Clear understanding · Yama &amp; Niyama</title>
+  <meta name="description" content="Svádhyáya, the ninth principle: not merely reading or hearing a spiritual subject, but grasping its underlying meaning and proper spirit. The same word carries different meanings in different contexts." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,400&family=Spectral:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Spectral:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/src/shared/base.css" />
+  <!-- Hide above-the-fold hero pieces only when motion is allowed, so reduced-motion
+       users (and the no-JS case) always see fully-rendered content. -->
+  <script>
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches)
+      document.documentElement.classList.add("anim");
+  </script>
   <style>
     :root {
-      --accent: hsl(288 58% 52%);
-      --accent-soft: hsl(288 48% 92%);
-      --ink: hsl(288 30% 12%);
-      --paper: hsl(288 40% 97%);
+      --ink: #241019;
+      --paper: #f4ece2;
+      --paper-2: #ebdfd0;
+      --accent: #8c2750;       /* deep plum / burgundy */
+      --gold: #c98a3c;         /* lamplight gold */
+      --muted: #6f5560;
+      --line: rgba(36, 16, 25, 0.15);
     }
-    body { background: var(--paper); color: var(--ink); }
-    .stage { min-height: 100svh; display: grid; grid-template-rows: auto 1fr auto; max-width: 860px; margin-inline: auto; padding: clamp(1.5rem, 5vw, 4rem); }
-    .crumb { font-family: var(--font-body); font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
-    .crumb a { color: inherit; text-decoration: none; }
-    .glyph { font-size: clamp(4rem, 16vw, 10rem); line-height: 1; color: var(--accent); opacity: .9; }
-    .translit { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.5rem, 9vw, 5.5rem); line-height: .95; margin: .1em 0 0; }
-    .gloss { font-style: italic; font-size: clamp(1.1rem, 3vw, 1.5rem); color: var(--accent); margin-top: .4rem; }
-    .sutra { font-style: italic; border-left: 3px solid var(--accent); padding-left: 1rem; margin: 2.5rem 0; color: hsl(288 25% 30%); }
-    .definition { font-size: clamp(1.15rem, 2.6vw, 1.5rem); line-height: 1.5; }
-    .note { margin-top: 1.5rem; color: hsl(288 18% 32%); line-height: 1.7; }
-    .seam { font-family: var(--font-body); font-size: .75rem; letter-spacing: .15em; text-transform: uppercase; color: hsl(288 15% 55%); }
+
+    body { background: var(--paper); color: var(--ink); overflow-x: hidden; }
+
+    /* faint paper grain for atmosphere */
+    body::after {
+      content: ""; position: fixed; inset: 0; z-index: 9; pointer-events: none;
+      opacity: 0.04; mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ── chrome ─────────────────────────────────────────── */
+    .progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 50; background: transparent; }
+    .progress__bar { height: 100%; width: 100%; transform: scaleX(0); transform-origin: left center;
+      background: linear-gradient(90deg, var(--accent), var(--gold)); }
+
+    .home { position: fixed; top: clamp(1rem, 3vw, 1.8rem); left: clamp(1rem, 4vw, 2.4rem); z-index: 40;
+      font: 500 0.74rem/1 var(--font-body); letter-spacing: 0.24em; text-transform: uppercase;
+      text-decoration: none; color: var(--ink); mix-blend-mode: difference; filter: invert(1); }
+    .home::before { content: "←"; margin-right: 0.5em; display: inline-block; }
+
+    /* ── shared type ────────────────────────────────────── */
+    .kicker { font: 500 0.78rem/1 var(--font-body); letter-spacing: 0.32em; text-transform: uppercase; color: var(--accent); margin: 0 0 1.4rem; }
+    .scene .kicker { color: var(--gold); }
+    .display { font: 300 clamp(2.3rem, 6.4vw, 5rem)/1.04 var(--font-display); letter-spacing: -0.018em; margin: 0; }
+    .lede { font: 400 clamp(1.12rem, 2.3vw, 1.5rem)/1.6 var(--font-body); color: var(--muted); max-width: 34ch; }
+    .scene .lede { color: rgba(255, 255, 255, 0.88); }
+    .body-copy { font: 400 clamp(1.05rem, 1.5vw, 1.22rem)/1.72 var(--font-body); max-width: 56ch; }
+
+    .panel { max-width: 1080px; margin-inline: auto; padding: clamp(4.5rem, 13vh, 10rem) clamp(1.4rem, 6vw, 5rem); }
+
+    /* ── full-bleed photographic scenes ─────────────────── */
+    .scene { position: relative; min-height: 100svh; display: grid; align-items: center; overflow: clip; color: #fff; }
+    .scene__bg { position: absolute; inset: -12% 0; width: 100%; height: 124%; object-fit: cover; will-change: transform; }
+    .scene__tint { position: absolute; inset: 0; z-index: 1; }
+    .scene__inner { position: relative; z-index: 2; width: 100%; max-width: 1080px; margin-inline: auto; padding: clamp(2rem, 8vw, 6rem) clamp(1.4rem, 6vw, 5rem); }
+    .scene__inner.right { display: flex; justify-content: flex-end; text-align: right; }
+    .scene__inner.right > div { max-width: 42ch; }
+
+    /* ── hero ───────────────────────────────────────────── */
+    .hero { text-align: center; place-items: center; }
+    .hero__tint { background:
+      radial-gradient(120% 90% at 50% 10%, rgba(20, 8, 14, 0.10), transparent 55%),
+      linear-gradient(180deg, rgba(24, 10, 16, 0.52) 0%, rgba(24, 10, 16, 0.32) 42%, rgba(20, 8, 14, 0.72) 100%); }
+    .hero__inner { display: grid; justify-items: center; gap: 0.2rem; }
+    .hero__num { font: 500 0.8rem/1 var(--font-body); letter-spacing: 0.42em; text-transform: uppercase; color: rgba(255,255,255,0.78); margin: 0 0 2.2rem; }
+    .hero__glyph { font-family: var(--font-display); font-weight: 400; font-size: clamp(3.2rem, 11vw, 7.5rem); line-height: 1; color: #fff; text-shadow: 0 2px 40px rgba(0,0,0,0.4); }
+    .hero__title { font: 300 clamp(3rem, 11vw, 7.5rem)/0.92 var(--font-display); letter-spacing: -0.02em; margin: 0.1em 0 0; }
+    .hero__sub { font: 500 clamp(0.9rem, 2vw, 1.15rem)/1 var(--font-body); letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); margin: 1.4rem 0 0; }
+    .hero__say { font: 400 clamp(1.05rem, 2.2vw, 1.35rem)/1.6 var(--font-body); color: rgba(255,255,255,0.9); max-width: 32ch; margin: 2.4rem auto 0; }
+    .cue { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 3;
+      font: 500 0.68rem/1 var(--font-body); letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.8);
+      display: grid; justify-items: center; gap: 0.7rem; }
+    .cue__line { width: 1px; height: 46px; background: rgba(255,255,255,0.6); transform-origin: top; }
+
+    /* ── the word — facing blocks ───────────────────────── */
+    .defs { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 6vw, 5rem); margin-top: 3rem; }
+    .def h3 { font: 500 clamp(1.6rem, 3.4vw, 2.4rem)/1.06 var(--font-display); margin: 0 0 0.3rem; }
+    .def .tag { font: 500 0.72rem/1 var(--font-body); letter-spacing: 0.26em; text-transform: uppercase; margin: 0 0 0.9rem; color: var(--muted); }
+    .def--true .tag { color: var(--accent); }
+    .def--true h3 { color: var(--accent); }
+    .def p { font: 400 1.08rem/1.66 var(--font-body); color: var(--muted); margin: 0; }
+    .pull { margin-top: clamp(2.6rem, 6vw, 4rem); padding-top: 2rem; border-top: 1px solid var(--line);
+      font: 300 clamp(1.5rem, 3.6vw, 2.4rem)/1.32 var(--font-display); letter-spacing: -0.01em; max-width: 26ch; }
+    .pull b { font-weight: 600; color: var(--accent); }
+
+    /* ── the flip — pinned two-meanings reveal ──────────── */
+    .flip { color: #fff; text-align: center; place-items: center; }
+    .flip__tint { background: linear-gradient(180deg, rgba(20, 8, 14, 0.84), rgba(28, 12, 8, 0.7)); }
+    .flip__inner { display: grid; justify-items: center; gap: 1.2rem; max-width: 40ch; }
+    .flip__sa { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.6rem, 9vw, 5.5rem); line-height: 1; color: #fff; }
+    .flip__word { font: 500 0.82rem/1 var(--font-body); letter-spacing: 0.34em; text-transform: uppercase; color: var(--gold); }
+    .flip__read { position: relative; min-height: 7.5em; width: 100%; }
+    .flip__read > div { position: absolute; inset: 0; display: grid; justify-items: center; align-content: start; gap: 0.6rem; }
+    .flip__label { font: 500 0.72rem/1 var(--font-body); letter-spacing: 0.3em; text-transform: uppercase; }
+    .flip__crude .flip__label { color: rgba(255,255,255,0.6); }
+    .flip__true .flip__label { color: var(--gold); }
+    .flip__gloss { font: 300 clamp(1.5rem, 4.6vw, 2.9rem)/1.28 var(--font-display); }
+    .flip__note { font: 400 0.98rem/1.6 var(--font-body); color: rgba(255,255,255,0.72); max-width: 36ch; }
+
+    /* ── contexts — surálaya cards ──────────────────────── */
+    .cards { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.2rem, 3vw, 2rem); margin-top: 3rem; }
+    .card { background: var(--paper-2); border: 1px solid var(--line); border-radius: 4px; padding: clamp(1.6rem, 3vw, 2.6rem); }
+    .card__sa { font-family: var(--font-display); font-size: 1.45rem; color: var(--accent); margin: 0 0 0.9rem; }
+    .card__tag { font: 500 0.72rem/1 var(--font-body); letter-spacing: 0.26em; text-transform: uppercase; color: var(--muted); margin: 0 0 0.7rem; }
+    .card h3 { font: 500 clamp(1.4rem, 3vw, 1.9rem)/1.1 var(--font-display); margin: 0 0 0.7rem; }
+    .card h3 b { color: var(--accent); font-weight: 600; }
+    .card p { font: 400 1.02rem/1.62 var(--font-body); color: var(--muted); margin: 0; }
+    .verdict { margin-top: clamp(2.4rem, 5vw, 3.4rem); font: 300 clamp(1.5rem, 3.6vw, 2.4rem)/1.34 var(--font-display); max-width: 28ch; }
+    .verdict b { font-weight: 600; color: var(--accent); }
+
+    /* ── closing ────────────────────────────────────────── */
+    .close__tint { background: linear-gradient(180deg, rgba(24, 10, 16, 0.6), rgba(20, 8, 14, 0.82)); }
+    .close__inner { max-width: 760px; }
+    .close .body-copy { color: rgba(255,255,255,0.9); max-width: 52ch; }
+    .close em { font-style: normal; color: var(--gold); }
+    .nav { display: flex; flex-wrap: wrap; gap: 1.4rem 2.4rem; margin-top: clamp(2.6rem, 6vw, 4rem);
+      padding-top: 1.6rem; border-top: 1px solid rgba(255,255,255,0.25); }
+    .nav a { font: 500 0.82rem/1.4 var(--font-body); letter-spacing: 0.14em; text-transform: uppercase; color: #fff; text-decoration: none; opacity: 0.82; transition: opacity 0.25s; }
+    .nav a:hover { opacity: 1; }
+    .nav a small { display: block; font-size: 0.66rem; letter-spacing: 0.2em; color: var(--gold); margin-top: 0.3rem; }
+    .nav .next { margin-left: auto; text-align: right; }
+    .attribution { margin-top: 3rem; font: 400 0.74rem/1.5 var(--font-body); letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
+
+    /* reveal gating — only hero pieces are pre-hidden (above the fold) */
+    .anim .hero [data-load] { opacity: 0; }
+
+    @media (max-width: 720px) {
+      .defs, .cards { grid-template-columns: 1fr; }
+      .scene__inner.right { justify-content: flex-start; text-align: left; }
+      .scene__inner.right > div { margin-left: 0; }
+      .nav .next { margin-left: 0; text-align: left; }
+      .flip__read { min-height: 9.5em; }
+    }
   </style>
 </head>
 <body>
-  <main class="stage">
-    <p class="crumb"><a href="/yama-niyama/">Yama & Niyama</a> · Niyama · 09</p>
-    <div>
-      <div class="glyph" lang="sa">स्वाध्याय</div>
-      <h1 class="translit">Svádhyáya</h1>
-      <p class="gloss">Clear understanding</p>
-      <blockquote class="sutra">Má shabdát rasaná jineyá tadaṃshán rasaná priye…</blockquote>
-      <p class="definition">Not merely reading or hearing a spiritual subject, but understanding its underlying meaning and proper spirit.</p>
-      <p class="note">The same word carries different meanings in different contexts. 'Máṃsa sádhaná' means control over the tongue's speech — not the slaughter of goats. To grasp the idea first is the whole discipline.</p>
-    </div>
-    <p class="seam">A Guide to Human Conduct — scaffold placeholder, design pending</p>
+  <div class="progress"><div class="progress__bar"></div></div>
+  <a class="home" href="/yama-niyama/">Yama &amp; Niyama</a>
+
+  <main>
+    <!-- ░░ HERO ░░ -->
+    <section class="hero scene">
+      <img class="scene__bg" data-hero-bg src="./img/hero_book_candle.jpg" alt="An open book fanned out on a table beside a lit candle in warm low light" />
+      <div class="scene__tint hero__tint"></div>
+      <div class="scene__inner">
+        <div class="hero__inner">
+          <p class="hero__num" data-load>Niyama · The Ninth Observance · 09</p>
+          <div class="hero__glyph" lang="sa" data-load>स्वाध्याय</div>
+          <h1 class="hero__title" data-load>Svádhyáya</h1>
+          <p class="hero__sub" data-load>Clear understanding</p>
+          <p class="hero__say" data-load>Not the words on the page, but the meaning behind them. To grasp the idea first is the whole discipline.</p>
+        </div>
+      </div>
+      <div class="cue" data-load><span>Scroll</span><span class="cue__line"></span></div>
+    </section>
+
+    <!-- ░░ THE WORD ░░ -->
+    <section class="panel">
+      <p class="kicker" data-reveal>The word</p>
+      <h2 class="display" data-split>Reading is not understanding.</h2>
+      <div class="defs">
+        <div class="def def--crude" data-reveal>
+          <p class="tag">What it became</p>
+          <h3>The shortcut</h3>
+          <p>Touch your head with the book three times. Offer fruits or sweets to the deity. No time to read, no need to grasp the meaning — this, the religious professionals say, will yield the same result. The crude reading, sold as the real thing.</p>
+        </div>
+        <div class="def def--true" data-reveal>
+          <p class="tag">What it means</p>
+          <h3>Svádhyáya</h3>
+          <p>Not only to read or hear a spiritual subject, but to understand its significance — the underlying idea. In the hermitage of the rśis a student carried it on day by day. The word survived; its meaning thinned out.</p>
+        </div>
+      </div>
+      <p class="pull" data-reveal>Accepting the outward meaning has only led to the <b>corruption of sádhaná</b> and the distortion of belief.</p>
+    </section>
+
+    <!-- ░░ THE COST — scripture pile ░░ -->
+    <section class="scene">
+      <img class="scene__bg" data-parallax src="./img/scripture.jpg" alt="A stack of aged cloth-bound books in green and tan on a worn wooden table" />
+      <div class="scene__tint" style="background:linear-gradient(180deg,rgba(28,12,20,.5),rgba(28,12,20,.72))"></div>
+      <div class="scene__inner">
+        <p class="kicker" data-reveal>How a meaning gets buried</p>
+        <h2 class="display" data-split>One aspect of tantra is called máṃsa sádhaná.</h2>
+        <p class="body-copy" data-reveal style="color:rgba(255,255,255,.9);margin-top:1.6rem">
+          The interpreters dominated by their material desires read the word at its crudest. <b style="color:var(--gold);font-weight:600">Máṃsa</b> as flesh. So they slaughter goats at the altar in its name — the number to be sacrificed fixed by the number of people who will eat the meat. The teaching becomes the opposite of itself. Alas, what an interpretation.
+        </p>
+      </div>
+    </section>
+
+    <!-- ░░ THE FLIP — pinned two-meanings reveal ░░ -->
+    <section class="flip scene">
+      <img class="scene__bg" src="./img/old_books.jpg" alt="A stack of antique leather-bound books with gilt and worn spines" />
+      <div class="scene__tint flip__tint"></div>
+      <div class="scene__inner">
+        <div class="flip__inner">
+          <div class="flip__sa" lang="sa">मांस</div>
+          <p class="flip__word">máṃsa · the same word</p>
+          <div class="flip__read">
+            <div class="flip__crude" data-read="crude">
+              <p class="flip__label">The crude reading</p>
+              <p class="flip__gloss">Meat. The slaughter of innocent goats.</p>
+              <p class="flip__note">Taken at face value, fed by appetite, dressed as devotion.</p>
+            </div>
+            <div class="flip__true" data-read="true">
+              <p class="flip__label">The true reading</p>
+              <p class="flip__gloss">Control over the tongue.</p>
+              <p class="flip__note"><b style="color:#fff;font-weight:600">Ma</b> means tongue; máṃsa, the action of the tongue — vocal expression. The máṃsa sádhaka takes it daily: he practises control over his speech. How beautiful the meaning is.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ THE PRINCIPLE — surálaya contexts ░░ -->
+    <section class="panel">
+      <p class="kicker" data-reveal>One word, two meanings</p>
+      <h2 class="display" data-split>The same word carries different meanings in different contexts.</h2>
+      <div class="cards">
+        <div class="card" data-reveal>
+          <p class="card__sa" lang="sa">सुरालय</p>
+          <p class="card__tag">Shaoṇḍikaḥ surálayaṃ gacchati</p>
+          <h3>The liquor merchant goes to the <b>surálaya</b>.</h3>
+          <p>Here surálaya is the house of surá — the liquor shop. The word means exactly what the speaker around it makes it mean.</p>
+        </div>
+        <div class="card" data-reveal>
+          <p class="card__sa" lang="sa">सुरालय</p>
+          <p class="card__tag">Nárada surálayaṃ gacchati</p>
+          <h3>Nárada goes to the <b>surálaya</b>.</h3>
+          <p>The very same surálaya is now the abode of the surá — the gods. Heaven. Change the context and the word turns inside out.</p>
+        </div>
+      </div>
+      <p class="verdict" data-reveal>So the idea is to be grasped first. <b>Otherwise the proper spirit will never be realized.</b></p>
+    </section>
+
+    <!-- ░░ THE WARNING — calligraphy ░░ -->
+    <section class="scene">
+      <img class="scene__bg" data-parallax src="./img/calligraphy.jpg" alt="A calligraphy practice sheet with a dip pen, ink bottle, nibs and an open lettering manual on a desk" />
+      <div class="scene__tint" style="background:linear-gradient(180deg,rgba(20,10,8,.5),rgba(20,10,8,.7))"></div>
+      <div class="scene__inner right">
+        <div>
+          <p class="kicker" data-reveal>Why it is kept hidden</p>
+          <h2 class="display" data-split>Those with vested interest keep the public away.</h2>
+          <p class="body-copy" data-reveal style="color:rgba(255,255,255,.92);margin-top:1.6rem;margin-left:auto">
+            Away from the true spirit of the true shástras — because a public that cannot read the meaning for itself is a public that can be exploited. The defence is not faith. It is comprehension. See how cautious you have to be.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ WHERE IT LEADS — library of open books ░░ -->
+    <section class="close scene">
+      <img class="scene__bg" data-parallax src="./img/library.jpg" alt="A wall covered with open books, their text-filled pages facing outward" />
+      <div class="scene__tint close__tint"></div>
+      <div class="scene__inner close__inner">
+        <p class="kicker" data-reveal>Where it leads</p>
+        <h2 class="display" data-split>Read for the idea, and the text comes alive.</h2>
+        <p class="body-copy" data-reveal>
+          Svádhyáya frees the scriptures from those who profit by misreading them, and clears the mind to receive what they actually hold. It is the understanding that <em>Tapah</em> turns into service, and the lucid step before <em>Iishvara Prańidhána</em> — taking shelter in the Cosmic with open eyes.
+        </p>
+        <nav class="nav" data-reveal>
+          <a class="prev" href="/yama-niyama/tapah">← Tapah<small>08 · Service</small></a>
+          <a href="/yama-niyama/">All ten<small>Index</small></a>
+          <a class="next" href="/yama-niyama/ishvara-pranidhana">Iishvara →<small>10 · The Cosmic</small></a>
+        </nav>
+        <p class="attribution" data-reveal>A Guide to Human Conduct · after Shrii Shrii Ánandamúrti</p>
+      </div>
+    </section>
   </main>
+
+  <script type="module">
+    import gsap from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    import { SplitText } from "gsap/SplitText";
+    import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    gsap.registerPlugin(ScrollToPlugin);
+    setupKeyboardNav();
+
+    if (!reduce) {
+      gsap.registerPlugin(ScrollTrigger, SplitText);
+      document.fonts.ready.then(init);
+    } else {
+      // With motion reduced, both readings of the flip must be legible; stack them.
+      const t = document.querySelector(".flip__true");
+      const c = document.querySelector(".flip__crude");
+      if (t && c) {
+        c.style.position = t.style.position = "static";
+        t.style.opacity = c.style.opacity = "1";
+        t.style.marginTop = "1.4rem";
+      }
+    }
+
+    // ← / → (and ↑ / ↓ / PgUp / PgDn) step between sections; Home / End jump to the ends.
+    // Tops are recomputed live each press with getBoundingClientRect so GSAP's pin
+    // spacers (which reparent pinned sections) can never desync the navigation.
+    function setupKeyboardNav() {
+      const tops = () => {
+        const ys = Array.from(document.querySelectorAll("main section"))
+          .map((s) => Math.round(s.getBoundingClientRect().top + window.scrollY))
+          .sort((a, b) => a - b);
+        return ys.filter((y, i) => i === 0 || y - ys[i - 1] > 8); // de-dupe near-equal
+      };
+
+      const scrollTo = (y) =>
+        gsap.to(window, { duration: reduce ? 0 : 0.9, ease: "power2.inOut", scrollTo: { y, autoKill: false } });
+
+      const step = (dir) => {
+        const ys = tops();
+        const y = window.scrollY;
+        const target = dir > 0
+          ? ys.find((t) => t > y + 8) ?? ys[ys.length - 1]
+          : [...ys].reverse().find((t) => t < y - 8) ?? ys[0];
+        scrollTo(target);
+      };
+
+      addEventListener("keydown", (e) => {
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        const fwd = e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === "PageDown";
+        const back = e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "PageUp";
+        if (!fwd && !back && e.key !== "Home" && e.key !== "End") return;
+        e.preventDefault();
+        const ys = tops();
+        if (e.key === "Home") return scrollTo(ys[0]);
+        if (e.key === "End") return scrollTo(ys[ys.length - 1]);
+        step(fwd ? 1 : -1);
+      });
+    }
+
+    function init() {
+      // scroll progress bar
+      gsap.to(".progress__bar", {
+        scaleX: 1, ease: "none",
+        scrollTrigger: { trigger: document.documentElement, start: "top top", end: "bottom bottom", scrub: true },
+      });
+
+      // hero entrance — fromTo with explicit visible end state, because the
+      // .anim CSS pre-hides these (a plain .from() would treat 0 as the target).
+      const heroTl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      heroTl
+        .fromTo(".hero__num", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.8 })
+        .fromTo(".hero__glyph", { opacity: 0, scale: 0.86, filter: "blur(14px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 1.4 }, "-=0.4")
+        .fromTo(".hero__title", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1.1 }, "-=0.9")
+        .fromTo(".hero__sub", { opacity: 0, y: 18, letterSpacing: "0.7em" }, { opacity: 1, y: 0, letterSpacing: "0.4em", duration: 0.9 }, "-=0.6")
+        .fromTo(".hero__say", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9 }, "-=0.5")
+        .fromTo(".cue", { opacity: 0 }, { opacity: 1, duration: 0.8 }, "-=0.4");
+      gsap.fromTo(".cue__line", { scaleY: 0 }, { scaleY: 1, transformOrigin: "top", duration: 1, ease: "power2.out", delay: 1.6, repeat: -1, repeatDelay: 0.6, yoyo: true });
+
+      // hero parallax + fade on scroll out
+      gsap.to("[data-hero-bg]", { yPercent: 16, scale: 1.12, ease: "none",
+        scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+      gsap.to(".hero__inner", { yPercent: -14, opacity: 0, ease: "none",
+        scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+
+      // parallax on every full-bleed scene image
+      gsap.utils.toArray("[data-parallax]").forEach((img) => {
+        gsap.fromTo(img, { yPercent: -10 }, { yPercent: 10, ease: "none",
+          scrollTrigger: { trigger: img.closest(".scene"), start: "top bottom", end: "bottom top", scrub: true } });
+      });
+
+      // heading line reveals
+      gsap.utils.toArray("[data-split]").forEach((el) => {
+        const split = new SplitText(el, { type: "lines", linesClass: "split-line" });
+        gsap.from(split.lines, {
+          yPercent: 110, opacity: 0, duration: 1, ease: "power3.out", stagger: 0.1,
+          scrollTrigger: { trigger: el, start: "top 82%" },
+        });
+      });
+
+      // generic fade-up reveals
+      gsap.utils.toArray("[data-reveal]").forEach((el) => {
+        gsap.from(el, {
+          y: 34, opacity: 0, duration: 0.9, ease: "power2.out",
+          scrollTrigger: { trigger: el, start: "top 88%" },
+        });
+      });
+
+      // signature moment — the word flips from its crude reading to its true one,
+      // pinned and scrubbed: the crude meaning fades out as the true meaning rises in.
+      const crude = document.querySelector(".flip__crude");
+      const tru = document.querySelector(".flip__true");
+      gsap.set(tru, { opacity: 0, y: 28 });
+      const flipTl = gsap.timeline({
+        scrollTrigger: { trigger: ".flip", start: "top top", end: "+=140%", pin: true, scrub: 0.6 },
+      });
+      flipTl
+        .to(crude, { opacity: 0, y: -28, ease: "power1.in" }, 0.35)
+        .to(tru, { opacity: 1, y: 0, ease: "power2.out" }, 0.55)
+        .fromTo(".flip__sa", { color: "#ffffff" }, { color: "#c98a3c", ease: "none" }, 0);
+
+      ScrollTrigger.refresh();
+    }
+  </script>
 </body>
 </html>
