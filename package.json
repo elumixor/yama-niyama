@@ -10,9 +10,13 @@
     "dev": "vite",
     "prebuild": "node scripts/generate.mjs",
     "build": "vite build",
+    "postbuild": "node scripts/flatten.mjs",
     "preview": "vite preview"
   },
   "devDependencies": {
     "vite": "^6.0.0"
+  },
+  "dependencies": {
+    "gsap": "^3.15.0"
   }
 }

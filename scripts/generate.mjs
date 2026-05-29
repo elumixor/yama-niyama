@@ -51,7 +51,7 @@ ${MARKER}
 </head>
 <body>
   <main class="stage">
-    <p class="crumb"><a href="/">${site.title}</a> · ${g.title} · ${String(p.order).padStart(2, "0")}</p>
+    <p class="crumb"><a href="${site.base}">${site.title}</a> · ${g.title} · ${String(p.order).padStart(2, "0")}</p>
     <div>
       <div class="glyph" lang="sa">${p.sanskrit}</div>
       <h1 class="translit">${p.translit}</h1>

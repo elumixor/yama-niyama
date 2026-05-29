@@ -83,7 +83,7 @@
         .filter((p) => p.group === key)
         .map(
           (p) => `
-          <a class="row" href="/${p.slug}/">
+          <a class="row" href="${site.base}${p.slug}">
             <span class="num">${String(p.order).padStart(2, "0")}</span>
             <span class="glyph" lang="sa">${p.sanskrit}</span>
             <span class="name">${p.translit}<small>${p.gloss}</small></span>

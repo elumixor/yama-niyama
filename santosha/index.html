@@ -1,47 +1,385 @@
 <!doctype html>
-<!-- generated:scaffold -->
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Santośa — Contentment · Yama & Niyama</title>
-  <meta name="description" content="Being contented with the earnings of normal labour, without undue pressure on body and mind, keeping aloof from external allurements." />
+  <title>Santośa — Contentment · Yama &amp; Niyama</title>
+  <meta name="description" content="Santośa, the second Niyama: a state of proper ease. Being contented with the earnings of normal labour, without undue pressure on body and mind, keeping aloof from external allurements." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,400&family=Spectral:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,900&family=Spectral:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/src/shared/base.css" />
+  <!-- Hide above-the-fold hero pieces only when motion is allowed, so reduced-motion
+       users (and the no-JS case) always see fully-rendered content. -->
+  <script>
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches)
+      document.documentElement.classList.add("anim");
+  </script>
   <style>
     :root {
-      --accent: hsl(216 58% 52%);
-      --accent-soft: hsl(216 48% 92%);
-      --ink: hsl(216 30% 12%);
-      --paper: hsl(216 40% 97%);
+      --ink: #16202b;
+      --paper: #f3efe7;
+      --paper-2: #ebe4d6;
+      --accent: #2f6f8f;
+      --gold: #c0813a;
+      --muted: #5d6b76;
+      --line: rgba(22, 32, 43, 0.14);
     }
-    body { background: var(--paper); color: var(--ink); }
-    .stage { min-height: 100svh; display: grid; grid-template-rows: auto 1fr auto; max-width: 860px; margin-inline: auto; padding: clamp(1.5rem, 5vw, 4rem); }
-    .crumb { font-family: var(--font-body); font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
-    .crumb a { color: inherit; text-decoration: none; }
-    .glyph { font-size: clamp(4rem, 16vw, 10rem); line-height: 1; color: var(--accent); opacity: .9; }
-    .translit { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.5rem, 9vw, 5.5rem); line-height: .95; margin: .1em 0 0; }
-    .gloss { font-style: italic; font-size: clamp(1.1rem, 3vw, 1.5rem); color: var(--accent); margin-top: .4rem; }
-    .sutra { font-style: italic; border-left: 3px solid var(--accent); padding-left: 1rem; margin: 2.5rem 0; color: hsl(216 25% 30%); }
-    .definition { font-size: clamp(1.15rem, 2.6vw, 1.5rem); line-height: 1.5; }
-    .note { margin-top: 1.5rem; color: hsl(216 18% 32%); line-height: 1.7; }
-    .seam { font-family: var(--font-body); font-size: .75rem; letter-spacing: .15em; text-transform: uppercase; color: hsl(216 15% 55%); }
+
+    body { background: var(--paper); color: var(--ink); overflow-x: hidden; }
+
+    /* faint paper grain for atmosphere */
+    body::after {
+      content: ""; position: fixed; inset: 0; z-index: 9; pointer-events: none;
+      opacity: 0.035; mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ── chrome ─────────────────────────────────────────── */
+    .progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 50; background: transparent; }
+    .progress__bar { height: 100%; width: 100%; transform: scaleX(0); transform-origin: left center;
+      background: linear-gradient(90deg, var(--accent), var(--gold)); }
+
+    .home { position: fixed; top: clamp(1rem, 3vw, 1.8rem); left: clamp(1rem, 4vw, 2.4rem); z-index: 40;
+      font: 500 0.74rem/1 var(--font-body); letter-spacing: 0.24em; text-transform: uppercase;
+      text-decoration: none; color: var(--ink); mix-blend-mode: difference; filter: invert(1); }
+    .home::before { content: "←"; margin-right: 0.5em; display: inline-block; }
+
+    /* ── shared type ────────────────────────────────────── */
+    .kicker { font: 500 0.78rem/1 var(--font-body); letter-spacing: 0.32em; text-transform: uppercase; color: var(--accent); margin: 0 0 1.4rem; }
+    .scene .kicker { color: rgba(255, 255, 255, 0.82); }
+    .display { font: 300 clamp(2.3rem, 6.4vw, 5rem)/1.04 var(--font-display); letter-spacing: -0.018em; margin: 0; }
+    .lede { font: 400 clamp(1.12rem, 2.3vw, 1.5rem)/1.6 var(--font-body); color: var(--muted); max-width: 34ch; }
+    .scene .lede { color: rgba(255, 255, 255, 0.88); }
+    .body-copy { font: 400 clamp(1.05rem, 1.5vw, 1.22rem)/1.72 var(--font-body); max-width: 56ch; }
+
+    .panel { max-width: 1080px; margin-inline: auto; padding: clamp(4.5rem, 13vh, 10rem) clamp(1.4rem, 6vw, 5rem); }
+
+    /* ── full-bleed photographic scenes ─────────────────── */
+    .scene { position: relative; min-height: 100svh; display: grid; align-items: center; overflow: clip; color: #fff; }
+    .scene__bg { position: absolute; inset: -12% 0; width: 100%; height: 124%; object-fit: cover; will-change: transform; }
+    .scene__tint { position: absolute; inset: 0; z-index: 1; }
+    .scene__inner { position: relative; z-index: 2; width: 100%; max-width: 1080px; margin-inline: auto; padding: clamp(2rem, 8vw, 6rem) clamp(1.4rem, 6vw, 5rem); }
+    .scene__inner.right { display: flex; justify-content: flex-end; text-align: right; }
+    .scene__inner.right > div { max-width: 40ch; }
+
+    /* ── hero ───────────────────────────────────────────── */
+    .hero { text-align: center; place-items: center; }
+    .hero__tint { background:
+      radial-gradient(120% 90% at 50% 8%, rgba(10, 18, 28, 0.12), transparent 55%),
+      linear-gradient(180deg, rgba(12, 20, 30, 0.42) 0%, rgba(12, 20, 30, 0.22) 42%, rgba(12, 20, 30, 0.62) 100%); }
+    .hero__inner { display: grid; justify-items: center; gap: 0.2rem; }
+    .hero__num { font: 500 0.8rem/1 var(--font-body); letter-spacing: 0.42em; text-transform: uppercase; color: rgba(255,255,255,0.78); margin: 0 0 2.2rem; }
+    .hero__glyph { font-family: var(--font-display); font-weight: 400; font-size: clamp(3.6rem, 12vw, 8.5rem); line-height: 1; color: #fff; text-shadow: 0 2px 40px rgba(0,0,0,0.35); }
+    .hero__title { font: 300 clamp(3rem, 11vw, 7.5rem)/0.92 var(--font-display); letter-spacing: -0.02em; margin: 0.1em 0 0; }
+    .hero__sub { font: 500 clamp(0.9rem, 2vw, 1.15rem)/1 var(--font-body); letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); margin: 1.4rem 0 0; }
+    .hero__say { font: 400 clamp(1.05rem, 2.2vw, 1.35rem)/1.6 var(--font-body); color: rgba(255,255,255,0.9); max-width: 30ch; margin: 2.4rem auto 0; }
+    .cue { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 3;
+      font: 500 0.68rem/1 var(--font-body); letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.8);
+      display: grid; justify-items: center; gap: 0.7rem; }
+    .cue__line { width: 1px; height: 46px; background: rgba(255,255,255,0.6); transform-origin: top; }
+
+    /* ── definition (two facing blocks) ─────────────────── */
+    .defs { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 6vw, 5rem); margin-top: 3rem; }
+    .def h3 { font: 500 clamp(1.6rem, 3.4vw, 2.4rem)/1 var(--font-display); margin: 0 0 0.2rem; }
+    .def .sa { font-family: var(--font-display); color: var(--accent); font-size: 1.4rem; margin: 0 0 0.9rem; }
+    .def--proper h3 { color: var(--accent); }
+    .def p { font: 400 1.08rem/1.66 var(--font-body); color: var(--muted); margin: 0; }
+    .pull { margin-top: clamp(2.6rem, 6vw, 4rem); padding-top: 2rem; border-top: 1px solid var(--line);
+      font: 300 clamp(1.5rem, 3.6vw, 2.4rem)/1.32 var(--font-display); letter-spacing: -0.01em; max-width: 24ch; }
+    .pull b { font-weight: 600; color: var(--accent); }
+
+    /* ── millionaire counter ────────────────────────────── */
+    .counter { color: #fff; text-align: center; place-items: center; }
+    .counter__tint { background: linear-gradient(180deg, rgba(18, 14, 8, 0.78), rgba(18, 14, 8, 0.62)); }
+    .counter__inner { display: grid; justify-items: center; gap: 1.4rem; }
+    .counter__num { font: 500 clamp(2.8rem, 11vw, 7.5rem)/1 var(--font-display); letter-spacing: -0.02em; color: var(--gold);
+      font-variant-numeric: tabular-nums; text-shadow: 0 2px 30px rgba(0,0,0,0.4); }
+    .counter__label { font: 500 0.82rem/1 var(--font-body); letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.78); }
+    .counter__quote { font: 300 clamp(1.4rem, 4.4vw, 2.8rem)/1.3 var(--font-display); max-width: 22ch; margin: 1.4rem auto 0; }
+    .counter__attr { font: 400 0.95rem/1.5 var(--font-body); color: rgba(255,255,255,0.65); max-width: 40ch; }
+
+    /* ── method cards ───────────────────────────────────── */
+    .cards { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.2rem, 3vw, 2rem); margin-top: 3rem; }
+    .card { background: var(--paper-2); border: 1px solid var(--line); border-radius: 4px; padding: clamp(1.6rem, 3vw, 2.6rem); }
+    .card__tag { font: 500 0.72rem/1 var(--font-body); letter-spacing: 0.26em; text-transform: uppercase; color: var(--accent); margin: 0 0 1rem; }
+    .card--off .card__tag { color: var(--muted); }
+    .card h3 { font: 500 clamp(1.5rem, 3vw, 2rem)/1.04 var(--font-display); margin: 0 0 0.8rem; }
+    .card p { font: 400 1.04rem/1.66 var(--font-body); color: var(--muted); margin: 0; }
+    .verdict { margin-top: clamp(2.4rem, 5vw, 3.4rem); font: 300 clamp(1.5rem, 3.6vw, 2.4rem)/1.34 var(--font-display); max-width: 26ch; }
+    .verdict b { font-weight: 600; color: var(--accent); }
+
+    /* ── closing ────────────────────────────────────────── */
+    .close__tint { background: linear-gradient(180deg, rgba(14, 22, 32, 0.55), rgba(14, 22, 32, 0.78)); }
+    .close__inner { max-width: 760px; }
+    .close .body-copy { color: rgba(255,255,255,0.9); max-width: 50ch; }
+    .close em { font-style: normal; color: var(--gold); }
+    .nav { display: flex; flex-wrap: wrap; gap: 1.4rem 2.4rem; margin-top: clamp(2.6rem, 6vw, 4rem);
+      padding-top: 1.6rem; border-top: 1px solid rgba(255,255,255,0.25); }
+    .nav a { font: 500 0.82rem/1.4 var(--font-body); letter-spacing: 0.14em; text-transform: uppercase; color: #fff; text-decoration: none; opacity: 0.82; transition: opacity 0.25s; }
+    .nav a:hover { opacity: 1; }
+    .nav a small { display: block; font-size: 0.66rem; letter-spacing: 0.2em; color: var(--gold); margin-top: 0.3rem; }
+    .nav .next { margin-left: auto; text-align: right; }
+    .attribution { margin-top: 3rem; font: 400 0.74rem/1.5 var(--font-body); letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
+
+    /* reveal gating — only hero pieces are pre-hidden (above the fold) */
+    .anim .hero [data-load] { opacity: 0; }
+
+    @media (max-width: 720px) {
+      .defs, .cards { grid-template-columns: 1fr; }
+      .scene__inner.right { justify-content: flex-start; text-align: left; }
+      .nav .next { margin-left: 0; text-align: left; }
+    }
   </style>
 </head>
 <body>
-  <main class="stage">
-    <p class="crumb"><a href="/">Yama & Niyama</a> · Niyama · 07</p>
-    <div>
-      <div class="glyph" lang="sa">सन्तोष</div>
-      <h1 class="translit">Santośa</h1>
-      <p class="gloss">Contentment</p>
-      <blockquote class="sutra">Tośa — the state of mental ease; Santośa — a state of proper ease.</blockquote>
-      <p class="definition">Being contented with the earnings of normal labour, without undue pressure on body and mind, keeping aloof from external allurements.</p>
-      <p class="note">Human desire knows no end; the millionaire wants millions more. Contentment does not mean tolerating exploitation in silence — you must still fight for your rights — but it forbids wasting your energy under the sway of greed.</p>
-    </div>
-    <p class="seam">A Guide to Human Conduct — scaffold placeholder, design pending</p>
+  <div class="progress"><div class="progress__bar"></div></div>
+  <a class="home" href="/yama-niyama/">Yama &amp; Niyama</a>
+
+  <main>
+    <!-- ░░ HERO ░░ -->
+    <section class="hero scene">
+      <img class="scene__bg" data-hero-bg src="./img/c_lake.jpg" alt="Snow mountains catching the first light above a sea of cloud at dawn" />
+      <div class="scene__tint hero__tint"></div>
+      <div class="scene__inner">
+        <div class="hero__inner">
+          <p class="hero__num" data-load>Niyama · The Second Observance · 07</p>
+          <div class="hero__glyph" lang="sa" data-load>सन्तोष</div>
+          <h1 class="hero__title" data-load>Santośa</h1>
+          <p class="hero__sub" data-load>Contentment</p>
+          <p class="hero__say" data-load>A state of proper ease — the mind at rest not because it has everything, but because it has stopped chasing.</p>
+        </div>
+      </div>
+      <div class="cue" data-load><span>Scroll</span><span class="cue__line"></span></div>
+    </section>
+
+    <!-- ░░ THE WORD ░░ -->
+    <section class="panel">
+      <p class="kicker" data-reveal>The word</p>
+      <h2 class="display" data-split>Two kinds of ease, one syllable apart.</h2>
+      <div class="defs">
+        <div class="def" data-reveal>
+          <p class="sa" lang="sa">तोष</p>
+          <h3>Tośa</h3>
+          <p>Mental ease. The pleasure of getting the thing you wanted. It is real, and it lasts about an hour. Then the mind drops it and runs after the next.</p>
+        </div>
+        <div class="def def--proper" data-reveal>
+          <p class="sa" lang="sa">सन्तोष</p>
+          <h3>Santośa</h3>
+          <p>Proper ease. The settled calm underneath, which no new acquisition can add to and no loss can take away. The prefix <b>san&#8203;-</b> means complete.</p>
+        </div>
+      </div>
+      <p class="pull" data-reveal>Contentment is not a feeling you reach by getting more. It is what is left <b>when the chasing stops.</b></p>
+    </section>
+
+    <!-- ░░ THE LAW OF NATURE — waves ░░ -->
+    <section class="scene">
+      <img class="scene__bg" data-parallax src="./img/c_waves.jpg" alt="Ocean swell breaking endlessly along a pale shore, seen from above" />
+      <div class="scene__tint" style="background:linear-gradient(180deg,rgba(10,28,38,.5),rgba(10,28,38,.66))"></div>
+      <div class="scene__inner">
+        <p class="kicker" data-reveal>The law of nature</p>
+        <h2 class="display" data-split>Human desire knows no end.</h2>
+        <p class="body-copy" data-reveal style="color:rgba(255,255,255,.9);margin-top:1.6rem">
+          Through endless analysis the objects of enjoyment keep multiplying — in number and in abstraction — so the mental flow never gets any rest. Achieving a desired object pleases you for an hour; then the long-cherished thing loses its importance the moment it is held, and the mind moves on. This is not your weakness. It is the rule.
+        </p>
+      </div>
+    </section>
+
+    <!-- ░░ THE MILLIONAIRE — pinned counter ░░ -->
+    <section class="counter scene">
+      <img class="scene__bg" src="./img/c_coins.jpg" alt="Overlapping banknotes filling the frame" />
+      <div class="scene__tint counter__tint"></div>
+      <div class="scene__inner">
+        <div class="counter__inner">
+          <p class="kicker">The millionaire</p>
+          <div class="counter__num" data-count>$1,000,000</div>
+          <p class="counter__label">…wants to become a multimillionaire</p>
+          <p class="counter__quote" data-quote>“Where is the money? I am somehow pulling on.”</p>
+          <p class="counter__attr" data-quote>— his answer, when asked if he is happy with his wealth. As money becomes the be-all and end-all, the mind is crudified; health is neglected; the body made unfit.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ THE PRACTICE — wheat ░░ -->
+    <section class="scene">
+      <img class="scene__bg" data-parallax src="./img/c_wheat.jpg" alt="Ripe wheat field under a low golden sun" />
+      <div class="scene__tint" style="background:linear-gradient(180deg,rgba(40,28,8,.32),rgba(30,22,8,.6))"></div>
+      <div class="scene__inner right">
+        <div>
+          <p class="kicker" data-reveal>The practice</p>
+          <h2 class="display" data-split>Be contented with the earnings of normal labour.</h2>
+          <p class="body-copy" data-reveal style="color:rgba(255,255,255,.92);margin-top:1.6rem;margin-left:auto">
+            Without undue pressure on body or mind. Staying there takes a special effort — to keep aloof from external allurements, and to meet each pull of greed with the thought that opposes it.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ THE METHOD — cards ░░ -->
+    <section class="panel">
+      <p class="kicker" data-reveal>The method</p>
+      <h2 class="display" data-split>Two forces can pull a craving out of the mind.</h2>
+      <div class="cards">
+        <div class="card" data-reveal>
+          <p class="card__tag">Auto-suggestion</p>
+          <h3>From within</h3>
+          <p>You yourself, again and again, hold the thought that is the opposite of the mean tendency occupying the mind. Held long enough, your very nature changes.</p>
+        </div>
+        <div class="card card--off" data-reveal>
+          <p class="card__tag">Outer-suggestion</p>
+          <h3>From outside</h3>
+          <p>The same change, brought about by an ideal repeated into your ears by some external agent. Useful — but it depends on someone else doing the repeating.</p>
+        </div>
+      </div>
+      <p class="verdict" data-reveal>For Santośa, only the first will do. <b>No one can be content on your behalf.</b></p>
+    </section>
+
+    <!-- ░░ WHAT IT IS NOT — path ░░ -->
+    <section class="scene">
+      <img class="scene__bg" data-parallax src="./img/c_path.jpg" alt="A worn path leading through a still, sunlit forest" />
+      <div class="scene__tint" style="background:linear-gradient(180deg,rgba(8,16,12,.62),rgba(8,16,12,.74))"></div>
+      <div class="scene__inner">
+        <p class="kicker" data-reveal>What it is not</p>
+        <h2 class="display" data-split>Contentment is not surrender.</h2>
+        <p class="body-copy" data-reveal style="color:rgba(255,255,255,.92);margin-top:1.6rem">
+          It does not mean letting yourself be exploited and bearing it in silence. Never give up your right to self-preservation, or your legitimate dues — go on fighting, with concerted effort, to establish them. The line is not drawn between fighting and yielding. It is drawn between need and greed.
+        </p>
+      </div>
+    </section>
+
+    <!-- ░░ WHERE IT LEADS — mountain ░░ -->
+    <section class="close scene">
+      <img class="scene__bg" data-parallax src="./img/c_mountain.jpg" alt="A high snow peak rising into clear mountain sky" />
+      <div class="scene__tint close__tint"></div>
+      <div class="scene__inner close__inner">
+        <p class="kicker" data-reveal>Where it leads</p>
+        <h2 class="display" data-split>Still the chase, and the energy it wasted is freed.</h2>
+        <p class="body-copy" data-reveal>
+          Santośa is the inner face of <em>Aparigraha</em> — non-accumulation — and it clears the restless mind for <em>Iishvara Prańidhána</em>, shelter in the Cosmic. Contentment was never the absence of striving. It is striving aimed at the one thing that does not run out.
+        </p>
+        <nav class="nav" data-reveal>
+          <a class="prev" href="/yama-niyama/shaoca">← Shaoca<small>06 · Purity</small></a>
+          <a href="/yama-niyama/">All ten<small>Index</small></a>
+          <a class="next" href="/yama-niyama/tapah">Tapah →<small>08 · Service</small></a>
+        </nav>
+        <p class="attribution" data-reveal>A Guide to Human Conduct · after Shrii Shrii Ánandamúrti</p>
+      </div>
+    </section>
   </main>
+
+  <script type="module">
+    import gsap from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    import { SplitText } from "gsap/SplitText";
+    import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    gsap.registerPlugin(ScrollToPlugin);
+    setupKeyboardNav();
+
+    if (!reduce) {
+      gsap.registerPlugin(ScrollTrigger, SplitText);
+      document.fonts.ready.then(init);
+    }
+
+    // ← / → (and ↑ / ↓ / PgUp / PgDn) step between sections; Home / End jump to the ends.
+    // Tops are recomputed live each press with getBoundingClientRect so GSAP's pin
+    // spacers (which reparent pinned sections) can never desync the navigation.
+    function setupKeyboardNav() {
+      const tops = () => {
+        const ys = Array.from(document.querySelectorAll("main section"))
+          .map((s) => Math.round(s.getBoundingClientRect().top + window.scrollY))
+          .sort((a, b) => a - b);
+        return ys.filter((y, i) => i === 0 || y - ys[i - 1] > 8); // de-dupe near-equal
+      };
+
+      const scrollTo = (y) =>
+        gsap.to(window, { duration: reduce ? 0 : 0.9, ease: "power2.inOut", scrollTo: { y, autoKill: false } });
+
+      const step = (dir) => {
+        const ys = tops();
+        const y = window.scrollY;
+        const target = dir > 0
+          ? ys.find((t) => t > y + 8) ?? ys[ys.length - 1]
+          : [...ys].reverse().find((t) => t < y - 8) ?? ys[0];
+        scrollTo(target);
+      };
+
+      addEventListener("keydown", (e) => {
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        const fwd = e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === "PageDown";
+        const back = e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "PageUp";
+        if (!fwd && !back && e.key !== "Home" && e.key !== "End") return;
+        e.preventDefault();
+        const ys = tops();
+        if (e.key === "Home") return scrollTo(ys[0]);
+        if (e.key === "End") return scrollTo(ys[ys.length - 1]);
+        step(fwd ? 1 : -1);
+      });
+    }
+
+    function init() {
+      // scroll progress bar
+      gsap.to(".progress__bar", {
+        scaleX: 1, ease: "none",
+        scrollTrigger: { trigger: document.documentElement, start: "top top", end: "bottom bottom", scrub: true },
+      });
+
+      // hero entrance — fromTo with explicit visible end state, because the
+      // .anim CSS pre-hides these (a plain .from() would treat 0 as the target).
+      const heroTl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      heroTl
+        .fromTo(".hero__num", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.8 })
+        .fromTo(".hero__glyph", { opacity: 0, scale: 0.86, filter: "blur(14px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 1.4 }, "-=0.4")
+        .fromTo(".hero__title", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1.1 }, "-=0.9")
+        .fromTo(".hero__sub", { opacity: 0, y: 18, letterSpacing: "0.7em" }, { opacity: 1, y: 0, letterSpacing: "0.4em", duration: 0.9 }, "-=0.6")
+        .fromTo(".hero__say", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9 }, "-=0.5")
+        .fromTo(".cue", { opacity: 0 }, { opacity: 1, duration: 0.8 }, "-=0.4");
+      gsap.fromTo(".cue__line", { scaleY: 0 }, { scaleY: 1, transformOrigin: "top", duration: 1, ease: "power2.out", delay: 1.6, repeat: -1, repeatDelay: 0.6, yoyo: true });
+
+      // hero parallax + fade on scroll out
+      gsap.to("[data-hero-bg]", { yPercent: 16, scale: 1.12, ease: "none",
+        scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+      gsap.to(".hero__inner", { yPercent: -14, opacity: 0, ease: "none",
+        scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+
+      // parallax on every full-bleed scene image
+      gsap.utils.toArray("[data-parallax]").forEach((img) => {
+        gsap.fromTo(img, { yPercent: -10 }, { yPercent: 10, ease: "none",
+          scrollTrigger: { trigger: img.closest(".scene"), start: "top bottom", end: "bottom top", scrub: true } });
+      });
+
+      // heading line reveals
+      gsap.utils.toArray("[data-split]").forEach((el) => {
+        const split = new SplitText(el, { type: "lines", linesClass: "split-line" });
+        gsap.from(split.lines, {
+          yPercent: 110, opacity: 0, duration: 1, ease: "power3.out", stagger: 0.1,
+          scrollTrigger: { trigger: el, start: "top 82%" },
+        });
+      });
+
+      // generic fade-up reveals
+      gsap.utils.toArray("[data-reveal]").forEach((el) => {
+        gsap.from(el, {
+          y: 34, opacity: 0, duration: 0.9, ease: "power2.out",
+          scrollTrigger: { trigger: el, start: "top 88%" },
+        });
+      });
+
+      // pinned millionaire counter
+      const numEl = document.querySelector("[data-count]");
+      const acc = { n: 1_000_000 };
+      const fmt = (v) => "$" + Math.round(v).toLocaleString("en-US");
+      const ctl = gsap.timeline({
+        scrollTrigger: { trigger: ".counter", start: "top top", end: "+=130%", pin: true, scrub: 0.5 },
+      });
+      ctl
+        .to(acc, { n: 96_000_000, ease: "none", onUpdate: () => (numEl.textContent = fmt(acc.n)) }, 0)
+        .from("[data-quote]", { opacity: 0, y: 26, stagger: 0.25, ease: "power2.out" }, 0.45);
+
+      ScrollTrigger.refresh();
+    }
+  </script>
 </body>
 </html>

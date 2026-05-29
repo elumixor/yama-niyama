@@ -3,3 +3,8 @@ dist
 *.log
 .DS_Store
 .vite
+
+# Playwright / browser verification artifacts (never commit screenshots)
+.playwright-mcp
+/*.jpeg
+/*.png
